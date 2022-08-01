@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     uid: '',
-    isLogin: 'false',
+    isLogin: '0',
     base: 'http://localhost:8000/',
   },
   getters: {
