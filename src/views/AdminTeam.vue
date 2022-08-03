@@ -1,0 +1,279 @@
+<template>
+  <div>
+    <div id="bgd">
+      <div id="membersDiv">
+        <span id="title" v-if="$store.state.role!==0">管理您的团队</span>
+        <span id="title" v-else-if="$store.state.role===0">查看您的团队</span>
+        <router-link to="/invite">
+          <img title="邀请" v-if="$store.state.role!==0" src="../assets/invite.png" class="img" id="invite">
+        </router-link>
+        <el-table
+            :data="members"
+            id="members"
+            max-height="500px"
+            :row-style="{height: '58px'}">
+          <el-table-column
+              prop="username"
+              label="昵称"
+              width="150px"
+          >
+          </el-table-column>
+          <el-table-column
+              prop="name"
+              label="姓名"
+              width="150px">
+          </el-table-column>
+          <el-table-column
+              prop="email"
+              label="邮箱"
+              width="180px">
+          </el-table-column>
+          <el-table-column
+              prop="role"
+              label="身份"
+              width="160px">
+            <template slot-scope="scope">
+            <span v-if="scope.row.role===0">
+              成员
+            </span>
+              <span v-if="scope.row.role===1">
+              管理员
+            </span>
+              <span v-if="scope.row.role===2">
+              创建者
+            </span>
+            </template>
+          </el-table-column>
+          <el-table-column
+              prop="role"
+              label="操作"
+          >
+            <template slot-scope="scope">
+              <img class="img" id="addAdmin" title="任命管理员" @click="clickAdd(scope.row.id)" slot="reference" v-if="scope.row.role===0&& ($store.state.role===1||$store.state.role===2)" src="../assets/addAdmin.png"> <!-- 任命管理员 -->
+              <img class="img" id="delete" title="删除" @click="clickDelete(scope.row.id)" v-if="scope.row.role===0&& ($store.state.role===1||$store.state.role===2)" src="../assets/delete.png"> <!-- 移除普通成员 -->
+              <img class="img" id="cancel" title="撤销" @click="clickCancel(scope.row.id)" v-if="scope.row.role===1&& ($store.state.role===2)" src="../assets/cancel.png"> <!-- 撤销管理员 -->
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-dialog
+            title="提示"
+            :visible.sync="addAdmin"
+            :close-on-click-modal ="false"
+            width="30%">
+          <i class="el-icon-warning-outline" style="color: #ffd952"></i>
+          <span>您确定要任命{{name}}为管理员吗？</span>
+          <span slot="footer" class="dialog-footer">
+          <el-button @click="addAdmin = false" class="cancel">取 消</el-button>
+          <el-button type="primary" @click="addAdmin = false" class="confirm">确 定</el-button>
+        </span>
+        </el-dialog>
+        <el-dialog
+            title="提示"
+            :visible.sync="Delete"
+            :close-on-click-modal ="false"
+            width="30%">
+          <i class="el-icon-warning-outline" style="color: #FF5733"></i>
+          <span>您确定要删除成员{{name}}吗？</span>
+          <span slot="footer" class="dialog-footer">
+          <el-button @click="Delete = false" class="cancel">取 消</el-button>
+          <el-button type="primary" @click="Delete = false" class="confirm">确 定</el-button>
+        </span>
+        </el-dialog>
+        <el-dialog
+            title="提示"
+            :visible.sync="cancel"
+            :close-on-click-modal ="false"
+            width="30%">
+          <i class="el-icon-warning-outline" style="color: #FF5733"></i>
+          <span>您确定要撤销管理员{{name}}吗？</span>
+          <span slot="footer" class="dialog-footer">
+          <el-button @click="cancel = false" class="cancel">取 消</el-button>
+          <el-button type="primary" @click="cancel = false" class="confirm">确 定</el-button>
+        </span>
+        </el-dialog>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<script>
+export default {
+  name: "TeamAdmin",
+  data() {
+    return {
+      addAdmin: false,
+      Delete: false,
+      cancel: false,
+      index: '',
+      name: '',
+      members: [{
+        id: 1,
+        username: '哈哈哈',
+        name: '小王',
+        email: '777777777@qq.com',
+        role: 2,
+      }, {
+        id: 2,
+        username: '嘿嘿嘿',
+        name: '小黑',
+        email: '888888888@qq.com',
+        role: 1,
+      }, {
+        id: 3,
+        username: '好好好',
+        name: '小蓝',
+        email: '666666666@qq.com',
+        role: 0,
+      }, {
+        id: 4,
+        username: '好好好',
+        name: '小hong',
+        email: '666666666@qq.com',
+        role: 0,
+      }, {
+        id: 5,
+        username: '好好好',
+        name: '小aa',
+        email: '666666666@qq.com',
+        role: 0,
+      }, {
+        id: 6,
+        username: '好好好',
+        name: '小b',
+        email: '666666666@qq.com',
+        role: 0,
+      }, {
+        id: 7,
+        username: '好好好',
+        name: '小c',
+        email: '666666666@qq.com',
+        role: 0,
+      }, {
+        id: 8,
+        username: '好好好',
+        name: '小d',
+        email: '666666666@qq.com',
+        role: 0,
+      }, {
+        id: 9,
+        username: '好好好',
+        name: '小e',
+        email: '666666666@qq.com',
+        role: 0,
+      }],
+    }
+  },
+  methods: {
+    clickAdd(index) {
+      this.addAdmin=true
+      this.index=index
+      this.name=this.members[index-'1'].name
+      console.log(this.index)
+    },
+    clickDelete(index) {
+      this.Delete=true
+      this.index=index
+      this.name=this.members[index-'1'].name
+      console.log(this.index)
+    },
+    clickCancel(index) {
+      this.cancel=true
+      this.index=index
+      this.name=this.members[index-'1'].name
+      console.log(this.index)
+    },
+  }
+}
+</script>
+
+<style scoped>
+  * {
+    margin: 0px;
+    padding: 0px;
+
+  }
+  #bgd {
+    background-image: url("../assets/adminBgd.jpg");
+    position: absolute;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 80%;
+    height: 90%;
+    left: 20%;
+    top: 10%;
+  }
+  #membersDiv {
+    top: 8%;
+    left: 15%;
+    background-color: #fafafa;
+    width: 70%;
+    height: 85%;
+    overflow-y: auto;
+    display: block;
+    position: absolute;
+    border: 1px solid #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+  }
+  #title {
+    position: relative;
+    top: 10px;
+    font-size: 25px;
+    left: 40%;
+  }
+  #members {
+    margin: 0px;
+    width: 95%;
+    left: 20px;
+    top: 35px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+  }
+  .img {
+    width: 26px;
+    height: 26px;
+    margin: 0px 3px;
+    cursor: pointer;
+    transition: 0.2s linear;
+    vertical-align: middle;
+    position: absolute;
+  }
+  .img:hover {
+    transform: scale(1.3);
+  }
+  #addAdmin {
+    left: 10px;
+    top: 16px
+  }
+  #delete {
+    left: 40px;
+    top: 16px;
+  }
+  #cancel {
+    left: 10px;
+    top: 16px;
+  }
+  #invite {
+    width: 36px;
+    height: 36px;
+    top: 10px;
+    left: 660px;
+  }
+
+</style>
+
+<style>
+.dialog-footer .confirm,.el-message-box__btns .confirm {
+  background-color: #ffd952 !important;
+  border: none !important;
+}
+.dialog-footer .confirm:hover, .el-message-box__btns .confirm:hover {
+  background-color: #fcd23e !important;
+}
+.dialog-footer .cancel:hover, .el-message-box__btns .cancel:hover  {
+  background-color: #fdfddd !important;
+  color: #ffd952 !important;
+  border-color: #fdfddd !important;
+}
+</style>
