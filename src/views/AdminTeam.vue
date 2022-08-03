@@ -49,9 +49,9 @@
               label="操作"
           >
             <template slot-scope="scope">
-              <img class="img" id="addAdmin" title="任命管理员" @click="clickAdd(scope.row.id)" slot="reference" v-if="scope.row.role===0&& ($store.state.role===1||$store.state.role===2)" src="../assets/addAdmin.png"> <!-- 任命管理员 -->
-              <img class="img" id="delete" title="删除" @click="clickDelete(scope.row.id)" v-if="scope.row.role===0&& ($store.state.role===1||$store.state.role===2)" src="../assets/delete.png"> <!-- 移除普通成员 -->
-              <img class="img" id="cancel" title="撤销" @click="clickCancel(scope.row.id)" v-if="scope.row.role===1&& ($store.state.role===2)" src="../assets/cancel.png"> <!-- 撤销管理员 -->
+              <img class="img" id="addAdmin" title="任命管理员" @click="clickAdd(scope.row.key)" slot="reference" v-if="scope.row.role===0&& ($store.state.role===1||$store.state.role===2)" src="../assets/addAdmin.png"> <!-- 任命管理员 -->
+              <img class="img" id="delete" title="删除" @click="clickDelete(scope.row.key)" slot="reference" v-if="scope.row.role===0&& ($store.state.role===1||$store.state.role===2)" src="../assets/delete.png"> <!-- 移除普通成员 -->
+              <img class="img" id="cancel" title="撤销" @click="clickCancel(scope.row.key)" slot="reference" v-if="scope.row.role===1&& ($store.state.role===2)" src="../assets/cancel.png"> <!-- 撤销管理员 -->
             </template>
           </el-table-column>
         </el-table>
@@ -146,7 +146,8 @@ export default {
                     username: res.data[i].username,
                     name: res.data[i].name,
                     email: res.data[i].email,
-                    role: res.data[i].role
+                    role: res.data[i].role,
+                    key: i
                   }
                   this.members.push(tmp)
                 }
@@ -256,31 +257,34 @@ export default {
     confirmAppoint() {
       this.addAdmin = false
       this.appoint()
+      this.members[this.index].role=1
     },
     confirmDelete() {
       this.Delete = false
       this.delete()
+      this.members.splice(this.index, 1)
     },
     confirmRevoke() {
       this.cancel = false
       this.Revoke()
+      this.members[this.index].role=0
     },
     clickAdd(index) {
       this.addAdmin=true
-      this.index=index-'1'
-      this.name=this.members[index-'1'].name
+      this.index=index
+      this.name=this.members[index].name
       console.log(this.index)
     },
     clickDelete(index) {
       this.Delete=true
-      this.index=index-'1'
-      this.name=this.members[index-'1'].name
+      this.index=index
+      this.name=this.members[index].name
       console.log(this.index)
     },
     clickCancel(index) {
       this.cancel=true
-      this.index=index-'1'
-      this.name=this.members[index-'1'].name
+      this.index=index
+      this.name=this.members[index].name
       console.log(this.index)
     },
   }
