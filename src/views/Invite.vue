@@ -17,8 +17,7 @@
           <span class="info">昵称：{{item.username}}</span>
           <span class="info">姓名：{{item.name}}</span>
           <span class="info">邮箱：{{item.email}}</span>
-          <img src="../assets/add.png" id="add" v-if="exit(item.group)">
-          <img v-if="!exit(item.group)" src="../assets/no.png" id="no">
+          <img src="../assets/add.png" id="add" @click="invite(item.id,index)">
         </div>
       </div>
     </div>
@@ -26,90 +25,76 @@
 </template>
 
 <script>
+
+import qs from "qs";
+
 export default {
   name: "Invite",
   created() {
     window.myData = this;
+    this.get_user();
   },
   data() {
     return {
       input: '',
-      members: [{
-        id: 1,
-        username: '哈哈哈',
-        name: '王',
-        email: '777777777@qq.com',
-        role: 2,
-        group: [1],
-        visible: true,
-      }, {
-        id: 2,
-        username: '嘿嘿嘿',
-        name: '小黑',
-        email: '888888888@qq.com',
-        role: 1,
-        group: [1],
-        visible: true,
-      }, {
-        id: 3,
-        username: '好好好',
-        name: '小蓝',
-        email: '666666666@qq.com',
-        role: 0,
-        group: [1],
-        visible: true,
-      }, {
-        id: 4,
-        username: '好好好',
-        name: '小hong',
-        email: '666666666@qq.com',
-        role: 0,
-        group: [1],
-        visible: true,
-      }, {
-        id: 5,
-        username: '好好好',
-        name: '小aa',
-        email: '666666666@qq.com',
-        role: 0,
-        group: [1],
-        visible: true,
-      }, {
-        id: 6,
-        username: '好好好',
-        name: '小b',
-        email: '666666666@qq.com',
-        role: 0,
-        group: [2],
-        visible: true,
-      }, {
-        id: 7,
-        username: '好好好',
-        name: '小c',
-        email: '666666666@qq.com',
-        role: 0,
-        group: [1],
-        visible: true,
-      }, {
-        id: 8,
-        username: '好好好aaaaaaaaa',
-        name: '小d',
-        email: '666666666@qq.com',
-        role: 0,
-        group: [2],
-        visible: true,
-      }, {
-        id: 9,
-        username: '好好好',
-        name: '小e',
-        email: '666666666@qq.com',
-        role: 0,
-        group: [1],
-        visible: true,
-      }],
+      members: [],
     }
   },
   methods: {
+    get_user() {
+      this.axios({
+        method: 'get',
+        url: this.$store.state.base+"team_manage/get_user/",
+      })
+          .then(res => {
+            console.log(res)
+            for (let i = 0; i < res.data.length; i++) {
+              let tmp = {
+                id: res.data[i].id,
+                username: res.data[i].username,
+                name: res.data[i].name,
+                email: res.data[i].email,
+                group: res.data[i].team,
+                avatar: res.data[i].avatar,
+                visible: true,
+              }
+              if (!this.exit(tmp.group)) {
+                this.members.push(tmp)
+              }
+            }
+          })
+    },
+    invite(uid,index) {
+      let params = {
+        uid: uid,
+        gid: this.$store.state.gid
+      }
+      this.axios({
+        method: 'post',
+        url: this.$store.state.base+"team_manage/invite/",
+        data: qs.stringify(params)
+      })
+          .then(res => {
+            switch (res.data.errno) {
+              case 1001:
+                this.$message.warning(res.data.msg)
+                break
+              case 1002:
+                this.$message.warning(res.data.msg)
+                break
+              case 1003:
+                this.$message.warning(res.data.msg)
+                break
+              case 1005:
+                this.$message.warning(res.data.msg)
+                break
+              case 0:
+                this.$message.success(res.data.msg)
+                  this.members.splice(index,1)
+                break
+            }
+          })
+    },
     search() {
       if (this.input!=='') {
         let i,j,len=this.members.length;
@@ -129,7 +114,7 @@ export default {
     },
     exit(group) {
       let len = group.length,i;
-      for (i=0;i<len;i++) {
+      for (i = 0; i < len; i++) {
         if (this.$store.state.gid===group[i]){
           return true
         }
