@@ -64,7 +64,7 @@
           <span>您确定要任命{{name}}为管理员吗？</span>
           <span slot="footer" class="dialog-footer">
           <el-button @click="addAdmin = false" class="cancel">取 消</el-button>
-          <el-button type="primary" @click="addAdmin = false" class="confirm">确 定</el-button>
+          <el-button type="primary" @click="confirmAppoint" class="confirm">确 定</el-button>
         </span>
         </el-dialog>
         <el-dialog
@@ -76,7 +76,7 @@
           <span>您确定要删除成员{{name}}吗？</span>
           <span slot="footer" class="dialog-footer">
           <el-button @click="Delete = false" class="cancel">取 消</el-button>
-          <el-button type="primary" @click="Delete = false" class="confirm">确 定</el-button>
+          <el-button type="primary" @click="confirmDelete" class="confirm">确 定</el-button>
         </span>
         </el-dialog>
         <el-dialog
@@ -88,7 +88,7 @@
           <span>您确定要撤销管理员{{name}}吗？</span>
           <span slot="footer" class="dialog-footer">
           <el-button @click="cancel = false" class="cancel">取 消</el-button>
-          <el-button type="primary" @click="cancel = false" class="confirm">确 定</el-button>
+          <el-button type="primary" @click="confirmRevoke" class="confirm">确 定</el-button>
         </span>
         </el-dialog>
       </div>
@@ -98,8 +98,15 @@
 </template>
 
 <script>
+
+import qs from "qs";
+
 export default {
   name: "TeamAdmin",
+  created() {
+    window.myData = this;
+    this.get_member();
+  },
   data() {
     return {
       addAdmin: false,
@@ -107,79 +114,172 @@ export default {
       cancel: false,
       index: '',
       name: '',
-      members: [{
-        id: 1,
-        username: '哈哈哈',
-        name: '小王',
-        email: '777777777@qq.com',
-        role: 2,
-      }, {
-        id: 2,
-        username: '嘿嘿嘿',
-        name: '小黑',
-        email: '888888888@qq.com',
-        role: 1,
-      }, {
-        id: 3,
-        username: '好好好',
-        name: '小蓝',
-        email: '666666666@qq.com',
-        role: 0,
-      }, {
-        id: 4,
-        username: '好好好',
-        name: '小hong',
-        email: '666666666@qq.com',
-        role: 0,
-      }, {
-        id: 5,
-        username: '好好好',
-        name: '小aa',
-        email: '666666666@qq.com',
-        role: 0,
-      }, {
-        id: 6,
-        username: '好好好',
-        name: '小b',
-        email: '666666666@qq.com',
-        role: 0,
-      }, {
-        id: 7,
-        username: '好好好',
-        name: '小c',
-        email: '666666666@qq.com',
-        role: 0,
-      }, {
-        id: 8,
-        username: '好好好',
-        name: '小d',
-        email: '666666666@qq.com',
-        role: 0,
-      }, {
-        id: 9,
-        username: '好好好',
-        name: '小e',
-        email: '666666666@qq.com',
-        role: 0,
-      }],
+      members: [],
     }
   },
   methods: {
+    get_member() {
+      let params = {
+        gid: this.$store.state.gid
+      }
+      this.axios({
+        method: 'post',
+        url: this.$store.state.base+"team_manage/get_member/",
+        data: qs.stringify(params)
+      })
+          .then(res => {
+            console.log(res)
+            switch (res.data.errno) {
+              case 1002:
+                this.$message.warning(res.data.msg)
+                break
+              case 1001:
+                this.$message.warning(res.data.msg)
+                break
+              case 1003:
+                this.$message.warning(res.data.msg)
+                break
+              default:
+                for (let i = 0; i < res.data.length; i++) {
+                  let tmp = {
+                    id: res.data[i].id,
+                    username: res.data[i].username,
+                    name: res.data[i].name,
+                    email: res.data[i].email,
+                    role: res.data[i].role
+                  }
+                  this.members.push(tmp)
+                }
+            }
+
+          })
+    },
+    appoint() {
+      let params = {
+        uid: this.members[this.index].id,
+        gid: this.$store.state.gid
+      }
+      this.axios({
+        method: 'post',
+        url: this.$store.state.base+"team_manage/appoint/",
+        data: qs.stringify(params)
+      })
+          .then(res => {
+            switch (res.data.errno) {
+              case 1001:
+                this.$message.warning(res.data.msg)
+                break
+              case 1002:
+                this.$message.warning(res.data.msg)
+                break
+              case 1003:
+                this.$message.warning(res.data.msg)
+                break
+              case 1004:
+                this.$message.warning(res.data.msg)
+                break
+              case 1005:
+                this.$message.warning(res.data.msg)
+                break
+              case 0:
+                this.$message.success(res.data.msg)
+                break
+            }
+          })
+    },
+    delete() {
+      let params = {
+        uid: this.members[this.index].id,
+        gid: this.$store.state.gid
+      }
+      this.axios({
+        method: 'post',
+        url: this.$store.state.base+"team_manage/delete/",
+        data: qs.stringify(params)
+      })
+          .then(res => {
+            switch (res.data.errno) {
+              case 1001:
+                this.$message.warning(res.data.msg)
+                break
+              case 1002:
+                this.$message.warning(res.data.msg)
+                break
+              case 1003:
+                this.$message.warning(res.data.msg)
+                break
+              case 1004:
+                this.$message.warning(res.data.msg)
+                break
+              case 1005:
+                this.$message.warning(res.data.msg)
+                break
+              case 0:
+                this.$message.success(res.data.msg)
+                break
+            }
+          })
+    },
+    Revoke() {
+      let params = {
+        uid: this.members[this.index].id,
+        gid: this.$store.state.gid
+      }
+      this.axios({
+        method: 'post',
+        url: this.$store.state.base+"team_manage/revoke/",
+        data: qs.stringify(params)
+      })
+          .then(res => {
+            switch (res.data.errno) {
+              case 1001:
+                this.$message.warning(res.data.msg)
+                break
+              case 1002:
+                this.$message.warning(res.data.msg)
+                break
+              case 1003:
+                this.$message.warning(res.data.msg)
+                break
+              case 1004:
+                this.$message.warning(res.data.msg)
+                break
+              case 1005:
+                this.$message.warning(res.data.msg)
+                break
+              case 0:
+                this.$message.success(res.data.msg)
+                break
+            }
+          })
+    },
+    confirmAppoint() {
+      this.addAdmin = false
+      this.appoint()
+    },
+    confirmDelete() {
+      this.Delete = false
+      this.delete()
+    },
+    confirmRevoke() {
+      this.cancel = false
+      this.Revoke()
+    },
     clickAdd(index) {
       this.addAdmin=true
-      this.index=index
+      this.index=index-'1'
       this.name=this.members[index-'1'].name
       console.log(this.index)
     },
     clickDelete(index) {
       this.Delete=true
-      this.index=index
+      this.index=index-'1'
       this.name=this.members[index-'1'].name
       console.log(this.index)
     },
     clickCancel(index) {
       this.cancel=true
-      this.index=index
+      this.index=index-'1'
       this.name=this.members[index-'1'].name
       console.log(this.index)
     },
