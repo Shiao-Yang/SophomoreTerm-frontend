@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="img img1">
-        <div class="card" v-if="design" @click="design=false">
+        <div class="card">
           <p class="word">原型设计</p>
         </div>
       </div>
@@ -12,9 +12,11 @@
         </div>
       </div>
       <div class="img img3">
-        <div class="card">
-          <p class="word">编辑文档</p>
-        </div>
+        <router-link to="/editor" class="router">
+          <div class="card">
+            <p class="word">编辑文档</p>
+          </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -87,5 +89,9 @@ export default {
     position: relative;
     font-size: 40px;
     top: 35%;
+  }
+  .router {
+    text-decoration: none;
+    color: #000000;
   }
 </style>

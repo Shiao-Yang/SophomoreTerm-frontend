@@ -9,3 +9,10 @@
   padding: 0px;
 }
 </style>
+
+<script>
+
+  export default {
+    name: 'App',
+  }
+</script>

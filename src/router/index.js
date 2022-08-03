@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import adminTeam from "@/views/AdminTeam";
 import invite from "@/views/Invite";
 import project from "@/views/Project";
+import editor from "@/views/Editor";
 
 Vue.use(VueRouter)
 
@@ -36,6 +37,11 @@ const routes = [
     path: '/project',
     name: 'project',
     component: project
+  },
+  {
+    path: '/editor',
+    name: 'editor',
+    component: editor
   }
 ]
 
