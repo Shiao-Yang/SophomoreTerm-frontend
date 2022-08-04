@@ -26,7 +26,7 @@
           id="editor"
       />
       <input type="text" placeholder="保存前起一个标题吧" id="htmlTitle">
-      <el-button @click="toSaveDoc">保存</el-button>
+      <el-button @click="toSaveDoc" id="save">保存</el-button>
     </div>
   </div>
 </template>
@@ -173,6 +173,20 @@ export default Vue.extend({
   }
   .file:hover {
     transform: scale(1.1);
+    background-color: rgb(240,240,240);
+  }
+  #htmlTitle {
+    position: absolute;
+    left: 75%;
+    top: 7%;
+  }
+  #save {
+    position: absolute;
+    left: 92%;
+    top: 5%
+  }
+  #save:hover {
+    color: black;
     background-color: rgb(240,240,240);
   }
 </style>
