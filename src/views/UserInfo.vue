@@ -151,7 +151,7 @@ export default {
           this.$store.state.userInfo.username = params.username;
           this.$store.state.userInfo.name = params.name;
           this.$store.state.userInfo.email = params.email;
-          this.$store.state.userInfo.name = params.profile;
+          this.$store.state.userInfo.profile = params.profile;
 
           this.$message({
             message: '修改成功',
