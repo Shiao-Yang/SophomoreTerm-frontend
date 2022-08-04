@@ -58,7 +58,7 @@ export default {
   left: 0;
   height: 100%;
   width: 230px;
-  background: #11101d;
+  background: #292c2f;
   box-shadow: 3px 3px 3px #111;
 }
 
@@ -99,7 +99,7 @@ export default {
 }
 
 .sidebar .nav-links li:hover{
-  background: #1d1b31;
+  background: #333333;
 }
 
 .sidebar .nav-links li i{
@@ -130,7 +130,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #1d1b31;
+  background: #333333;
 }
 
 .sidebar .profile-details .profile-content{
@@ -144,7 +144,7 @@ export default {
   object-fit: cover;
   border-radius: 16px;
   margin: 0 14px 0 12px;
-  background: #1d1b31;
+  background: #333333;
   padding: 10px;
 }
 
