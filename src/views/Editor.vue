@@ -27,6 +27,13 @@ import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 
 export default Vue.extend({
   components: { Editor, Toolbar },
+  created() {
+    window.myData = this;
+    if (!this.$store.state.isLogin) {
+      this.$store.state.warning = true
+      this.$router.push('/')
+    }
+  },
   data() {
     return {
       editor: null,

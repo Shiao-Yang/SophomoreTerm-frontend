@@ -33,6 +33,10 @@ export default {
   created() {
     window.myData = this;
     this.get_user();
+    if (!this.$store.state.isLogin) {
+      this.$store.state.warning = true
+      this.$router.push('/')
+    }
   },
   data() {
     return {
