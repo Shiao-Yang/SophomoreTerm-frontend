@@ -62,7 +62,7 @@ export default {
       };
       this.$axios({
         method: 'post',
-        url: this.$store.state.base+"api/login/login/",
+        url: this.$store.state.base+"login/login/",
         data: qs.stringify(params)
       })
       .then(res => {
