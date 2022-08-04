@@ -84,9 +84,9 @@ export default {
     },
     rowClick(record,index){
       console.log(record);
-      this.$store.gid=record.gid;
+      this.$store.state.gid=record.gid;
       this.$router.push('/adminTeam');
-      console.log(this.$store.gid);
+      console.log(this.$store.state.gid);
     },
     backPage(){
       this.$router.push('/userInfo');
