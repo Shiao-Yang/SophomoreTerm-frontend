@@ -8,7 +8,7 @@
         <router-link to="/invite">
           <img title="邀请" v-if="$store.state.role!==0" src="../assets/invite.png" class="img" id="invite">
         </router-link>
-        <img title="解散" v-if="$store.state.role==2" src="../assets/Dismiss.png" class="img" id="dismiss" @click="Dismiss=true">
+        <img title="解散" v-if="$store.state.role===2" src="../assets/Dismiss.png" class="img" id="dismiss" @click="Dismiss=true">
 
         <el-table
             :data="members"
