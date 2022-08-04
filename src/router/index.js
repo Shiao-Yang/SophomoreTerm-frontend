@@ -10,13 +10,15 @@ import Design from "@/views/Design";
 import SideNavigation from "@/components/SideNavigation";
 import ProjectView from "@/views/ProjectView";
 
+import Home from "@/views/Home";
+import TeamList from "@/views/TeamList";
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: Home
   },
   {
     path: '/login&register',
@@ -59,6 +61,11 @@ const routes = [
   {
     path: '/prototype',
     component: ()=> import('@/examples/vseditor'),
+  },
+  {
+    path:'/tempTeamList',//以后要改成包含uid信息的个人的团队列表路径
+    name: 'teamList',
+    component: TeamList
   }
 
 ]
@@ -67,6 +74,7 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+
 })
 
 export default router

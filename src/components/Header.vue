@@ -1,0 +1,116 @@
+<template>
+  <div>
+    <div class="header">
+      <div class="box">
+        <h1 class="moshuLogo">
+  <!--          <img src="../assets/logo.png">-->
+<!--          <button @click="toVisitHome">Mobook</button>-->
+            <span @click="toVisitHome">Mobook</span>
+        </h1>
+<!--        <nav>-->
+<!--          <router-link active-class="active" to="/home">首页</router-link>-->
+<!--          <router-link active-class="active" to="/ask">问答</router-link>-->
+<!--          <router-link active-class="active" to="/community">社区</router-link>-->
+<!--        </nav>-->
+      </div>
+      <div class="box">
+        <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" v-if="$store.state.isLogin==='1'"></el-avatar>
+        <el-avatar icon="el-icon-user-solid" v-else></el-avatar>
+
+        <nav>
+          <a v-if="$store.state.isLogin==='1'" @click="toVisitSelf">个人信息</a>
+          <a v-else @click="toLogin">登录</a>
+          <a v-if="$store.state.isLogin==='1'" @click="toExit">退出登录</a>
+          <a v-else @click="toRegister">注册</a>
+        </nav>
+      </div>
+    </div>
+<!--    <div class="contents">-->
+<!--      <div class="content">-->
+<!--        &lt;!&ndash;指定组件的位置&ndash;&gt;-->
+<!--        <router-view></router-view>-->
+<!--      </div>-->
+<!--    </div>-->
+
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Header",
+  methods:{
+    toVisitHome:function (){
+      this.$router.push('/');
+    },
+    toLogin:function (){
+      this.$router.push('/login');
+    },
+    toRegister:function (){
+      this.$router.push('/register');
+    },
+    toVisitSelf:function (){
+      this.$router.push('/user/uid');
+    },
+    toExit:function (){
+    },
+  }
+}
+</script>
+
+<style scoped>
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  background-color:#292c2f;
+  color: #ffffff;
+
+  /*吸顶效果*/
+  /* position: sticky;
+   position: -webkit-sticky;    !*兼容 -webkit 内核的浏览器*!
+   top: 0px;                    !*必须设一个值，否则不生效*!*/
+
+}
+.box{
+  display: flex;
+  align-items: center;
+}
+h1{
+  display: flex;
+  align-items: center;
+  font: normal 28px Cookie, Arial, Helvetica, sans-serif;
+  padding: 0px 20px;
+}
+img{
+  width: 40px;
+  height: 40px;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  margin: 0px 40px;
+  font:16px Arial, Helvetica, sans-serif;
+}
+nav a{
+  padding: 0 15px;
+  width: 32px;
+  text-decoration:none;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: normal;
+  opacity: 0.9;
+}
+
+nav a:hover {
+  opacity: 1;
+}
+
+.moshuLogo:hover{
+  cursor:pointer
+}
+a:hover{
+  cursor:pointer
+}
+</style>
