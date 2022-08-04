@@ -6,31 +6,7 @@
     </div>
     <ul class="nav-links">
       <li>
-        <router-link to="#">
-          <i class='bx bxs-pie-chart-alt-2'></i>
-          <span class="link-name">项目</span>
-        </router-link>
-      </li>
-      <li>
-        <router-link to="#">
-          <i class='bx bxs-pie-chart-alt-2'></i>
-          <span class="link-name">项目</span>
-        </router-link>
-      </li>
-      <li>
-        <router-link to="#">
-          <i class='bx bxs-pie-chart-alt-2'></i>
-          <span class="link-name">项目</span>
-        </router-link>
-      </li>
-      <li>
-        <router-link to="#">
-          <i class='bx bxs-pie-chart-alt-2'></i>
-          <span class="link-name">项目</span>
-        </router-link>
-      </li>
-      <li>
-        <router-link to="#">
+        <router-link to="/projectList">
           <i class='bx bxs-pie-chart-alt-2'></i>
           <span class="link-name">项目</span>
         </router-link>
