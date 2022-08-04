@@ -57,17 +57,6 @@
 
         <div class="form-group">
           <div class="field">
-            <p>加入团队数</p>
-          </div>
-          <div class="content">
-            <div class="inputPlace">
-              <input type="text" :placeholder=this.$store.state.userInfo.gnum onfocus="this.blur()" id="gnum">
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="field">
             <p>个人简介</p>
           </div>
           <div class="content">
@@ -92,25 +81,63 @@ export default {
   name: "UserInfo",
   data() {
     return {
-      tabPosition: 'left'
+
     }
   },
 
-  mounted() {
-    this.initPage()
+  created() {
+    this.getInfo(this.$store.state.userInfo.uid);
   },
   methods: {
-    changeInfo() {
+    getInfo(uid) {
+      let user;
       let params = {
-        username: document.getElementById('username'),
-        name: document.getElementById('name'),
-        email: document.getElementById('email'),
-        profile: document.getElementById('profile'),
+        uid: this.$store.state.userInfo.uid,
       }
-
       this.$axios({
         method: 'post',
-        url: "http://localhost:8000/changeInfo",
+        url: "http://localhost:8000/space/get_info/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log(res.data[0]);
+        user = res.data[0];
+        this.$store.state.userInfo.username = user.username;
+        this.$store.state.userInfo.name = user.name;
+        this.$store.state.userInfo.email = user.email;
+        this.$store.state.userInfo.profile = user.profile;
+
+        console.log(this.$store.state.userInfo.username);
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    changeInfo() {
+      let params = {
+        uid: this.$store.state.userInfo.uid,
+        username: document.getElementById('username').value,
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        profile: document.getElementById('profile').value,
+      }
+      if(params.username === '' && params.name === '' && params.email === '' && params.profile === '') {
+        return ;
+      }
+      if(params.username === '') {
+        params.username = this.$store.state.userInfo.username;
+      }
+      if(params.name === '') {
+        params.name = this.$store.state.userInfo.name;
+      }
+      if(params.email === '') {
+        params.email = this.$store.state.userInfo.email;
+      }
+      if(params.profile === '') {
+        params.profile = this.$store.state.userInfo.profile;
+      }
+      console.log(params);
+      this.$axios({
+        method: 'post',
+        url: "http://localhost:8000/space/update_info/",
         data: qs.stringify(params)
       }).then(res => {
         console.log(res.data)
@@ -124,7 +151,7 @@ export default {
           this.$message({
             message: '修改成功',
             type: 'success',
-            showClose
+            showClose: true,
           })
           location.reload();
 
@@ -132,7 +159,7 @@ export default {
           this.$message({
             message: res.data.msg,
             type: 'error',
-            showClose
+            showClose: true,
           })
         }
 
@@ -284,7 +311,7 @@ export default {
   position: relative;
   background-color: #f0f5f5;
   width: 650px;
-  height: 600px;
+  height: 500px;
   border-radius: 5px;
   box-shadow: 2px 0 10px rgba(0,0,0,0.1);
   left: 370px;

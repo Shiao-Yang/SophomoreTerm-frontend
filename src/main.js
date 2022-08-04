@@ -12,9 +12,9 @@ Vue.use(VueAxios, axios) // 安装插件
 Vue.use(ElementUI);
 
 Vue.config.productionTip = false
-
+Vue.prototype.eventbus = new Vue()
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App)
 }).$mount('#app')

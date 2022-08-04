@@ -7,6 +7,8 @@ import AccountInfo from "@/views/AccountInfo";
 import AddedTeam from "@/views/AddedTeam";
 import temp from "@/views/temp";
 import Design from "@/views/Design";
+import SideNavigation from "@/components/SideNavigation";
+import ProjectView from "@/views/ProjectView";
 
 Vue.use(VueRouter)
 
@@ -49,6 +51,16 @@ const routes = [
     name: 'design',
     component: Design
   },
+  {
+    path:'/projectList',
+    name: 'ProjectList',
+    component: ProjectView
+  },
+  {
+    path: '/prototype',
+    component: ()=> import('@/examples/vseditor'),
+  }
+
 ]
 
 const router = new VueRouter({

@@ -110,16 +110,15 @@ export default {
         console.log(res.data)
         if(res.data.errno === 0) {
 
-          this.$store.state.uid = res.data.uid;
+          //this.$store.state.uid = res.data.uid;
           //this.$store.state.userInfo.username = user.username;
-          this.$store.state.isLogin = true;
-
+          //this.$store.state.isLogin = true;
           this.$message({
             message: '注册成功',
             type: 'success',
             showClose: true,
           })
-          this.$router.push('/');
+          location.reload();
 
         } else {
           this.$message({

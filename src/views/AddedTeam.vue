@@ -24,7 +24,7 @@
         </div>
         <div v-for="(item,i) in TeamData" class="form-group">
           <div class="field">
-            <p>{{ item }}</p>
+            <p>{{ item.name }}</p>
           </div>
         </div>
 
@@ -37,17 +37,80 @@
 </template>
 
 <script>
+import qs from "qs";
+
 export default {
   name: "AddedTeam",
   data() {
     return {
       tabPosition: 'left',
       TeamData: [
-          '大二下小学期',
-          '大三下小学期',
+        '大二下小学期',
+        '大三下小学期',
       ],
     }
-  }
+  },
+
+  created() {
+    console.log(this.$store.state.userInfo.username);
+    this.getTeam(this.$store.state.userInfo.uid);
+    this.getInfo(this.$store.state.userInfo.uid);
+  },
+
+  methods: {
+    getTeam(uid) {
+      let user;
+      let params = {
+        uid: this.$store.state.userInfo.uid,
+        username: this.$store.state.userInfo.username,
+      }
+      console.log(params)
+
+      this.$axios({
+        method: 'post',
+        url: "http://127.0.0.1:8000/space/get_group/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log(res.data);
+        if(res.data.error === undefined) {
+          this.TeamData = res.data;
+        }
+        else {
+          this.$message ({
+            message: res.data.msg,
+            type: "error",
+            showClose: true,
+          });
+        }
+
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getInfo(uid) {
+      let user;
+      let params = {
+        uid: this.$store.state.userInfo.uid,
+      }
+      this.$axios({
+        method: 'post',
+        url: "http://localhost:8000/space/get_info/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log(res.data[0]);
+        user = res.data[0];
+        this.$store.state.userInfo.username = user.username;
+        this.$store.state.userInfo.name = user.name;
+        this.$store.state.userInfo.email = user.email;
+        this.$store.state.userInfo.profile = user.profile;
+
+        console.log(this.$store.state.userInfo.username);
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+  },
+
 }
 </script>
 
@@ -208,8 +271,10 @@ export default {
 
 .title {
   background-color: #f0f5f5;
-  height: 70px;
+  height: 100px;
   position: relative;
+  border-radius: 5px;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
   top: -30px
 }
 
@@ -221,13 +286,13 @@ export default {
 }
 .form-group {
   position: relative;
+  top: -30px;
   background-color: #f0f5f5;
   width: 650px;
   height: 80px;
-  /*border-radius: 5px;
+  border-radius: 5px;
   box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 
-   */
   z-index: 2;
   display: flex;
   flex-direction: row;

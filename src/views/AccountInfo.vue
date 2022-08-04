@@ -56,7 +56,7 @@
           </div>
         </div>
 
-        <button id="changPassword">确认更改</button>
+        <button @click="changePassword" id="changPassword">确认更改</button>
 
       </div>
 
@@ -74,17 +74,27 @@ export default {
       tabPosition: 'left'
     }
   },
+
+  created() {
+    this.getInfo(this.$store.state.userInfo.uid);
+  },
+
   methods: {
     changePassword() {
       let params = {
-        pw: document.getElementById('pw'),
-        pw1: document.getElementById('pw1'),
-        pw2: document.getElementById('pw2'),
+        uid: this.$store.state.userInfo.uid,
+        password: document.getElementById('pw').value,
+        password_1: document.getElementById('pw1').value,
+        password_2: document.getElementById('pw2').value,
       }
+      console.log(params);
 
+      if(params.password === '' && params.password_1 === '' && params.password_2 === '') {
+        return;
+      }
       this.$axios({
         method: 'post',
-        url: "http://localhost:8000/changePassword",
+        url: "http://127.0.0.1:8000/space/update_password/",
         data: qs.stringify(params)
       }).then(res => {
         console.log(res.data)
@@ -93,20 +103,41 @@ export default {
           this.$store.state.userInfo.password = params.password;
 
           this.$message({
-            message: '修改成功',
+            message: res.data.msg,
             type: 'success',
-            showClose
+            showClose: true,
           })
           location.reload();
-
         } else {
           this.$message({
             message: res.data.msg,
             type: 'error',
-            showClose
+            showClose: true,
           })
         }
 
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getInfo(uid) {
+      let user;
+      let params = {
+        uid: this.$store.state.userInfo.uid,
+      }
+      this.$axios({
+        method: 'post',
+        url: "http://localhost:8000/space/get_info/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log(res.data[0]);
+        user = res.data[0];
+        this.$store.state.userInfo.username = user.username;
+        this.$store.state.userInfo.name = user.name;
+        this.$store.state.userInfo.email = user.email;
+        this.$store.state.userInfo.profile = user.profile;
+
+        console.log(this.$store.state.userInfo.username);
       }).catch(err => {
         console.log(err)
       })
