@@ -23,6 +23,10 @@ export default new Vuex.Store({
     warning: false, // 非法跳转
     base: "http://127.0.0.1:8000/api/",
     controls: [],
+    his: [[]],
+    hisPnt: 0,
+    pic_id: 1,
+    pic_name: '',
   },
   getters: {
   },

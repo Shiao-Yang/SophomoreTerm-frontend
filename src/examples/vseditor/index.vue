@@ -11,6 +11,7 @@ import {
   EVENT_COMPONENT_SELECT,
   EVENT_COMPONENT_TRANSFORM,
   EVENT_COMPONENT_UNSELECT,
+  EVENT_APPLICATION_SAVE,
 } from '@/examples/vseditor/event-enums'
 import FooterVue from '@/examples/vseditor/footer.vue'
 import HeaderVue from '@/examples/vseditor/header.vue'
@@ -26,6 +27,7 @@ import PropInspectorVue from '@/examples/vseditor/prop-inspector.vue'
 import PluginSelectionVue from '@/examples/vseditor/plugins/plugin-selection.vue'
 import PluginGridVue from '@/examples/vseditor/plugins/plugin-grid.vue'
 import { registerKeyboardAction } from '@/examples/vseditor/plugins/keyboard'
+import qs from "qs";
 let historys = [[]]
 let historyPointer = 0
 export default {
@@ -210,12 +212,15 @@ export default {
     setControls(controls, needRecordHistory = true) {
       this.controls = controls
 
-      this.$store.state.controls = this.controls;
       if (needRecordHistory) {
         historys = historys.slice(0, historyPointer + 1)
         historys.push(this.controls)
         historyPointer = historys.length - 1
       }
+
+      this.$store.state.controls = this.controls;
+      this.$store.state.his = historys;
+      this.$store.state.hisPnt = historyPointer;
     },
     /**
      * @description 清空选中状态
@@ -311,6 +316,42 @@ export default {
     },
     jump() {
       this.$router.push('/userInfo');
+    },
+    handleSave() {
+      let params = {
+        pid: this.$store.state.pic_id,
+        data: JSON.stringify(this.controls),
+        name: this.$store.state.pic_name,
+      }
+      console.log(params);
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base+"design/store/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log(res.data);
+
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    get_Pic(pic_id) {
+      let params = {
+        pic_id: pic_id,
+      }
+      console.log(params);
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base+"design/get_one_design/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log(res.data);
+        this.controls = JSON.parse(res.data.data);
+        //console.log(this.controls);
+      }).catch(err => {
+        console.log(err)
+      })
+
     }
   },
   created() {
@@ -325,12 +366,17 @@ export default {
     this.eventbus.$on(EVENT_APPLICATION_REDO, this.handleRedo)
     this.eventbus.$on(EVENT_APPLICATION_UNDO, this.handleUndo)
     this.eventbus.$on(EVENT_APPLICATION_CLEAR, this.handleClear)
-
+    this.eventbus.$on(EVENT_APPLICATION_SAVE, this.handleSave)
     // 绑定键盘按钮事件
     registerKeyboardAction(this)
 
+    this.get_Pic(this.$store.state.pic_id);
     console.log(this.$store.state.controls);
+    /*
     this.controls = this.$store.state.controls;
+    historys = this.$store.state.his;
+    historyPointer = this.$store.state.hisPnt;
+    */
   },
   render() {
     return (

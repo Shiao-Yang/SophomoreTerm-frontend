@@ -126,11 +126,20 @@ export default {
           location.reload();
 
         } else {
-          this.$message({
-            message: res.data.msg,
-            type: 'error',
-            showClose: true,
-          })
+          if(res.data.msg == '密码格式错误' ) {
+            this.$message({
+              message: res.data.msg+':必须包含字母和数字，且长度在8和18之间',
+              type: 'error',
+              showClose: true,
+            })
+          }
+          else {
+            this.$message({
+              message: res.data.msg,
+              type: 'error',
+              showClose: true,
+            })
+          }
         }
 
       })

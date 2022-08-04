@@ -5,6 +5,7 @@ import {
   EVENT_APPLICATION_UNDO,
   EVENT_COMPONENT_DELETE,
   EVENT_COMPONENT_DUPLICATE,
+  EVENT_APPLICATION_SAVE,
 } from './event-enums'
 export default {
   methods: {},
@@ -51,6 +52,13 @@ export default {
             onClick={() => this.eventbus.$emit(EVENT_APPLICATION_CLEAR)}
           >
             Clear
+          </button>
+          <button
+              title="Save all components in the editing area"
+              data-action="save"
+              onClick={() => this.eventbus.$emit(EVENT_APPLICATION_SAVE)}
+          >
+            SAVE
           </button>
         </div>
       </div>

@@ -6,6 +6,7 @@
           <img src="../assets/images/register.png" alt="加载失败">
           <p> {{this.$store.state.userInfo.username}} </p>
         </div>
+        <el-button @click="jump">去mode</el-button>
         <div class="down1">
           <router-link to="/userInfo">个人资料</router-link>
         </div>
@@ -94,6 +95,9 @@ export default {
     this.getInfo(sessionStorage.getItem('uid'));
   },
   methods: {
+    jump() {
+      this.$router.push('/prototype');
+    },
     getInfo(uid) {
       let user;
       let params = {

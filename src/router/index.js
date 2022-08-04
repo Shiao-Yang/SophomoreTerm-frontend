@@ -13,9 +13,12 @@ import adminTeam from "@/views/AdminTeam";
 import invite from "@/views/Invite";
 import project from "@/views/Project";
 import editor from "@/views/Editor";
+import DesignList from "@/views/DesignList"
+
 
 import Home from "@/views/Home";
 import TeamList from "@/views/TeamList";
+import designList from "@/views/DesignList";
 Vue.use(VueRouter)
 
 
@@ -72,7 +75,7 @@ const routes = [
     name: 'teamList',
     component: TeamList
   },
-  
+
   // {
   //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   // },*/
@@ -95,6 +98,11 @@ const routes = [
     path: '/editor',
     name: 'editor',
     component: editor
+  },
+  {
+    path: '/designList',
+    name: 'designList',
+    component: designList
   }
 
 ]
