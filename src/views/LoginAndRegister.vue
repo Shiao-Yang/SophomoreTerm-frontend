@@ -55,6 +55,7 @@ export default {
 
     toLogin: function () {
       let params;
+      let tempthis = this;
       params = {
         username: document.getElementById('un').value,
         password: document.getElementById('pw').value
@@ -77,6 +78,7 @@ export default {
             type: 'success',
             showClose: true,
           })
+          tempthis.isLogin = true;
           this.$router.push('/');
 
         } else {
