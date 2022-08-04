@@ -12,11 +12,11 @@
         </div>
       </div>
       <div class="img img3">
-        <router-link to="/editor" class="router">
+        <div class="router" @click="turnToEditor">
           <div class="card">
             <p class="word">编辑文档</p>
           </div>
-        </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -37,6 +37,11 @@ export default {
       map: true,
       file: true,
     }
+  },
+  methods:{
+    turnToEditor(){
+      this.$router.push('/editor');
+    },
   }
 }
 </script>

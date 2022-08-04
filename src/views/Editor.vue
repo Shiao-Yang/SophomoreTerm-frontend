@@ -17,6 +17,8 @@
           @onCreated="onCreated"
           id="editor"
       />
+      <input type="text" placeholder="保存前起一个标题吧" id="htmlTitle">
+      <el-button @click="toSavaHTML">保存</el-button>
     </div>
   </div>
 </template>
@@ -58,6 +60,11 @@ export default Vue.extend({
     const editor = this.editor
     if (editor == null) return
     editor.destroy() // 组件销毁时，及时销毁编辑器
+  },
+  toSavaHTML(){
+    const tempthis = this;
+    console.log(this.$refs)
+    let html = this.$refs.file.files[0];
   }
 })
 </script>

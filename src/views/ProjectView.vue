@@ -28,8 +28,8 @@
             <div class="projectList">
               <ul class="projects">
                 <li class="project-item" v-for="project in this.projects">
-                  <img class="project-logo" src="../assets/logo.png">
-                  <span class="project-info">
+<!--                  <img class="project-logo" src="../assets/logo.png" >-->
+                  <span class="project-info" @click="turnToProjrct">
                     <span class="project-name">{{project.name}}</span>
                     <span class="project-details">创建时间 : {{project.starttime}}</span>
                   </span>
@@ -119,7 +119,9 @@ export default {
             console.log(err);
           })
     },
-
+    turnToProjrct(){
+      this.$router.push("/project")
+    },
     close(){
       this.isCreate = false;
     }
