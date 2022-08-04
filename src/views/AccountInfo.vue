@@ -108,7 +108,13 @@ export default {
             type: 'success',
             showClose: true,
           })
-          location.reload();
+          let pw = document.getElementById('pw');
+          let pw1 = document.getElementById('pw1');
+          let pw2 = document.getElementById('pw2');
+          pw.value = '';
+          pw1.value = '';
+          pw2.value = '';
+
         } else {
           this.$message({
             message: res.data.msg,
