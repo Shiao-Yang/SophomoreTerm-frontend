@@ -84,11 +84,12 @@ export default {
     },
     rowClick(record,index){
       console.log(record);
-      this.$router.push('/team/'+record.gid);
-      console.log(index)
+      this.$store.gid=record.gid;
+      this.$router.push('/adminTeam');
+      console.log(this.$store.gid);
     },
     backPage(){
-
+      this.$router.push('/userInfo');
     },
     getCreatedGroup(uid){
         this.theUid = uid;
