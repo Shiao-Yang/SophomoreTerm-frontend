@@ -1,5 +1,6 @@
 <template>
   <div>
+    <side-navigation></side-navigation>
     <div class="container">
       <div class="img img1">
         <div class="card">
@@ -23,8 +24,12 @@
 </template>
 
 <script>
+import sideNavigation from "@/components/SideNavigation";
 export default {
   name: "Project",
+  components: {
+    sideNavigation,
+  },
   created() {
     //if (!this.$store.state.isLogin) {
     //  this.$store.state.warning = true
