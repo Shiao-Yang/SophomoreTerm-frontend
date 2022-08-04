@@ -19,6 +19,7 @@ export default new Vuex.Store({
     pid: '', // 当前项目id
     role: 2, // 当前用户身份
     isLogin: false,
+    warning: false, // 非法跳转
     base: "http://127.0.0.1:8000/",
   },
   getters: {

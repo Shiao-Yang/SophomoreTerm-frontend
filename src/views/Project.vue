@@ -25,6 +25,12 @@
 <script>
 export default {
   name: "Project",
+  created() {
+    if (!this.$store.state.isLogin) {
+      this.$store.state.warning = true
+      this.$router.push('/')
+    }
+  },
   data() {
     return {
       design: true,

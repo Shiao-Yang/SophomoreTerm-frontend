@@ -4,7 +4,7 @@
 <!--      <router-link to="/">Home</router-link> |-->
 <!--      <router-link to="/about">About</router-link>-->
 <!--    </nav>-->
-    <div><Header/></div>
+    <div v-if="this.$route.path!=='/invite'"><Header/></div>
     <router-view/>
 
   </div>
@@ -28,10 +28,17 @@
   export default {
     name: 'App',
     components: {Header},
+    created() {
+
+    },
+    mounted() {
+      if (this.$store.state.warning) {
+        this.$message.warning("请先登录！")
+        this.$store.state.warning = false
+      }
+    }
   }
 </script>
-  <router-view></router-view>
-</template>
 
 <style>
 
