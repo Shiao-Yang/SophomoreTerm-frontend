@@ -1,5 +1,6 @@
 <template>
   <div id="bgd">
+
     <router-link to="/project">
       <img src="../assets/return.png" id="return">
     </router-link>
@@ -29,10 +30,10 @@ export default Vue.extend({
   components: { Editor, Toolbar },
   created() {
     window.myData = this;
-    if (!this.$store.state.isLogin) {
-      this.$store.state.warning = true
-      this.$router.push('/')
-    }
+    //if (!this.$store.state.isLogin) {
+    //   this.$store.state.warning = true
+    //  this.$router.push('/')
+    //}
   },
   data() {
     return {

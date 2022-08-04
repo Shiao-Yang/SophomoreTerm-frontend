@@ -127,10 +127,10 @@ export default {
     this.get_member();
     console.log(this.$store.state.isLogin)
     console.log(this.$store.state.role)
-    if (!this.$store.state.isLogin) {
-      this.$store.state.warning = true
-      this.$router.push('/')
-    }
+    //if (!this.$store.state.isLogin) {
+    //  this.$store.state.warning = true
+    //  this.$router.push('/')
+    //}
   },
   data() {
     return {
