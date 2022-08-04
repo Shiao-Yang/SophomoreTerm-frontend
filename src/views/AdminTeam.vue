@@ -3,8 +3,8 @@
     <side-navigation></side-navigation>
     <div id="bgd">
       <div id="membersDiv">
-        <span id="title" v-if="$store.state.role!==0">管理您的团队</span>
-        <span id="title" v-else-if="$store.state.role===0">查看您的团队</span>
+        <span class="title" v-if="$store.state.role!==0">管理您的团队</span>
+        <span class="title" v-else-if="$store.state.role===0">查看您的团队</span>
         <router-link to="/invite">
           <img title="邀请" v-if="$store.state.role!==0" src="../assets/invite.png" class="img" id="invite">
         </router-link>
@@ -383,7 +383,7 @@ export default {
     border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
   }
-  #title {
+  .title {
     position: relative;
     top: 10px;
     font-size: 25px;
