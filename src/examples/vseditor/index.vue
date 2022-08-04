@@ -319,11 +319,11 @@ export default {
     },
     handleSave() {
       let params = {
-        pid: this.$store.state.pic_id,
+        picid: this.$store.state.pic_id,
         data: JSON.stringify(this.controls),
-        name: this.$store.state.pic_name,
+
       }
-      console.log(params);
+      //console.log(params);
       this.$axios({
         method: 'post',
         url: this.$store.state.base+"design/store/",
@@ -337,7 +337,7 @@ export default {
     },
     get_Pic(pic_id) {
       let params = {
-        pic_id: pic_id,
+        picid: pic_id,
       }
       console.log(params);
       this.$axios({
@@ -345,8 +345,8 @@ export default {
         url: this.$store.state.base+"design/get_one_design/",
         data: qs.stringify(params)
       }).then(res => {
-        console.log(res.data);
-        this.controls = JSON.parse(res.data.data);
+        console.log(res.data[0]);
+        this.controls = JSON.parse(res.data[0].data);
         //console.log(this.controls);
       }).catch(err => {
         console.log(err)

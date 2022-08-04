@@ -22,14 +22,14 @@
           <div class="content-details">
             <div class="projectList">
               <ul class="projects">
-                <li class="project-item" v-for="project in this.projects">
+                <li class="project-item" v-for="(project, index) in this.projects">
                   <img class="project-logo" src="../assets/logo.png">
                   <span class="project-info">
                     <span class="project-name">{{project.name}}</span>
                     <!--<span class="project-details">创建时间 : {{project.starttime}}</span>-->
                   </span>
                   <i class='bx bxs-log-in first' @click="toDesign(project.picid,project.name)"></i>
-                  <i class='bx bxs-cog'></i>
+                  <i class='bx bx-x delete' @click="dlt(project.picid, index)"></i>
                 </li>
               </ul>
             </div>
@@ -65,6 +65,41 @@ export default {
     }
   },
   methods: {
+    dlt(pic_id, index) {
+      let params = {
+        picid: pic_id,
+      }
+      console.log(params);
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base+"design/delete/",
+        data: qs.stringify(params)
+      }).then(res => {
+        //console.log(res.data);
+        if(res.data.errno === 0) {
+
+          this.$message({
+            message: res.data.msg,
+            type: 'success',
+            showClose: true,
+          })
+          //this.projects.push({picid: params.picid, name: params.name, data: []});
+          this.isCreate = false;
+          this.projects.splice(index, 1);
+          //location.reload();
+
+        } else {
+          this.$message({
+            message: res.data.msg,
+            type: 'error',
+            showClose: true,
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+
     toDesign(pic_id,pic_name) {
       this.$store.state.pic_id = pic_id;
       this.$store.state.pic_name = pic_name;
@@ -99,35 +134,43 @@ export default {
         url: self.$store.state.base+"space/get_info/",
         data:formData,
       })
-          .then(res=>{
+      .then(res=>{
 
-          })
+      })
     },
 
-    createProject(name){
-      let self = this;
-      let formData = new FormData;
-      formData.append('name', name);
-      formData.append('uid', this.$store.state.userInfo.uid);
-      formData.append('gid', this.$store.state.gid);
-      self.$axios({
-        method: 'POST',
-        url: self.$store.state.base+"project_manage/create/",
-        data:formData,
+    createProject(name) {
+      let params = {
+        picid: 2 /*this.$store.state.pid*/,
+        name: name,
+      }
+      console.log(params);
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base+"design/create/",
+        data: qs.stringify(params)
+      }).then(res => {
+        if(res.data.errno === 0) {
+
+          this.$message({
+            message: res.data.msg,
+            type: 'success',
+            showClose: true,
+          })
+          this.projects.push({picid: params.picid, name: params.name, data: []});
+          this.isCreate = false;
+          //location.reload();
+        } else {
+          this.$message({
+            message: res.data.msg,
+            type: 'error',
+            showClose: true,
+          })
+        }
+
+      }).catch(err => {
+        console.log(err)
       })
-          .then(res=>{
-            console.log(res.data);
-            self.close();
-            if(res.data.errno === '0'){
-              self.$message.success("新建项目成功");
-            }
-            else{
-              self.$message.error("新建项目失败,错误代码:"+res.data.errno);
-            }
-          })
-          .catch(err=>{
-            console.log(err);
-          })
     },
 
     close(){
