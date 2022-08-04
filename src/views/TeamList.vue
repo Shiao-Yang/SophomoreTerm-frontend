@@ -8,7 +8,7 @@
           :data="createdGroup"
           stripe
           style="width: 100%"
-          @row-click="rowClick">
+          @row-click="rowClick1">
         <template v-for="(col ,index) in cols">
         <el-table-column
             :prop="col.prop"
@@ -23,7 +23,7 @@
           :data="managedGroup"
           stripe
           style="width: 100%"
-          @row-click="rowClick">
+          @row-click="rowClick2">
         <template v-for="(col ,index) in cols">
           <el-table-column
               :prop="col.prop"
@@ -38,7 +38,7 @@
           :data="participatedGroup"
           stripe
           style="width: 100%"
-          @row-click="rowClick">
+          @row-click="rowClick3">
         <template v-for="(col ,index) in cols">
           <el-table-column
               :prop="col.prop"
@@ -82,9 +82,27 @@ export default {
     handleChange(val) {
       // console.log(val);
     },
-    rowClick(record,index){
-      console.log(record);
+    rowClick1(record,index){
+      // console.log(record);
+      // console.log(index);
       this.$store.state.gid=record.gid;
+      this.$store.state.role=2;
+      this.$router.push('/adminTeam');
+      console.log(this.$store.state.gid);
+    },
+    rowClick2(record,index){
+      // console.log(record);
+      // console.log(index);
+      this.$store.state.gid=record.gid;
+      this.$store.state.role=1;
+      this.$router.push('/adminTeam');
+      console.log(this.$store.state.gid);
+    },
+    rowClick3(record,index){
+      // console.log(record);
+      // console.log(index);
+      this.$store.state.gid=record.gid;
+      this.$store.state.role=0;
       this.$router.push('/adminTeam');
       console.log(this.$store.state.gid);
     },

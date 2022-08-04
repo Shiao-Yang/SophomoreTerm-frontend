@@ -20,8 +20,9 @@
         <nav>
           <a v-if="$store.state.isLogin===true" @click="toVisitSelf">个人信息</a>
           <a v-else @click="toLogin">登录</a>
-          <a v-if="$store.state.isLogin===true" @click="toExit">退出登录</a>
+          <a v-if="$store.state.isLogin===true" @click="toVisitTeamList">团队列表</a>
           <a v-else @click="toRegister">注册</a>
+          <a v-if="$store.state.isLogin===true" @click="toExit">退出登录</a>
         </nav>
       </div>
     </div>
@@ -50,6 +51,9 @@ export default {
     },
     toVisitSelf:function (){
       this.$router.push('/userInfo');
+    },
+    toVisitTeamList:function (){
+      this.$router.push('/teamList');
     },
     toExit:function (){
       this.$store.state.isLogin = false;

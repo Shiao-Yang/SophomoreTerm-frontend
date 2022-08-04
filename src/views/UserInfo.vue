@@ -12,10 +12,10 @@
         <div class="down">
           <router-link to="/accountInfo">账号信息</router-link>
         </div>
-        <div class="down">
-<!--          <router-link to="/addedTeam">已加入团队</router-link>-->
-          <router-link to="/teamList">团队列表</router-link>
-        </div>
+<!--        <div class="down">-->
+<!--&lt;!&ndash;          <router-link to="/addedTeam">已加入团队</router-link>&ndash;&gt;-->
+<!--          <router-link to="/teamList">团队列表</router-link>-->
+<!--        </div>-->
 
       </div>
 

@@ -12,9 +12,9 @@
         <div class="down1">
           <router-link to="/accountInfo">账号信息</router-link>
         </div>
-        <div class="down">
-          <router-link to="/teamList">团队列表</router-link>
-        </div>
+<!--        <div class="down">-->
+<!--          <router-link to="/teamList">团队列表</router-link>-->
+<!--        </div>-->
 
       </div>
 
