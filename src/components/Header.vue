@@ -43,10 +43,10 @@ export default {
       this.$router.push('/');
     },
     toLogin:function (){
-      this.$router.push('/login');
+      this.$router.push('/login&register');
     },
     toRegister:function (){
-      this.$router.push('/register');
+      this.$router.push('/login&register');
     },
     toVisitSelf:function (){
       this.$router.push('/user/uid');
