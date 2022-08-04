@@ -387,6 +387,7 @@ export default {
     position: relative;
     top: 10px;
     font-size: 25px;
+    left: 40%;
   }
   #members {
     margin: 0px;
