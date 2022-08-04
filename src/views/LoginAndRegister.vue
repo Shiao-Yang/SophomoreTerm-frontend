@@ -81,6 +81,8 @@ export default {
           tempthis.isLogin = true;
           this.$router.push('/');
 
+          sessionStorage.setItem('uid',res.data.uid);
+
         } else {
           this.$message({
             message: res.data.msg,

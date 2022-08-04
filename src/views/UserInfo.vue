@@ -86,8 +86,8 @@ export default {
   },
 
   created() {
-    console.log(this.$store.state.userInfo.uid);
-    this.getInfo(this.$store.state.userInfo.uid);
+    console.log(sessionStorage.getItem('uid'));
+    this.getInfo(sessionStorage.getItem('uid'));
   },
   methods: {
     getInfo(uid) {
@@ -114,7 +114,7 @@ export default {
     },
     changeInfo() {
       let params = {
-        uid: this.$store.state.userInfo.uid,
+        uid: sessionStorage.getItem('uid'),
         username: document.getElementById('username').value,
         name: document.getElementById('name').value,
         email: document.getElementById('email').value,

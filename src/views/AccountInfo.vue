@@ -76,13 +76,14 @@ export default {
   },
 
   created() {
-    this.getInfo(this.$store.state.userInfo.uid);
+    console.log(sessionStorage.getItem('uid'));
+    this.getInfo(sessionStorage.getItem('uid'));
   },
 
   methods: {
     changePassword() {
       let params = {
-        uid: this.$store.state.userInfo.uid,
+        uid: sessionStorage.getItem('uid'),
         password: document.getElementById('pw').value,
         password_1: document.getElementById('pw1').value,
         password_2: document.getElementById('pw2').value,
@@ -123,7 +124,7 @@ export default {
     getInfo(uid) {
       let user;
       let params = {
-        uid: this.$store.state.userInfo.uid,
+        uid: uid,
       }
       this.$axios({
         method: 'post',
