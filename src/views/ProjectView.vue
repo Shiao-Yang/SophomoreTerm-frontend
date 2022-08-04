@@ -28,12 +28,12 @@
             <div class="projectList">
               <ul class="projects">
                 <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== isActive">
-                  <img class="project-logo" src="../assets/logo.png">
+<!--                  <img class="project-logo" src="../assets/logo.png">-->
                   <span class="project-info">
                     <span class="project-name">{{project.name}}</span>
                     <span class="project-details">创建时间 : {{project.starttime}}</span>
                   </span>
-                  <i class='bx bxs-log-in first' title="进入项目"></i>
+                  <i class='bx bxs-log-in first' title="进入项目" @click="toTurnToProject(project.id)"></i>
                   <i class='bx bxs-cog' title="项目管理" @click="changeIsSet(index)"></i>
                 </li>
               </ul>
@@ -77,6 +77,12 @@ export default {
     }
   },
   methods: {
+    toTurnToProject(pid){
+      this.$store.state.pid=pid;
+      console.log(pid)
+      this.$router.push("/project")
+      console.log(this.$store.state.pid)
+    },
     getProjects(gid){
       let self = this;
       self.$axios({
