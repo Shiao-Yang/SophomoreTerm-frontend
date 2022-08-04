@@ -52,16 +52,16 @@ export default {
   },
 
   created() {
-    console.log(this.$store.state.userInfo.username);
-    this.getTeam(this.$store.state.userInfo.uid);
-    this.getInfo(this.$store.state.userInfo.uid);
+    console.log(sessionStorage.getItem('uid'));
+    this.getInfo(sessionStorage.getItem('uid'));
+    this.getTeam(sessionStorage.getItem('uid'));
   },
 
   methods: {
     getTeam(uid) {
       let user;
       let params = {
-        uid: this.$store.state.userInfo.uid,
+        uid: uid,
         username: this.$store.state.userInfo.username,
       }
       console.log(params)
@@ -90,7 +90,7 @@ export default {
     getInfo(uid) {
       let user;
       let params = {
-        uid: this.$store.state.userInfo.uid,
+        uid: uid,
       }
       this.$axios({
         method: 'post',

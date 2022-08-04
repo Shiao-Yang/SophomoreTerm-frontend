@@ -86,8 +86,8 @@ export default {
   },
 
   created() {
-    console.log(this.$store.state.userInfo.uid);
-    this.getInfo(this.$store.state.userInfo.uid);
+    console.log(sessionStorage.getItem('uid'));
+    this.getInfo(sessionStorage.getItem('uid'));
   },
   methods: {
     getInfo(uid) {
@@ -154,7 +154,7 @@ export default {
             type: 'success',
             showClose: true,
           })
-          location.reload();
+          this.$router.push('/userInfo');
 
         } else {
           this.$message({
