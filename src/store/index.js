@@ -21,7 +21,7 @@ export default new Vuex.Store({
     role: 2, // 当前用户身份
     isLogin: false,
     warning: false, // 非法跳转
-    base: "http://127.0.0.1:8000/api",
+    base: "http://127.0.0.1:8000/api/",
     controls: [],
   },
   getters: {
