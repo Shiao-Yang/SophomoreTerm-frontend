@@ -79,6 +79,7 @@ export default {
           })
           this.$router.push('/');
 
+          sessionStorage.setItem('controls', []);
           sessionStorage.setItem('uid',res.data.uid);
 
         } else {

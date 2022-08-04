@@ -94,8 +94,10 @@ export default {
 
       //console.log(this.$store)
 
-      this.$store.state.controls = this.controls;
-      console.log(this.$store.state.controls);
+
+      console.log(this.controls)
+      //sessionStorage.setItem('controls',this.controls);
+      //console.log(sessionStorage.getItem('controls'));
     },
     /**
      * @description 根据变更id的数据进行批量更新
@@ -207,6 +209,8 @@ export default {
     },
     setControls(controls, needRecordHistory = true) {
       this.controls = controls
+
+      this.$store.state.controls = this.controls;
       if (needRecordHistory) {
         historys = historys.slice(0, historyPointer + 1)
         historys.push(this.controls)
@@ -304,6 +308,9 @@ export default {
     },
     saveView() {
       this.$store.state.controls = this.controls;
+    },
+    jump() {
+      this.$router.push('/userInfo');
     }
   },
   created() {
@@ -322,8 +329,7 @@ export default {
     // 绑定键盘按钮事件
     registerKeyboardAction(this)
 
-    //提取保存的信息
-    console.log(this.$store.state.controls)
+    console.log(this.$store.state.controls);
     this.controls = this.$store.state.controls;
   },
   render() {
@@ -332,6 +338,7 @@ export default {
         <HeaderVue />
         <div class="content">
           <ComponentsVue />
+
           <EditorViewVue ref="editor" value={this.controls}>
             <PluginSelectionVue application={this} />
             <PluginGridVue />

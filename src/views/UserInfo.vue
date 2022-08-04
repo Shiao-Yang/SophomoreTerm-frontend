@@ -154,7 +154,7 @@ export default {
             type: 'success',
             showClose: true,
           })
-          location.reload();
+          //location.reload();
 
         } else {
           this.$message({
@@ -406,7 +406,7 @@ export default {
 }
 input{
   width: 350px;
-  color: #f0f5f5;
+  color: #2e2f31;
   /* 下边框样式 */
   padding: 10px 0;
   text-indent: 10px;
@@ -418,7 +418,7 @@ input::placeholder{
   color: #2e2f31;
 }
 input:focus{
-  color: #8e9aaf;
+  color: #2e2f31;
   outline: none;
   transition: 0.5s;
 }
