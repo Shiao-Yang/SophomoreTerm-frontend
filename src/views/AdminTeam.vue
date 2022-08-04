@@ -311,6 +311,8 @@ export default {
     height: 90%;
     left: 20%;
     top: 10%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
   }
   #membersDiv {
     top: 8%;
@@ -329,7 +331,6 @@ export default {
     position: relative;
     top: 10px;
     font-size: 25px;
-    left: 40%;
   }
   #members {
     margin: 0px;
