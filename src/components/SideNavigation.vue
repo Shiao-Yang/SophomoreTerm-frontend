@@ -1,8 +1,8 @@
 <template>
   <div class="sidebar">
-    <div class="logo-details">
-      <i class='bx bxs-book-reader'></i>
-      <span class="logo-name">墨&nbsp书</span>
+    <div class="logo-details" @click="toHome">
+        <i class='bx bxs-book-reader'></i>
+        <span class="logo-name">墨&nbsp书</span>
     </div>
     <ul class="nav-links">
       <li>
@@ -59,6 +59,11 @@ export default {
       username:"DEFAULT",
     }
   },
+  methods:{
+    toHome(){
+      this.$router.push('/')
+    }
+  }
 }
 </script>
 
@@ -69,6 +74,7 @@ export default {
   box-sizing: border-box;
   text-align: left;
 }
+
 
 .sidebar{
   position: fixed;
@@ -86,6 +92,7 @@ export default {
   width: 100%;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .sidebar .logo-details i{

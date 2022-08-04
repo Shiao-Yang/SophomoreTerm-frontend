@@ -14,6 +14,7 @@ export default new Vuex.Store({
       email: '', //邮箱
       gnum: 0, //团队数
       profile: '我是爱看书的Jerry', //简介
+      controls: [],
     },
     gid: 1, // 当前团队id
     pid: '', // 当前项目id

@@ -58,6 +58,7 @@ export default {
 * {
   box-sizing: border-box;
 
+
 }
 
 body {
@@ -97,6 +98,7 @@ body {
   left: 20px;
   margin: 0;
   opacity: 0;
+  background: transparent;
 }
 
 .panel.active {

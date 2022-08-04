@@ -1,13 +1,9 @@
 <template>
   <div id="app">
-<!--    <nav>-->
-<!--      <router-link to="/">Home</router-link> |-->
-<!--      <router-link to="/about">About</router-link>-->
-<!--    </nav>-->
     <div v-if="this.$route.path!=='/invite'"><Header/></div>
     <router-view/>
-
   </div>
+
 </template>
 
 <style>
@@ -19,6 +15,10 @@
   color: #2c3e50;
   background: #efefbb;
   background: linear-gradient(to right, #d4d3dd, #efefbb);
+}
+
+*{
+  text-align: center;
 }
 
 </style>

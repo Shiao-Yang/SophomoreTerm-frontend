@@ -1,25 +1,24 @@
 <template>
   <div>
-
     <div class="container">
       <SideNavigation></SideNavigation>
       <div class="main-container">
         <div class="header">
           <button type="button" class="btn-new">
             <i class='bx bx-plus-circle'></i>
-            <span class="btn-details">新建项目</span>
+            <span class="btn-details" @click="isCreate=true">新建项目</span>
           </button>
         </div>
         <div class="content">
           <div class="content-bar">
             <ul class="nav-list">
               <li class="nav-item">
-                <div class="nav-details" :class="{'active':isProject}" @click="isProject=!isProject">
+                <div class="nav-details" :class="{'active':(isActive === 1)}" @click="isActive=1">
                   <span>企业项目</span>
                 </div>
               </li>
               <li class="nav-item">
-                <div class="nav-details" :class="{'active':!isProject}" @click="isProject=!isProject">
+                <div class="nav-details" :class="{'active':(isActive === 0)}" @click="isActive=0">
                   <span>回收站</span>
                 </div>
               </li>
@@ -28,34 +27,13 @@
           <div class="content-details">
             <div class="projectList">
               <ul class="projects">
-                <li class="project-item" @click="isProject=isProject">
+                <li class="project-item" v-for="project in this.projects">
                   <img class="project-logo" src="../assets/logo.png">
                   <span class="project-info">
-                    <p class="project-name">墨书测试项目</p>
-                    <span class="project-details">创建人: Weng</span>
-                    <span class="project-details">创建时间: 2022.08.02</span>
+                    <span class="project-name">{{project.name}}</span>
+                    <span class="project-details">创建时间 : {{project.starttime}}</span>
                   </span>
-                  <i class='bx bxs-log-in first' @click="isProject=!isProject"></i>
-                  <i class='bx bxs-cog'></i>
-                </li>
-                <li class="project-item">
-                  <img class="project-logo" src="../assets/logo.png">
-                  <span class="project-info">
-                    <p class="project-name">墨书测试项目</p>
-                    <span class="project-details">创建人: Weng</span>
-                    <span class="project-details">创建时间: 2022.08.02</span>
-                  </span>
-                  <i class='bx bxs-log-in first' @click="isProject=!isProject"></i>
-                  <i class='bx bxs-cog'></i>
-                </li>
-                <li class="project-item">
-                  <img class="project-logo" src="../assets/logo.png">
-                  <span class="project-info">
-                    <p class="project-name">墨书测试项目</p>
-                    <span class="project-details">创建人: Weng</span>
-                    <span class="project-details">创建时间: 2022.08.02</span>
-                  </span>
-                  <i class='bx bxs-log-in first' @click="isProject=!isProject"></i>
+                  <i class='bx bxs-log-in first'></i>
                   <i class='bx bxs-cog'></i>
                 </li>
               </ul>
@@ -63,21 +41,98 @@
           </div>
         </div>
       </div>
+      <div class="main-container" v-if="isCreate">
+        <template>
+          <CreateProjectWindow @ok="createProject" @cancel="close"></CreateProjectWindow>
+        </template>
       </div>
-
+      </div>
   </div>
 </template>
 
 <script>
 import SideNavigation from "@/components/SideNavigation";
+import CreateProjectWindow from "@/components/CreateProjectWindow";
+
 export default {
   name: "ProjectView",
   components: {
+    CreateProjectWindow,
     SideNavigation,
   },
   data(){
     return{
-      isProject:false,
+      isActive: 1,
+      isCreate: false,
+      projects:[],
+      founders:[],
+    }
+  },
+  methods: {
+    getProjects(gid){
+      let self = this;
+      self.$axios({
+        method: 'GET',
+        url: self.$store.state.base+"project_manage/get_project/",
+        params: gid,
+      })
+          .then(res =>{
+            self.projects = res.data;
+          });
+    },
+    getFounder(uid){
+      let self = this;
+      let formData = new FormData;
+      formData.append("uid", uid);
+      self.$axios({
+        method: 'POST',
+        url: self.$store.state.base+"space/get_info/",
+        data:formData,
+      })
+          .then(res=>{
+
+          })
+    },
+
+    createProject(name){
+      let self = this;
+      let formData = new FormData;
+      formData.append('name', name);
+      formData.append('uid', this.$store.state.userInfo.uid);
+      formData.append('gid', this.$store.state.gid);
+      self.$axios({
+        method: 'POST',
+        url: self.$store.state.base+"project_manage/create/",
+        data:formData,
+      })
+          .then(res=>{
+            console.log(res.data);
+            self.close();
+            if(res.data.errno === '0'){
+              self.$message.success("新建项目成功");
+            }
+            else{
+              self.$message.error("新建项目失败,错误代码:"+res.data.errno);
+            }
+          })
+          .catch(err=>{
+            console.log(err);
+          })
+    },
+
+    close(){
+      this.isCreate = false;
+    }
+  },
+
+  created() {
+    this.getProjects({gid:this.$store.state.gid});
+  },
+
+  mounted() {
+
+    for(let i=0; i<this.projects.length; i++){
+      this.getFounder(i);
     }
   }
 
@@ -92,13 +147,13 @@ export default {
 .container{
   height: 100%;
   width: 100%;
+  background: #ffffff;
 }
 
 .main-container{
   position: relative;
-  margin-top: 50px;
   margin-left: 230px;
-  padding: 0 48px;
+  padding: 10px 48px 0 48px;
 }
 
 .header{
