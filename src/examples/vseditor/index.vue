@@ -370,44 +370,44 @@ export default {
       a.download = fileName
       a.click()
     },
+    handleSave() {
+      let params = {
+        picid: this.$store.state.pic_id,
+        data: JSON.stringify(this.controls),
 
+      }
+      //console.log(params);
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base + "design/store/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log(res.data);
+
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    get_Pic(pic_id) {
+      let params = {
+        picid: pic_id,
+      }
+      console.log(params);
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base + "design/get_one_design/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log(res.data[0]);
+        this.controls = JSON.parse(res.data[0].data);
+        //console.log(this.controls);
+      }).catch(err => {
+        console.log(err)
+      })
+
+    },
   },
-  handleSave() {
-    let params = {
-      picid: this.$store.state.pic_id,
-      data: JSON.stringify(this.controls),
 
-    }
-    //console.log(params);
-    this.$axios({
-      method: 'post',
-      url: this.$store.state.base + "design/store/",
-      data: qs.stringify(params)
-    }).then(res => {
-      console.log(res.data);
-
-    }).catch(err => {
-      console.log(err)
-    })
-  },
-  get_Pic(pic_id) {
-    let params = {
-      picid: pic_id,
-    }
-    console.log(params);
-    this.$axios({
-      method: 'post',
-      url: this.$store.state.base + "design/get_one_design/",
-      data: qs.stringify(params)
-    }).then(res => {
-      console.log(res.data[0]);
-      this.controls = JSON.parse(res.data[0].data);
-      //console.log(this.controls);
-    }).catch(err => {
-      console.log(err)
-    })
-
-  },
 
   created() {
     // 使用独立的事件对象来处理，避免多层透传回调函数

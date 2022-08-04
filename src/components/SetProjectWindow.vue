@@ -50,13 +50,13 @@ export default {
   data() {
     return {
       founder:{},
+      project: {},
     }
   },
 
   props:{
-    project: Object,
+    p: Object,
   },
-
   methods : {
     sure() {
       this.$emit('ok', this.project);
@@ -99,10 +99,15 @@ export default {
               this.$message.error("修改状态失败，错误代码:"+res.data.errno);
             }
           })
+    },
+    getProject(){
+      this.project = this.p;
     }
   },
   created() {
+    this.getProject();
     this.getFounder(this.project.uid);
+
   }
 }
 </script>

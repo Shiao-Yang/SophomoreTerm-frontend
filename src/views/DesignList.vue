@@ -230,6 +230,7 @@ export default {
 
     close(){
       this.isCreate = false;
+      this.isSet = -1;
     }
   },
 
