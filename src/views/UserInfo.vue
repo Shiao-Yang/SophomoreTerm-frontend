@@ -13,7 +13,8 @@
           <router-link to="/accountInfo">账号信息</router-link>
         </div>
         <div class="down">
-          <router-link to="/addedTeam">已加入团队</router-link>
+<!--          <router-link to="/addedTeam">已加入团队</router-link>-->
+          <router-link to="/teamList">团队列表</router-link>
         </div>
 
       </div>
@@ -86,6 +87,9 @@ export default {
   },
 
   created() {
+    if(this.$store.state.isLogin === false){
+      this.$router.push('/');
+    }
     console.log(sessionStorage.getItem('uid'));
     this.getInfo(sessionStorage.getItem('uid'));
   },

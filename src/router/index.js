@@ -68,7 +68,7 @@ const routes = [
     component: ()=> import('@/examples/vseditor'),
   },
   {
-    path:'/tempTeamList',//以后要改成包含uid信息的个人的团队列表路径
+    path:'/teamList',//以后要改成包含uid信息的个人的团队列表路径
     name: 'teamList',
     component: TeamList
   },
