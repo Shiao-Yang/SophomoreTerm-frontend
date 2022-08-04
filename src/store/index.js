@@ -20,6 +20,7 @@ export default new Vuex.Store({
     role: 2, // 当前用户身份
     isLogin: false,
     base: "http://127.0.0.1:8000/",
+    controls: [],
   },
   getters: {
   },

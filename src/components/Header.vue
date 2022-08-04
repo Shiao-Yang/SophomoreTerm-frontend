@@ -18,9 +18,9 @@
         <el-avatar icon="el-icon-user-solid" v-else></el-avatar>
 
         <nav>
-          <a v-if="$store.state.isLogin==='1'" @click="toVisitSelf">个人信息</a>
+          <a v-if="$store.state.isLogin===true" @click="toVisitSelf">个人信息</a>
           <a v-else @click="toLogin">登录</a>
-          <a v-if="$store.state.isLogin==='1'" @click="toExit">退出登录</a>
+          <a v-if="$store.state.isLogin===true" @click="toExit">退出登录</a>
           <a v-else @click="toRegister">注册</a>
         </nav>
       </div>
@@ -49,7 +49,7 @@ export default {
       this.$router.push('/login&register');
     },
     toVisitSelf:function (){
-      this.$router.push('/user/uid');
+      this.$router.push('/userInfo');
     },
     toExit:function (){
     },
