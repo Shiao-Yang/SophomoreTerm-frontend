@@ -179,7 +179,7 @@ export default {
 <style scoped>
 .main {
   /* 100%窗口高度 */
-  height: 100%;
+  height: 675px;
   width: 100%;
   /* 弹性布局 水平+垂直居中 */
   display: flex;
@@ -188,7 +188,7 @@ export default {
   align-items: center;
   /* 渐变背景 */
   background: linear-gradient(200deg,#f3e7e9,#e3eeff);
-  top: 0px;
+  top: 50px;
   left: 0px;
 }
 
