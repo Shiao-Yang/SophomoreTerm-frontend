@@ -52,7 +52,8 @@ export default {
       this.$router.push('/userInfo');
     },
     toExit:function (){
-
+      this.$store.state.isLogin = false;
+      this.$router.push('/');
     },
   }
 }
