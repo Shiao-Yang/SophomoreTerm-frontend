@@ -11,6 +11,7 @@ export function getComponentRef(id) {
 export function getComponentRefsById(ids) {
   return ids.map((item) => ComponentRefMap[item])
 }
+
 export function destoryComponentRef(id) {
   ComponentRefMap[id] = null
 }

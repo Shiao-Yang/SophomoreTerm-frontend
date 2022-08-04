@@ -21,6 +21,7 @@ export default new Vuex.Store({
     isLogin: false,
     warning: false, // 非法跳转
     base: "http://127.0.0.1:8000/",
+    controls: [],
   },
   getters: {
   },

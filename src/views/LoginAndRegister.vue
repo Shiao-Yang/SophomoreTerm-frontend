@@ -69,10 +69,10 @@ export default {
         console.log(res.data)
         if(res.data.errno === 0) {
 
-          this.$store.state.uid = res.data.uid;
+          this.$store.state.userInfo.uid = res.data.uid;
           //this.$store.state.userInfo.username = user.username;
           this.$store.state.isLogin = true;
-
+          console.log(this.$store.state.userInfo.uid);
           this.$message({
             message: '登陆成功',
             type: 'success',

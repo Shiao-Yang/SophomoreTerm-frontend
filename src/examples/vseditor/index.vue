@@ -91,6 +91,11 @@ export default {
 
       // 默认选中最后一个
       this.handleSelect(component)
+
+      //console.log(this.$store)
+
+      this.$store.state.controls = this.controls;
+      console.log(this.$store.state.controls);
     },
     /**
      * @description 根据变更id的数据进行批量更新
@@ -297,9 +302,13 @@ export default {
     getEditorView() {
       return this.$refs.editor
     },
+    saveView() {
+      this.$store.state.controls = this.controls;
+    }
   },
   created() {
     // 使用独立的事件对象来处理，避免多层透传回调函数
+
     this.eventbus.$on(EVENT_COMPONENT_ADD, this.addControl)
     this.eventbus.$on(EVENT_COMPONENT_SELECT, this.handleSelect)
     this.eventbus.$on(EVENT_COMPONENT_TRANSFORM, this.handleTransform)
@@ -312,6 +321,10 @@ export default {
 
     // 绑定键盘按钮事件
     registerKeyboardAction(this)
+
+    //提取保存的信息
+    console.log(this.$store.state.controls)
+    this.controls = this.$store.state.controls;
   },
   render() {
     return (

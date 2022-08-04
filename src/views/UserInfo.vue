@@ -7,13 +7,13 @@
           <p> {{this.$store.state.userInfo.username}} </p>
         </div>
         <div class="down1">
-          <a href="http://localhost:8080/userInfo">个人资料</a>
+          <router-link to="/userInfo">个人资料</router-link>
         </div>
         <div class="down">
-          <a href="http://localhost:8080/accountInfo">账号信息</a>
+          <router-link to="/accountInfo">账号信息</router-link>
         </div>
         <div class="down">
-          <a href="http://localhost:8080/addedTeam">已加入团队</a>
+          <router-link to="/addedTeam">已加入团队</router-link>
         </div>
 
       </div>
@@ -86,13 +86,14 @@ export default {
   },
 
   created() {
+    console.log(this.$store.state.userInfo.uid);
     this.getInfo(this.$store.state.userInfo.uid);
   },
   methods: {
     getInfo(uid) {
       let user;
       let params = {
-        uid: this.$store.state.userInfo.uid,
+        uid: uid,
       }
       this.$axios({
         method: 'post',
