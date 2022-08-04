@@ -114,7 +114,7 @@ export default {
     },
     changeInfo() {
       let params = {
-        uid: this.$store.state.userInfo.uid,
+        uid: sessionStorage.getItem('uid'),
         username: document.getElementById('username').value,
         name: document.getElementById('name').value,
         email: document.getElementById('email').value,
@@ -154,7 +154,7 @@ export default {
             type: 'success',
             showClose: true,
           })
-          this.$router.push('/userInfo');
+          location.reload();
 
         } else {
           this.$message({

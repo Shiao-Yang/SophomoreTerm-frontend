@@ -108,7 +108,7 @@ export default {
             type: 'success',
             showClose: true,
           })
-          this.$router.push('/accountInfo');
+          location.reload();
         } else {
           this.$message({
             message: res.data.msg,
