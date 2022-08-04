@@ -60,7 +60,9 @@ export default {
 
 
 }
-
+h1 {
+  text-align: center;
+}
 body {
   /*font-family: 'Muli', sans-serif;*/
   display: flex;
