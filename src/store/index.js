@@ -27,6 +27,7 @@ export default new Vuex.Store({
     hisPnt: 0,
     pic_id: 1,
     pic_name: '',
+    doc_id: 0
   },
   getters: {
   },
