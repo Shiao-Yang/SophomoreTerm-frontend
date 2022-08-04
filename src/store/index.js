@@ -15,10 +15,11 @@ export default new Vuex.Store({
       gnum: 0, //团队数
       profile: '我是爱看书的Jerry', //简介
     },
-    gid: '', //当前团队id
-    pid: '', //当前项目id
-    isLogin: false, //登陆状态
-    base: 'http://localhost:8000/',
+    gid: 1, // 当前团队id
+    pid: '', // 当前项目id
+    role: 2, // 当前用户身份
+    isLogin: false,
+    base: "http://127.0.0.1:8000/",
   },
   getters: {
   },

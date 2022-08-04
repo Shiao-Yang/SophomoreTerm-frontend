@@ -9,10 +9,15 @@ import temp from "@/views/temp";
 import Design from "@/views/Design";
 import SideNavigation from "@/components/SideNavigation";
 import ProjectView from "@/views/ProjectView";
+import adminTeam from "@/views/AdminTeam";
+import invite from "@/views/Invite";
+import project from "@/views/Project";
+import editor from "@/views/Editor";
 
 import Home from "@/views/Home";
 import TeamList from "@/views/TeamList";
 Vue.use(VueRouter)
+
 
 const routes = [
   {
@@ -66,6 +71,30 @@ const routes = [
     path:'/tempTeamList',//以后要改成包含uid信息的个人的团队列表路径
     name: 'teamList',
     component: TeamList
+  },
+  
+  // {
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  // },*/
+  {
+    path: '/adminTeam',
+    name: 'adminTeam',
+    component: adminTeam
+  },
+  {
+    path: '/invite',
+    name: 'invite',
+    component: invite
+  },
+  {
+    path: '/project',
+    name: 'project',
+    component: project
+  },
+  {
+    path: '/editor',
+    name: 'editor',
+    component: editor
   }
 
 ]
