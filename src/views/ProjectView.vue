@@ -27,14 +27,14 @@
           <div class="content-details">
             <div class="projectList">
               <ul class="projects">
-                <li class="project-item" v-for="project in this.projects">
-<!--                  <img class="project-logo" src="../assets/logo.png" >-->
-                  <span class="project-info" @click="turnToProjrct">
+                <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== isActive">
+                  <img class="project-logo" src="../assets/logo.png">
+                  <span class="project-info">
                     <span class="project-name">{{project.name}}</span>
                     <span class="project-details">创建时间 : {{project.starttime}}</span>
                   </span>
-                  <i class='bx bxs-log-in first'></i>
-                  <i class='bx bxs-cog'></i>
+                  <i class='bx bxs-log-in first' title="进入项目"></i>
+                  <i class='bx bxs-cog' title="项目管理" @click="changeIsSet(index)"></i>
                 </li>
               </ul>
             </div>
@@ -46,17 +46,24 @@
           <CreateProjectWindow @ok="createProject" @cancel="close"></CreateProjectWindow>
         </template>
       </div>
+      <div class="main-container" v-if="isSet !== -1">
+        <template>
+          <SetProjectWindow @ok="renameProject" @cancel="close" :project="projects[isSet]"></SetProjectWindow>
+        </template>
       </div>
+    </div>
   </div>
 </template>
 
 <script>
 import SideNavigation from "@/components/SideNavigation";
 import CreateProjectWindow from "@/components/CreateProjectWindow";
+import SetProjectWindow from "@/components/SetProjectWindow";
 
 export default {
   name: "ProjectView",
   components: {
+    SetProjectWindow,
     CreateProjectWindow,
     SideNavigation,
   },
@@ -64,6 +71,7 @@ export default {
     return{
       isActive: 1,
       isCreate: false,
+      isSet: -1,
       projects:[],
       founders:[],
     }
@@ -78,6 +86,7 @@ export default {
       })
           .then(res =>{
             self.projects = res.data;
+            this.initIsSet();
           });
     },
     getFounder(uid){
@@ -119,11 +128,42 @@ export default {
             console.log(err);
           })
     },
-    turnToProjrct(){
-      this.$router.push("/project")
+
+    renameProject(project){
+      let formData = new FormData;
+      formData.append("id", project.id);
+      formData.append("name", project.name);
+      this.$axios({
+        method: "POST",
+        url: this.$store.state.base+"project_manage/rename/",
+        data: formData,
+      })
+          .then(res =>{
+            console.log(res.data);
+            this.close();
+            if(res.data.errno === 0){
+              this.$message.success("重命名项目成功");
+            }
+            else{
+              this.$message.error("重命名项目失败，错误代码:"+res.data.errno);
+            }
+          })
+
     },
+
+    initIsSet(){
+      this.isSet = -1;
+      console.log(this.isSet);
+    },
+
+    changeIsSet(index){
+      this.isSet = index;
+      console.log(this.isSet);
+    },
+
     close(){
       this.isCreate = false;
+      this.isSet = -1;
     }
   },
 
@@ -217,9 +257,9 @@ export default {
   color: #8c8c8c;
   margin-right: 24px;
   text-align: center;
-  cursor: pointer;
   border-bottom: solid #006cfa 0;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .content-bar .nav-list .nav-item .nav-details{
@@ -249,7 +289,6 @@ export default {
   height: 80px;
   margin-top: 20px;
   display: flex;
-  cursor: pointer;
 }
 
 .content-details .projectList .projects .project-item:hover{
