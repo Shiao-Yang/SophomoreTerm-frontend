@@ -27,7 +27,7 @@
           <div class="content-details">
             <div class="projectList">
               <ul class="projects">
-                <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== isActive">
+                <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== isActive && isActive === 1">
                   <img class="project-logo" src="../assets/logo.png">
                   <span class="project-info">
                     <span class="project-name">{{project.name}}</span>
@@ -35,6 +35,16 @@
                   </span>
                   <i class='bx bxs-log-in first' title="进入项目"></i>
                   <i class='bx bxs-cog' title="项目管理" @click="changeIsSet(index)"></i>
+                  <i class='bx bx-x delete' title="移动至回收站" @click="toBin(index)"></i>
+                </li>
+                <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== isActive && isActive === 0">
+                  <img class="project-logo" src="../assets/logo.png">
+                  <span class="project-info">
+                    <span class="project-name">{{project.name}}</span>
+                    <span class="project-details">创建时间 : {{project.starttime}}</span>
+                  </span>
+                  <i class='bx bxs-log-out-circle first' title="移出回收站"></i>
+                  <i class='bx bx-x delete' title="删除项目" @click="deleteProject(index)"></i>
                 </li>
               </ul>
             </div>
@@ -164,6 +174,47 @@ export default {
     close(){
       this.isCreate = false;
       this.isSet = -1;
+    },
+
+    toBin(index){
+      let formData = new FormData;
+      formData.append("id", this.projects[index].id);
+      this.$axios({
+        method:"POST",
+        url: this.$store.state.base + "project_manage/to_bin/",
+        data: formData,
+      })
+          .then(res=>{
+            console.log(res.data);
+            if(res.data.errno === 0){
+              this.$message.success("移动至回收站成功");
+              this.$router.push('/projectList');
+              this.getProjects({gid:this.$store.state.gid });
+            }
+            else{
+              this.$message.error("移动至回收站失败，错误代码:"+res.data.errno);
+            }
+          })
+    },
+    deleteProject(index){
+      let formData = new FormData;
+      formData.append("id", this.projects[index].id);
+      this.$axios({
+        method:"POST",
+        url: this.$store.state.base + "project_manage/delete/",
+        data: formData,
+      })
+          .then(res=>{
+            console.log(res.data);
+            if(res.data.errno === 0){
+              this.$message.success("删除项目成功");
+              this.$router.push('/projectList');
+              this.getProjects({gid:this.$store.state.gid });
+            }
+            else{
+              this.$message.error("删除项目失败，错误代码:"+res.data.errno);
+            }
+          })
     }
   },
 
@@ -341,6 +392,19 @@ export default {
   min-width: 70px;
   float: right;
 }
+
+.content-details .projectList .projects .project-item i{
+  transition: all 0.3s ease;
+}
+
+.content-details .projectList .projects .project-item i:hover{
+  font-size:30px;
+}
+
+.content-details .projectList .projects .project-item .delete:hover{
+  color: #FF5733;
+}
+
 
 .content-details .projectList .projects .project-item i.first{
   color: #11101d;
