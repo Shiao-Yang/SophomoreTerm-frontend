@@ -1,5 +1,6 @@
 <template>
   <div>
+    <side-navigation></side-navigation>
     <div class="container">
       <div class="img img1">
         <div class="card">
@@ -12,19 +13,23 @@
         </div>
       </div>
       <div class="img img3">
-        <router-link to="/editor" class="router">
+        <div class="router" @click="turnToEditor">
           <div class="card">
             <p class="word">编辑文档</p>
           </div>
-        </router-link>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import sideNavigation from "@/components/SideNavigation";
 export default {
   name: "Project",
+  components: {
+    sideNavigation,
+  },
   created() {
     //if (!this.$store.state.isLogin) {
     //  this.$store.state.warning = true
@@ -37,6 +42,11 @@ export default {
       map: true,
       file: true,
     }
+  },
+  methods:{
+    turnToEditor(){
+      this.$router.push('/editor');
+    },
   }
 }
 </script>
@@ -77,7 +87,7 @@ export default {
   }
   .card {
     margin: 0px;
-    position: relative;
+    position: absolute;
     width: 280px;
     height: 280px;
     background-color: rgb(240,240,240,0.9);

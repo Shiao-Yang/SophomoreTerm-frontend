@@ -1,5 +1,6 @@
 <template>
   <div id="bgd">
+
     <router-link to="/project">
       <img src="../assets/return.png" id="return">
     </router-link>
@@ -17,6 +18,8 @@
           @onCreated="onCreated"
           id="editor"
       />
+      <input type="text" placeholder="保存前起一个标题吧" id="htmlTitle">
+      <el-button @click="toSaveDoc">保存</el-button>
     </div>
   </div>
 </template>
@@ -24,15 +27,16 @@
 <script>
 import Vue from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import axios from "axios";
 
 export default Vue.extend({
   components: { Editor, Toolbar },
   created() {
     window.myData = this;
-    if (!this.$store.state.isLogin) {
-      this.$store.state.warning = true
-      this.$router.push('/')
-    }
+    //if (!this.$store.state.isLogin) {
+    //   this.$store.state.warning = true
+    //  this.$router.push('/')
+    //}
   },
   data() {
     return {
@@ -47,6 +51,22 @@ export default Vue.extend({
     onCreated(editor) {
       this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
     },
+    toSaveDoc(){
+      const tempthis = this;
+      let params= new FormData();
+      params.append("pid",2)
+      params.append("name",document.getElementById("htmlTitle").value)
+      params.append("file",tempthis.editor.getHtml())
+      axios.post('http://127.0.0.1:8000/api/project_manage/save_document/',
+          params,
+          {headers:{'Content-Type':'multipart/form-data'}})
+          .then(function (Response) {
+            console.log(Response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    }
   },
   mounted() {
     // 模拟 ajax 请求，异步渲染编辑器
@@ -58,7 +78,7 @@ export default Vue.extend({
     const editor = this.editor
     if (editor == null) return
     editor.destroy() // 组件销毁时，及时销毁编辑器
-  }
+  },
 })
 </script>
 

@@ -27,14 +27,24 @@
           <div class="content-details">
             <div class="projectList">
               <ul class="projects">
-                <li class="project-item" v-for="project in this.projects">
+                <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== isActive && isActive === 1">
                   <img class="project-logo" src="../assets/logo.png">
                   <span class="project-info">
                     <span class="project-name">{{project.name}}</span>
                     <span class="project-details">创建时间 : {{project.starttime}}</span>
                   </span>
-                  <i class='bx bxs-log-in first'></i>
-                  <i class='bx bxs-cog'></i>
+                  <i class='bx bxs-log-in first' title="进入项目" @click="toTurnToProject(project.id)"></i>
+                  <i class='bx bxs-cog' title="项目管理" @click="changeIsSet(index)"></i>
+                  <i class='bx bx-x delete' title="移动至回收站" @click="toBin(index)"></i>
+                </li>
+                <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== isActive && isActive === 0">
+                  <img class="project-logo" src="../assets/logo.png">
+                  <span class="project-info">
+                    <span class="project-name">{{project.name}}</span>
+                    <span class="project-details">创建时间 : {{project.starttime}}</span>
+                  </span>
+                  <i class='bx bxs-log-out-circle first' title="移出回收站"></i>
+                  <i class='bx bx-x delete' title="删除项目" @click="deleteProject(index)"></i>
                 </li>
               </ul>
             </div>
@@ -46,17 +56,24 @@
           <CreateProjectWindow @ok="createProject" @cancel="close"></CreateProjectWindow>
         </template>
       </div>
+      <div class="main-container" v-if="isSet !== -1">
+        <template>
+          <SetProjectWindow @ok="renameProject" @cancel="close" :project="projects[isSet]"></SetProjectWindow>
+        </template>
       </div>
+    </div>
   </div>
 </template>
 
 <script>
 import SideNavigation from "@/components/SideNavigation";
 import CreateProjectWindow from "@/components/CreateProjectWindow";
+import SetProjectWindow from "@/components/SetProjectWindow";
 
 export default {
   name: "ProjectView",
   components: {
+    SetProjectWindow,
     CreateProjectWindow,
     SideNavigation,
   },
@@ -64,11 +81,18 @@ export default {
     return{
       isActive: 1,
       isCreate: false,
+      isSet: -1,
       projects:[],
       founders:[],
     }
   },
   methods: {
+    toTurnToProject(pid){
+      this.$store.state.pid=pid;
+      console.log(pid)
+      this.$router.push("/project")
+      console.log(this.$store.state.pid)
+    },
     getProjects(gid){
       let self = this;
       self.$axios({
@@ -78,6 +102,7 @@ export default {
       })
           .then(res =>{
             self.projects = res.data;
+            this.initIsSet();
           });
     },
     getFounder(uid){
@@ -120,8 +145,82 @@ export default {
           })
     },
 
+    renameProject(project){
+      let formData = new FormData;
+      formData.append("id", project.id);
+      formData.append("name", project.name);
+      this.$axios({
+        method: "POST",
+        url: this.$store.state.base+"project_manage/rename/",
+        data: formData,
+      })
+          .then(res =>{
+            console.log(res.data);
+            this.close();
+            if(res.data.errno === 0){
+              this.$message.success("重命名项目成功");
+            }
+            else{
+              this.$message.error("重命名项目失败，错误代码:"+res.data.errno);
+            }
+          })
+
+    },
+
+    initIsSet(){
+      this.isSet = -1;
+      console.log(this.isSet);
+    },
+
+    changeIsSet(index){
+      this.isSet = index;
+      console.log(this.isSet);
+    },
+
     close(){
       this.isCreate = false;
+      this.isSet = -1;
+    },
+
+    toBin(index){
+      let formData = new FormData;
+      formData.append("id", this.projects[index].id);
+      this.$axios({
+        method:"POST",
+        url: this.$store.state.base + "project_manage/to_bin/",
+        data: formData,
+      })
+          .then(res=>{
+            console.log(res.data);
+            if(res.data.errno === 0){
+              this.$message.success("移动至回收站成功");
+              this.$router.push('/projectList');
+              this.getProjects({gid:this.$store.state.gid });
+            }
+            else{
+              this.$message.error("移动至回收站失败，错误代码:"+res.data.errno);
+            }
+          })
+    },
+    deleteProject(index){
+      let formData = new FormData;
+      formData.append("id", this.projects[index].id);
+      this.$axios({
+        method:"POST",
+        url: this.$store.state.base + "project_manage/delete/",
+        data: formData,
+      })
+          .then(res=>{
+            console.log(res.data);
+            if(res.data.errno === 0){
+              this.$message.success("删除项目成功");
+              this.$router.push('/projectList');
+              this.getProjects({gid:this.$store.state.gid });
+            }
+            else{
+              this.$message.error("删除项目失败，错误代码:"+res.data.errno);
+            }
+          })
     }
   },
 
@@ -215,9 +314,9 @@ export default {
   color: #8c8c8c;
   margin-right: 24px;
   text-align: center;
-  cursor: pointer;
   border-bottom: solid #006cfa 0;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .content-bar .nav-list .nav-item .nav-details{
@@ -247,7 +346,6 @@ export default {
   height: 80px;
   margin-top: 20px;
   display: flex;
-  cursor: pointer;
 }
 
 .content-details .projectList .projects .project-item:hover{
@@ -300,6 +398,19 @@ export default {
   min-width: 70px;
   float: right;
 }
+
+.content-details .projectList .projects .project-item i{
+  transition: all 0.3s ease;
+}
+
+.content-details .projectList .projects .project-item i:hover{
+  font-size:30px;
+}
+
+.content-details .projectList .projects .project-item .delete:hover{
+  color: #FF5733;
+}
+
 
 .content-details .projectList .projects .project-item i.first{
   color: #11101d;

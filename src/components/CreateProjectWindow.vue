@@ -29,7 +29,6 @@ export default {
   name: "CreateProjectWindow",
   data() {
     return {
-      payStyle: '',
       input: '',
     }
   },
