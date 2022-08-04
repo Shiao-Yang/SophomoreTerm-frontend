@@ -101,7 +101,7 @@ export default {
       }
       this.$axios({
         method: 'post',
-        url: "http://localhost:8000/space/get_info/",
+        url: this.$store.state.base+"space/get_info/",
         data: qs.stringify(params)
       }).then(res => {
         console.log(res.data[0]);
@@ -142,7 +142,7 @@ export default {
       console.log(params);
       this.$axios({
         method: 'post',
-        url: "http://localhost:8000/space/update_info/",
+        url: this.$store.state.base+"space/update_info/",
         data: qs.stringify(params)
       }).then(res => {
         console.log(res.data)

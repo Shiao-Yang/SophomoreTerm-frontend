@@ -62,7 +62,7 @@ export default {
       };
       this.$axios({
         method: 'post',
-        url: "http://localhost:8000/login/login/",
+        url: this.$store.state.base+"api/login/login/",
         data: qs.stringify(params)
       })
       .then(res => {
@@ -108,7 +108,7 @@ export default {
       console.log(params);
       this.$axios({
         method: 'post',
-        url: "http://localhost:8000/login/register/",
+        url: this.$store.state.base+"login/register/",
         data: qs.stringify(params)
       })
       .then(res => {

@@ -118,7 +118,7 @@ export default {
         const tempthis =this;
         this.$axios({
           method: 'post',
-          url: "http://127.0.0.1:8000/group_manage/get_created_group/",
+          url: this.$store.state.base+"group_manage/get_created_group/",
           data: qs.stringify(params)
         }).then(res => {
           console.log(res);
@@ -136,7 +136,7 @@ export default {
       const tempthis =this;
       this.$axios({
         method: 'post',
-        url: "http://127.0.0.1:8000/group_manage/get_managed_group/",
+        url: this.$store.state.base+"group_manage/get_managed_group/",
         data: qs.stringify(params)
       }).then(res => {
         console.log(res);
@@ -154,7 +154,7 @@ export default {
       const tempthis =this;
       this.$axios({
         method: 'post',
-        url: "http://127.0.0.1:8000/group_manage/get_participated_group/",
+        url: this.$store.state.base+"group_manage/get_participated_group/",
         data: qs.stringify(params)
       }).then(res => {
         console.log(res);
@@ -182,7 +182,7 @@ export default {
           }
           this.$axios({
             method: 'post',
-            url: "http://127.0.0.1:8000/group_manage/create_group/",
+            url: this.$store.state.base+"group_manage/create_group/",
             data: qs.stringify(params)
           }).then(res => {
             console.log(res);

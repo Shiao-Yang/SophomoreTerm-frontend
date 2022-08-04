@@ -68,7 +68,7 @@ export default {
 
       this.$axios({
         method: 'post',
-        url: "http://127.0.0.1:8000/space/get_group/",
+        url: this.$store.state.base+"space/get_group/",
         data: qs.stringify(params)
       }).then(res => {
         console.log(res.data);
@@ -94,7 +94,7 @@ export default {
       }
       this.$axios({
         method: 'post',
-        url: "http://localhost:8000/space/get_info/",
+        url: this.$store.state.base+"space/get_info/",
         data: qs.stringify(params)
       }).then(res => {
         console.log(res.data[0]);

@@ -23,6 +23,7 @@
           <a v-if="$store.state.isLogin===true" @click="toVisitTeamList">团队列表</a>
           <a v-else @click="toRegister">注册</a>
           <a v-if="$store.state.isLogin===true" @click="toExit">退出登录</a>
+          <router-link to="/prototype">测试</router-link>
         </nav>
       </div>
     </div>
