@@ -28,8 +28,9 @@
                     <span class="project-name">{{project.name}}</span>
                     <!--<span class="project-details">创建时间 : {{project.starttime}}</span>-->
                   </span>
-                  <i class='bx bxs-log-in first' @click="toDesign(project.picid,project.name)"></i>
-                  <i class='bx bx-x delete' @click="dlt(project.picid, index)"></i>
+                  <i class='bx bxl-sketch first' title="设计" @click="toDesign(project.picid,project.name)"></i>
+                  <i class='bx bxs-edit-alt' title="重命名" @click="changeIsSet(index)"></i>
+                  <i class='bx bxs-trash delete' title="删除" @click="dlt(project.picid, index)"></i>
                 </li>
               </ul>
             </div>
@@ -41,6 +42,11 @@
           <CreateProjectWindow @ok="createProject" @cancel="close"></CreateProjectWindow>
         </template>
       </div>
+      <div class="main-container" v-if="isSet !== -1">
+        <template>
+          <SetProjectWindow @ok="rename" @cancel="close" :project="projects[isSet]"></SetProjectWindow>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -48,6 +54,7 @@
 <script>
 import SideNavigation from "@/components/SideNavigation";
 import CreateProjectWindow from "@/components/CreateProjectWindow";
+import SetProjectWindow from "@/components/SetProjectWindow";
 import qs from "qs";
 
 export default {
@@ -55,6 +62,7 @@ export default {
   components: {
     CreateProjectWindow,
     SideNavigation,
+    SetProjectWindow,
   },
   data(){
     return{
@@ -62,9 +70,20 @@ export default {
       isCreate: false,
       projects:[],
       founders:[],
+      isSet: -1,
     }
   },
   methods: {
+    initIsSet(){
+      this.isSet = -1;
+      console.log(this.isSet);
+    },
+
+    changeIsSet(index){
+      this.isSet = index;
+      console.log(this.isSet);
+    },
+
     dlt(pic_id, index) {
       let params = {
         picid: pic_id,
@@ -86,6 +105,42 @@ export default {
           //this.projects.push({picid: params.picid, name: params.name, data: []});
           this.isCreate = false;
           this.projects.splice(index, 1);
+          //location.reload();
+
+        } else {
+          this.$message({
+            message: res.data.msg,
+            type: 'error',
+            showClose: true,
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+
+    rename(project) {
+      let params = {
+        picid: project.picid,
+        name: project.name,
+      }
+      console.log(params);
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base+"design/rename/",
+        data: qs.stringify(params)
+      }).then(res => {
+        //console.log(res.data);
+        if(res.data.errno === 0) {
+
+          this.$message({
+            message: '重命名成功',
+            type: 'success',
+            showClose: true,
+          })
+          //this.projects.push({picid: params.picid, name: params.name, data: []});
+          this.isCreate = false;
+          //this.projects[index].name = ;
           //location.reload();
 
         } else {
@@ -157,7 +212,7 @@ export default {
             type: 'success',
             showClose: true,
           })
-          this.projects.push({picid: params.picid, name: params.name, data: []});
+          this.projects.push({picid: res.data.picid, name: params.name, data: []});
           this.isCreate = false;
           //location.reload();
         } else {
