@@ -28,11 +28,13 @@
 import Vue from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import axios from "axios";
+import qs from "qs";
 
 export default Vue.extend({
   components: { Editor, Toolbar },
   created() {
     window.myData = this;
+    this.getContent();
     //if (!this.$store.state.isLogin) {
     //   this.$store.state.warning = true
     //  this.$router.push('/')
@@ -53,22 +55,28 @@ export default Vue.extend({
     },
     toSaveDoc(){
       const tempthis = this;
-      let params= new FormData();
-      params.append("pid",2)
-      params.append("name",document.getElementById("htmlTitle").value)
-      params.append("file",tempthis.editor.getHtml())
-      axios.post('http://127.0.0.1:8000/api/project_manage/save_document/',
-          params,
-          {headers:{'Content-Type':'multipart/form-data'}})
+      let params= {
+        pid:this.$store.state.pid,
+        name:document.getElementById("htmlTitle").value,
+        data:tempthis.editor.getHtml()
+      }
+      console.log(params)
+      axios.post('http://127.0.0.1:8000/api/project_manage/create/',
+          qs.stringify(params))
           .then(function (Response) {
             console.log(Response);
           })
           .catch(function (error) {
             console.log(error);
           })
+    },
+    getContent(){
+      this.html='';
     }
   },
+
   mounted() {
+    this.getContent();
     // 模拟 ajax 请求，异步渲染编辑器
     //setTimeout(() => {
     //  this.html = '<p>模拟 Ajax 异步设置内容 HTML</p>'
