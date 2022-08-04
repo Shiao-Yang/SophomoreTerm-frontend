@@ -103,6 +103,7 @@ export default {
   background: #f8f8f8;
   padding: 15px;
   overflow-y: auto;
+  right: 0;
   .input-item {
     margin-bottom: 12px;
     display: flex;

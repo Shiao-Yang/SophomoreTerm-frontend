@@ -11,6 +11,7 @@ import {
   EVENT_COMPONENT_SELECT,
   EVENT_COMPONENT_TRANSFORM,
   EVENT_COMPONENT_UNSELECT,
+  EVENT_CONTENT_CHANGETOIMAGE,
   EVENT_APPLICATION_SAVE,
 } from '@/examples/vseditor/event-enums'
 import FooterVue from '@/examples/vseditor/footer.vue'
@@ -27,6 +28,7 @@ import PropInspectorVue from '@/examples/vseditor/prop-inspector.vue'
 import PluginSelectionVue from '@/examples/vseditor/plugins/plugin-selection.vue'
 import PluginGridVue from '@/examples/vseditor/plugins/plugin-grid.vue'
 import { registerKeyboardAction } from '@/examples/vseditor/plugins/keyboard'
+import html2canvas from "html2canvas";
 import qs from "qs";
 let historys = [[]]
 let historyPointer = 0
@@ -73,11 +75,11 @@ export default {
      * @description 批量添加组件到编辑区域，如果指定了parentid则将添加到指定的组件中。目前parentid对应的组件只能为Container类型的组件
      * @params {{components:Array,parentId:string?}}
      */
-    addControl({ components, parentId }) {
+    addControl({components, parentId}) {
       let controls = []
       let newComponents = this.getComponents(components, parentId)
       if (parentId) {
-        const { path } = findComponentPathById(this.controls, parentId)
+        const {path} = findComponentPathById(this.controls, parentId)
         controls = updateTreeIn(this.controls, path, (item) => {
           item.children = item.children.concat(newComponents)
           return item
@@ -89,7 +91,7 @@ export default {
       this.setControls(controls)
 
       // 默认选中最后一个
-      let { component } = findComponentPathById(controls, newComponents[newComponents.length - 1].id)
+      let {component} = findComponentPathById(controls, newComponents[newComponents.length - 1].id)
 
       // 默认选中最后一个
       this.handleSelect(component)
@@ -129,12 +131,12 @@ export default {
     updateControlValue(key, value, isExtra) {
       let controls = updateTreeIn(this.controls, this.currentPath, (item) => {
         if (['x', 'y', 'width', 'height', 'rotation'].includes(key)) {
-          let transform = { ...item.transform }
+          let transform = {...item.transform}
           transform[key] = value
           item.transform = transform
           return item
         } else if (isExtra) {
-          let extra = { ...item.extra }
+          let extra = {...item.extra}
           extra[key] = value
           item.extra = extra
         } else {
@@ -145,8 +147,8 @@ export default {
       this.setControls(controls)
     },
     // 组件拖拽时将新的transform同步到属性编辑器中，并在end事件中进行一次数据同步
-    handleTransform({ transform, type }) {
-      this.controlled = { ...this.controlled, ...transform }
+    handleTransform({transform, type}) {
+      this.controlled = {...this.controlled, ...transform}
       if (['resizeend', 'dragend', 'rotateend'].includes(type)) {
         this.updateControlValue('transform', transform, false)
       }
@@ -186,15 +188,15 @@ export default {
 
       // 深度拷贝数据，避免数据引用污染
       control = JSON.parse(JSON.stringify(control))
-      Object.assign(control, control.transform, { active: true })
+      Object.assign(control, control.transform, {active: true})
       //  将选中组件设置到当前属性编辑器中
-      let { path } = findComponentPathById(this.controls, control.id)
+      let {path} = findComponentPathById(this.controls, control.id)
       this.currentPath = path
       this.controlled = control
       this.currentId = control.id
     },
     // 属性编辑器变化后同步到组件中
-    handleChange({ name, value, extra }) {
+    handleChange({name, value, extra}) {
       if (!this.currentId) {
         return
       }
@@ -317,6 +319,57 @@ export default {
     jump() {
       this.$router.push('/userInfo');
     },
+    openDialog() {
+      this.dialogFormVisible = true;
+      console.log(this.dialogFormVisible);
+    },
+    toImage() {
+      // 手动创建一个 canvas 标签
+      const canvas = document.createElement("canvas")
+      // 获取父标签，意思是这个标签内的 DOM 元素生成图片
+      // imageTofile是给截图范围内的父级元素自定义的ref名称
+      let canvasBox = this.$refs.imageTofile
+      // 获取父级的宽高
+      const width = parseInt(window.getComputedStyle(canvasBox).width)
+      const height = parseInt(window.getComputedStyle(canvasBox).height)
+      // 宽高 * 2 并放大 2 倍 是为了防止图片模糊
+      canvas.width = width * 3
+      canvas.height = height * 3
+      canvas.style.width = width + 'px'
+      canvas.style.height = height + 'px'
+      const context = canvas.getContext("2d");
+      context.scale(2, 2);
+      const options = {
+        backgroundColor: null,
+        canvas: canvas,
+        useCORS: true
+      }
+      html2canvas(canvasBox, options).then((canvas) => {
+        // toDataURL 图片格式转成 base64
+        let fileName = prompt("请输入导出的图片名\n(默认.png，支持.jpg, .jpeg及.png)", "例:aaa(默认输出aaa.png)")
+        let reg = [/.png$/, /.jpg$/, /.jpeg$/]
+        let dataURL = String
+        if (reg[2].test(fileName)) {
+          dataURL = canvas.toDataURL("image/jpeg")
+        } else if (reg[1].test(fileName)) {
+          dataURL = canvas.toDataURL("image/jpg")
+        } else {
+          dataURL = canvas.toDataURL("image/png")
+        }
+        console.log(fileName)
+        fileName.replace(/.png$/, "")
+        fileName.replace(/.jpeg$/, "")
+        fileName.replace(/.jpg$/, "")
+        this.downloadImage(dataURL, fileName)
+      })
+    },
+    downloadImage(url, fileName) {
+      // 如果是在网页中可以直接创建一个 a 标签直接下载
+      let a = document.createElement('a')
+      a.href = url
+      a.download = fileName
+      a.click()
+    },
     handleSave() {
       let params = {
         picid: this.$store.state.pic_id,
@@ -326,7 +379,7 @@ export default {
       //console.log(params);
       this.$axios({
         method: 'post',
-        url: this.$store.state.base+"design/store/",
+        url: this.$store.state.base + "design/store/",
         data: qs.stringify(params)
       }).then(res => {
         console.log(res.data);
@@ -342,7 +395,7 @@ export default {
       console.log(params);
       this.$axios({
         method: 'post',
-        url: this.$store.state.base+"design/get_one_design/",
+        url: this.$store.state.base + "design/get_one_design/",
         data: qs.stringify(params)
       }).then(res => {
         console.log(res.data[0]);
@@ -352,8 +405,10 @@ export default {
         console.log(err)
       })
 
-    }
+    },
   },
+
+
   created() {
     // 使用独立的事件对象来处理，避免多层透传回调函数
 
@@ -366,17 +421,14 @@ export default {
     this.eventbus.$on(EVENT_APPLICATION_REDO, this.handleRedo)
     this.eventbus.$on(EVENT_APPLICATION_UNDO, this.handleUndo)
     this.eventbus.$on(EVENT_APPLICATION_CLEAR, this.handleClear)
+    this.eventbus.$on(EVENT_CONTENT_CHANGETOIMAGE, this.toImage)
+
     this.eventbus.$on(EVENT_APPLICATION_SAVE, this.handleSave)
     // 绑定键盘按钮事件
     registerKeyboardAction(this)
 
     this.get_Pic(this.$store.state.pic_id);
     console.log(this.$store.state.controls);
-    /*
-    this.controls = this.$store.state.controls;
-    historys = this.$store.state.his;
-    historyPointer = this.$store.state.hisPnt;
-    */
   },
   render() {
     return (
@@ -384,11 +436,12 @@ export default {
         <HeaderVue />
         <div class="content">
           <ComponentsVue />
-
-          <EditorViewVue ref="editor" value={this.controls}>
-            <PluginSelectionVue application={this} />
-            <PluginGridVue />
-          </EditorViewVue>
+          <div class="temp" ref="imageTofile">
+            <EditorViewVue ref="editor" value={this.controls}>
+              <PluginSelectionVue application={this} />
+              <PluginGridVue />
+            </EditorViewVue>
+          </div>
           <PropInspectorVue onChange={this.handleChange} controlled={this.controlled} />
         </div>
         <FooterVue />
@@ -402,6 +455,14 @@ export default {
 *{
   margin: 0;
   padding: 0;
+}
+
+.temp{
+  flex: 1;
+  position: relative;
+  width: 100%;
+  overflow: scroll;
+  height: 100%;
 }
 
 .vs-editor-app {

@@ -43,7 +43,7 @@
                     <span class="project-name">{{project.name}}</span>
                     <span class="project-details">创建时间 : {{project.starttime}}</span>
                   </span>
-                  <i class='bx bxs-log-out-circle first' title="移出回收站"></i>
+                  <i class='bx bxs-log-out-circle first' title="移出回收站" @click="outBin(index)"></i>
                   <i class='bx bx-x delete' title="删除项目" @click="deleteProject(index)"></i>
                 </li>
               </ul>
@@ -58,7 +58,7 @@
       </div>
       <div class="main-container" v-if="isSet !== -1">
         <template>
-          <SetProjectWindow @ok="renameProject" @cancel="close" :project="projects[isSet]"></SetProjectWindow>
+          <SetProjectWindow @ok="renameProject" @cancel="close" :p="projects[isSet]"></SetProjectWindow>
         </template>
       </div>
     </div>
@@ -221,7 +221,28 @@ export default {
               this.$message.error("删除项目失败，错误代码:"+res.data.errno);
             }
           })
-    }
+    },
+
+    outBin(index){
+      let formData = new FormData;
+      formData.append("id", this.projects[index].id);
+      this.$axios({
+        method:"POST",
+        url: this.$store.state.base + "project_manage/out_bin/",
+        data: formData,
+      })
+          .then(res=>{
+            console.log(res.data);
+            if(res.data.errno === 0){
+              this.$message.success("移出回收站成功");
+              this.$router.push('/projectList');
+              this.getProjects({gid:this.$store.state.gid });
+            }
+            else{
+              this.$message.error("出回收站失败，错误代码:"+res.data.errno);
+            }
+          })
+    },
   },
 
   created() {
