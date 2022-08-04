@@ -87,7 +87,7 @@ export default {
   }
   .card {
     margin: 0px;
-    position: relative;
+    position: absolute;
     width: 280px;
     height: 280px;
     background-color: rgb(240,240,240,0.9);
