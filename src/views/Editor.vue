@@ -6,8 +6,11 @@
     </router-link>
 
     <div id="list">
-      <div class="file" v-for="(item,index) in files">
-        <p>&nbsp;&nbsp;文件名:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
+      <el-button @click="toStartCreateDoc">创建新的文档</el-button><br>
+      <input type="text" placeholder="输入文档id来删除它" id="toDel">
+      <el-button @click="toDelectTheDoc">确认删除文档</el-button>
+      <div class="file" v-for="item in docs">
+        <p @click="toEditThisDoc(item)">&nbsp;&nbsp;{{item.id}}:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
       </div>
     </div>
 
@@ -41,7 +44,7 @@ export default Vue.extend({
   components: { Editor, Toolbar },
   created() {
     window.myData = this;
-    this.getContent();
+    this.getAllDoc();
     //if (!this.$store.state.isLogin) {
     //   this.$store.state.warning = true
     //  this.$router.push('/')
@@ -54,21 +57,53 @@ export default Vue.extend({
       toolbarConfig: { },
       editorConfig: { placeholder: '请输入内容...' },
       mode: 'default', // or 'simple'
-      files: [{
-        id: 1,
-        name: '11'
-      },{
-        id: 2,
-        name: '22'
-      },{
-        id: 3,
-        name: '33'
-      }],
+      docs: [],
     }
   },
   methods: {
     onCreated(editor) {
       this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
+    },
+    toStartCreateDoc(){
+      this.$store.state.doc_id=0;
+      this.html='';
+    },
+    toDelectTheDoc(){
+      const tempthis = this;
+      let params= {
+        id:document.getElementById("toDel").value,
+      }
+      axios.post('http://127.0.0.1:8000/api/project_manage/delete_document/',
+          qs.stringify(params))
+          .then(function (Response) {
+            console.log(Response)
+            tempthis.getAllDoc();
+            if(Response.data.errno===0)
+              alert("已删除")
+            else if(Response.data.errno===2)
+              alert("不存在此文档")
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
+    toEditThisDoc(thisDoc){
+      this.$store.state.doc_id=thisDoc.id
+      const tempthis = this;
+      let params= {
+       id:thisDoc.id
+      }
+      axios.post('http://127.0.0.1:8000/api/project_manage/open_document/',
+          qs.stringify(params))
+          .then(function (Response) {
+            //alert("新文档已保存。")
+            tempthis.html=Response.data.data
+            console.log("此文档已打开，现在的html代码是"+tempthis.html);
+            console.log(Response)
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
     },
     toSaveDoc(){
       const tempthis = this;
@@ -77,23 +112,55 @@ export default Vue.extend({
         name:document.getElementById("htmlTitle").value,
         data:tempthis.editor.getHtml()
       }
+      let params2= {
+        id:this.$store.state.doc_id,
+        data:tempthis.editor.getHtml()
+      }
       console.log(params)
-      axios.post('http://127.0.0.1:8000/api/project_manage/create/',
-          qs.stringify(params))
+      if(this.$store.state.doc_id===0){
+        axios.post('http://127.0.0.1:8000/api/project_manage/create_document/',
+            qs.stringify(params))
+            .then(function (Response) {
+              console.log(Response);
+              tempthis.getAllDoc();
+              alert("新文档已保存。")
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+      }
+      else{
+        axios.post('http://127.0.0.1:8000/api/project_manage/store_document/',
+            qs.stringify(params2))
+            .then(function (Response) {
+              console.log(Response);
+              alert("对文档的修改已保存。")
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+      }
+    },
+    getAllDoc(){
+      const tempthis = this;
+      let param= {
+        pid:this.$store.state.pid,
+      }
+      axios.post('http://127.0.0.1:8000/api/project_manage/get_documents/',
+          qs.stringify(param))
           .then(function (Response) {
-            console.log(Response);
+            tempthis.docs=Response.data
+            console.log("本项目所有文档信息如下：")
+            console.log(tempthis.docs);
           })
           .catch(function (error) {
             console.log(error);
           })
-    },
-    getContent(){
-      this.html='';
     }
   },
 
   mounted() {
-    this.getContent();
+    this.getAllDoc();
     // 模拟 ajax 请求，异步渲染编辑器
     //setTimeout(() => {
     //  this.html = '<p>模拟 Ajax 异步设置内容 HTML</p>'
