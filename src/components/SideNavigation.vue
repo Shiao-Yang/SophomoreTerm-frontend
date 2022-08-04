@@ -17,7 +17,7 @@
             <img src="../assets/logo.png">
           </div>
           <div class="profile-name">
-            {{username}}
+            {{this.$store.state.userInfo.username}}
           </div>
           <i class='bx bx-log-out-circle'></i>
         </div>
@@ -38,7 +38,7 @@ export default {
   methods:{
     toHome(){
       this.$router.push('/')
-    }
+    },
   }
 }
 </script>

@@ -5,6 +5,7 @@ import {
   EVENT_APPLICATION_UNDO,
   EVENT_COMPONENT_DELETE,
   EVENT_COMPONENT_DUPLICATE,
+  EVENT_CONTENT_CHANGETOIMAGE,
   EVENT_APPLICATION_SAVE,
 } from './event-enums'
 export default {
@@ -12,7 +13,6 @@ export default {
   render() {
     return (
       <div class="vs-header">
-
         <h1>
           <i className='bx bxs-book-reader'></i>
           墨 书
@@ -52,6 +52,13 @@ export default {
             onClick={() => this.eventbus.$emit(EVENT_APPLICATION_CLEAR)}
           >
             Clear
+          </button>
+          <button
+            title="Change this page to image and download"
+            data-action="export"
+            onClick={() => this.eventbus.$emit(EVENT_CONTENT_CHANGETOIMAGE)}
+          >
+            Export
           </button>
           <button
               title="Save all components in the editing area"
