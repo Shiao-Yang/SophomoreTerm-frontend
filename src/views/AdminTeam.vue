@@ -8,6 +8,8 @@
         <router-link to="/invite">
           <img title="邀请" v-if="$store.state.role!==0" src="../assets/invite.png" class="img" id="invite">
         </router-link>
+        <img title="解散" v-if="$store.state.role==2" src="../assets/Dismiss.png" class="img" id="dismiss" @click="Dismiss=true">
+
         <el-table
             :data="members"
             id="members"
@@ -56,6 +58,18 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-dialog
+          title="提示"
+          :visible.sync="Dismiss"
+          :close-on-click-modal ="false"
+          width="30%">
+        <i class="el-icon-warning-outline" style="color: #ffd952"></i>
+        <span>您确定要解散团队吗？</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="Dismiss = false" class="cancel">取 消</el-button>
+          <el-button type="primary" @click="dismiss" class="confirm">确 定</el-button>
+        </span>
+      </el-dialog>
         <el-dialog
             title="提示"
             :visible.sync="addAdmin"
@@ -111,6 +125,7 @@ export default {
   created() {
     window.myData = this;
     this.get_member();
+    console.log(this.$store.state.isLogin)
     if (!this.$store.state.isLogin) {
       this.$store.state.warning = true
       this.$router.push('/')
@@ -118,6 +133,7 @@ export default {
   },
   data() {
     return {
+      Dismiss: false,
       addAdmin: false,
       Delete: false,
       cancel: false,
@@ -162,6 +178,41 @@ export default {
                 }
             }
 
+          })
+    },
+    dismiss() {
+      let params = {
+        uid: this.$store.state.userInfo.uid,
+        gid: this.$store.state.gid
+      }
+      this.axios({
+        method: 'post',
+        url: this.$store.state.base+"group_manage/dismiss/",
+        data: qs.stringify(params)
+      })
+          .then(res => {
+            switch (res.data.errno) {
+              case 1001:
+                this.$message.warning(res.data.msg)
+                break
+              case 1002:
+                this.$message.warning(res.data.msg)
+                break
+              case 1003:
+                this.$message.warning(res.data.msg)
+                break
+              case 1004:
+                this.$message.warning(res.data.msg)
+                break
+              case 1005:
+                this.$message.warning(res.data.msg)
+                break
+              case 0:
+                this.$message.success(res.data.msg)
+                  this.Dismiss=false
+                  this.$router.push("/teamList")
+                break
+            }
           })
     },
     appoint() {
@@ -373,6 +424,12 @@ export default {
     height: 36px;
     top: 10px;
     left: 660px;
+  }
+  #dismiss {
+    width: 36px;
+    height: 36px;
+    top: 10px;
+    left: 710px;
   }
 
 </style>
