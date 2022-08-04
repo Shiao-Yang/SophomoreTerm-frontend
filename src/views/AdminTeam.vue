@@ -1,5 +1,6 @@
 <template>
   <div>
+    <side-navigation></side-navigation>
     <div id="bgd">
       <div id="membersDiv">
         <span id="title" v-if="$store.state.role!==0">管理您的团队</span>
@@ -100,9 +101,13 @@
 <script>
 
 import qs from "qs";
+import sideNavigation from "@/components/SideNavigation";
 
 export default {
   name: "TeamAdmin",
+  components: {
+    sideNavigation,
+  },
   created() {
     window.myData = this;
     this.get_member();
