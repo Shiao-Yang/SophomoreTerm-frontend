@@ -4,6 +4,13 @@
     <router-link to="/project">
       <img src="../assets/return.png" id="return">
     </router-link>
+
+    <div id="list">
+      <div class="file" v-for="(item,index) in files">
+        <p>&nbsp;&nbsp;文件名:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
+      </div>
+    </div>
+
     <div id="box">
       <Toolbar
           :editor="editor"
@@ -47,6 +54,16 @@ export default Vue.extend({
       toolbarConfig: { },
       editorConfig: { placeholder: '请输入内容...' },
       mode: 'default', // or 'simple'
+      files: [{
+        id: 1,
+        name: '11'
+      },{
+        id: 2,
+        name: '22'
+      },{
+        id: 3,
+        name: '33'
+      }],
     }
   },
   methods: {
@@ -112,11 +129,23 @@ export default Vue.extend({
   #return:hover{
     transform: scale(1.2);
   }
+  #list {
+    position: absolute;
+    top: 10%;
+    left: 3%;
+    width: 15%;
+    height: 70%;
+    background-color: white;
+    opacity: 0.90;
+    overflow-y: auto;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+  }
   #box {
     position: absolute;
     top: 5%;
-    left: 10%;
-    width: 80%;
+    left: 20%;
+    width: 70%;
     height: 85%;
     opacity: 0.97;
   }
@@ -131,5 +160,19 @@ export default Vue.extend({
     border-radius: 5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
   }
-
+  .file {
+    display: flex;
+    height: 5%;
+    width: 80%;
+    background: rgb(255,255,255);
+    margin: 10px auto;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .file:hover {
+    transform: scale(1.1);
+    background-color: rgb(240,240,240);
+  }
 </style>
