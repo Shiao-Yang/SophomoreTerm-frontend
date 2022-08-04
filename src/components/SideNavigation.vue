@@ -58,7 +58,7 @@ export default {
   left: 0;
   height: 100%;
   width: 230px;
-  background: #11101d;
+  background: #292c2f;
   box-shadow: 3px 3px 3px #111;
 }
 

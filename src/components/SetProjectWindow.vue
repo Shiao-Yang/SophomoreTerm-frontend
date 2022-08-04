@@ -21,7 +21,7 @@
               </li>
               <li>
                 <span class="label">当前状态 :</span>
-                <span class="details" v-if="project.state === 0">
+                <span class="details" v-if="project.status === 0">
                   <i class='bx bxs-circle' style="color: #42b983"></i>
                   正在开发
                   <el-button type="info" style="margin-left: 10px" @click="changeState">结束</el-button>
@@ -83,7 +83,7 @@ export default {
 
     changeState(){
       let formData = new FormData;
-      formData.append("uid", this.project.id);
+      formData.append("id", this.project.id);
       this.$axios({
         method: "POST",
         url: this.$store.state.base+"project_manage/close/",
