@@ -4,20 +4,22 @@
     <div class="container">
       <div class="img img1" @click="toDesign">
         <div class="card">
-          <p class="word">原型设计</p>
+          <p class="word" style="color: black">原型设计</p>
         </div>
       </div>
       <div class="img img2">
+        <a href="https://www.umletino.com/umletino.html" style="text-decoration: none;color: black">
         <div class="card">
           <p class="word">绘制图</p>
         </div>
+        </a>
       </div>
       <div class="img img3">
-        <div class="router" @click="turnToEditor">
-          <div class="card">
-            <p class="word">编辑文档</p>
+          <div class="router" @click="turnToEditor">
+            <div class="card">
+              <p class="word">编辑文档</p>
+            </div>
           </div>
-        </div>
       </div>
     </div>
   </div>
@@ -50,6 +52,9 @@ export default {
     toDesign() {
       this.$router.push('/designList')
     },
+    //turnToUML() {
+    //  this.$router.push('https://www.umletino.com/umletino.html')
+    //}
 
   }
 }
