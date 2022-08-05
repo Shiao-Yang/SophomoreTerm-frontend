@@ -28,8 +28,8 @@
             <div class="projectList">
               <ul class="projects">
                 <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== isActive && isActive === 1">
-                  <img class="project-logo" src="../assets/logo.png">
-                  <span class="project-info">
+                  <img class="project-logo" src="../assets/logo.png" title="进入项目" @click="toTurnToProject(project.id)">
+                  <span class="project-info" title="进入项目" @click="toTurnToProject(project.id)">
                     <span class="project-name">{{project.name}}</span>
                     <span class="project-details">创建时间 : {{project.starttime}}</span>
                   </span>
@@ -425,7 +425,7 @@ export default {
 }
 
 .content-details .projectList .projects .project-item i:hover{
-  font-size:30px;
+  font-size:32px;
 }
 
 .content-details .projectList .projects .project-item .delete:hover{
@@ -437,7 +437,6 @@ export default {
   color: #11101d;
   cursor: pointer;
   margin: auto 0 auto auto;
-  font-size: 28px;
   height: 30px;
   min-width: 70px;
   float: right;
