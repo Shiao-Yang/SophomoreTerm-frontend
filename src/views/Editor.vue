@@ -30,7 +30,8 @@
           @onCreated="onCreated"
           id="editor"
       />
-      <input type="text" placeholder="保存前起一个标题吧" id="htmlTitle">
+      <input type="text" placeholder="保存前起一个标题吧" id="htmlTitle" v-if="this.$store.state.doc_id===0">
+      <h4 id="htmlTitle" v-else>{{theTitle}}</h4>
       <el-button @click="toSaveDoc" id="save">保存</el-button>
     </div>
   </div>
@@ -60,6 +61,7 @@ export default Vue.extend({
       editorConfig: { placeholder: '请输入内容...' },
       mode: 'default', // or 'simple'
       docs: [],
+      theTitle:"未命名"
     }
   },
   methods: {
@@ -80,8 +82,10 @@ export default Vue.extend({
           .then(function (Response) {
             console.log(Response)
             tempthis.getAllDoc();
-            if(Response.data.errno===0)
+            if(Response.data.errno===0){
               alert("已删除")
+              tempthis.toStartCreateDoc()
+            }
             else if(Response.data.errno===2)
               alert("不存在此文档")
           })
@@ -90,6 +94,7 @@ export default Vue.extend({
           })
     },
     toEditThisDoc(thisDoc){
+
       this.$store.state.doc_id=thisDoc.id
       const tempthis = this;
       let params= {
@@ -101,7 +106,16 @@ export default Vue.extend({
             //alert("新文档已保存。")
             tempthis.html=Response.data.data
             console.log("此文档已打开，现在的html代码是"+tempthis.html);
-            console.log(Response)
+            //console.log(Response)
+            let i;
+            //console.log(tempthis.docs.length)
+            for(i=0;i<tempthis.docs.length;i++){
+              if(tempthis.docs[i].id===thisDoc.id){
+                tempthis.theTitle=tempthis.docs[i].name;
+                //alert(i+tempthis.docs[i].id)
+                break;
+              }
+            }
           })
           .catch(function (error) {
             console.log(error);
