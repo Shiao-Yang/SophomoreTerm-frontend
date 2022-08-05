@@ -303,12 +303,15 @@ export default {
 }
 
 .title {
-  height: 40px;
+  height: 70px;
 }
 
 .title p {
   font-size: 30px;
   font-weight: bold;
+  position: relative;
+  left: 40%;
+  top: 25px;
 }
 .form-group {
   position: relative;
@@ -408,6 +411,8 @@ input:focus::placeholder{
 }
 
 .form-box-right button{
+  position: relative;
+  left: 30%;
   width: 300px;
   margin-top: 30px;
   background-color: #feffff;

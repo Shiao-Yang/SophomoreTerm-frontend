@@ -6,7 +6,6 @@
           <img src="../assets/images/register.png" alt="加载失败">
           <p> {{this.$store.state.userInfo.username}} </p>
         </div>
-        <el-button @click="jump">去mode</el-button>
         <div class="down1">
           <router-link to="/userInfo">个人资料</router-link>
         </div>
@@ -330,12 +329,15 @@ export default {
 }
 
 .title {
-  height: 40px;
+  height: 70px;
 }
 
 .title p {
+  position: relative;
   font-size: 30px;
   font-weight: bold;
+  left: 40%;
+  top: 25px;
 }
 .form-group {
   position: relative;
@@ -435,6 +437,8 @@ input:focus::placeholder{
 }
 
 .form-box-right button{
+  position: relative;
+  left: 30%;
   width: 300px;
   margin-top: 30px;
   background-color: #feffff;
