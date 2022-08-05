@@ -39,7 +39,7 @@
       </div>
       <div class="main-container" v-if="isCreate">
         <template>
-          <CreateProjectWindow @ok="createProject" @cancel="close"></CreateProjectWindow>
+          <CreateDesignWindow @ok="createProject" @cancel="close"></CreateDesignWindow>
         </template>
       </div>
       <div class="main-container" v-if="isSet !== -1">
@@ -53,15 +53,15 @@
 
 <script>
 import SideNavigation from "@/components/SideNavigation";
-import CreateProjectWindow from "@/components/CreateProjectWindow";
 import SetDesignWindow from "@/components/SetDesignWindow";
 import qs from "qs";
+import CreateDesignWindow from "@/components/CreateDesignWindow";
 
 export default {
   name: "ProjectView",
   components: {
     SetDesignWindow,
-    CreateProjectWindow,
+    CreateDesignWindow,
     SideNavigation,
   },
   data(){
