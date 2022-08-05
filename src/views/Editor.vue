@@ -6,11 +6,13 @@
     </router-link>
 
     <div id="list">
-      <el-button @click="toStartCreateDoc">创建新的文档</el-button><br>
+      <div @click="toStartCreateDoc" id="create"><p style="position:absolute;left: 22%;top: 15%">创建新的文档</p></div>
       <input type="text" placeholder="输入文档id来删除它" id="toDel">
-      <el-button @click="toDelectTheDoc">确认删除文档</el-button>
-      <div class="file" v-for="item in docs">
-        <p @click="toEditThisDoc(item)">&nbsp;&nbsp;{{item.id}}:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
+      <div @click="toDelectTheDoc" id="Delete"><p style="position:absolute;left: 22%;top: 15%">确认删除文档</p></div>
+      <div id="files">
+        <div class="file" v-for="item in docs">
+          <p @click="toEditThisDoc(item)">&nbsp;&nbsp;{{item.id}}:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
+        </div>
       </div>
     </div>
 
@@ -230,7 +232,7 @@ export default Vue.extend({
   .file {
     display: flex;
     height: 5%;
-    width: 80%;
+    width: 100%;
     background: rgb(255,255,255);
     margin: 10px auto;
     border-radius: 5px;
@@ -242,18 +244,74 @@ export default Vue.extend({
     transform: scale(1.1);
     background-color: rgb(240,240,240);
   }
+  #files {
+    position: absolute;
+    width: 80%;
+    left: 10%;
+    top: 24%;
+  }
   #htmlTitle {
     position: absolute;
     left: 75%;
     top: 7%;
+    border-radius: 5px;
+    border: 1px solid rgb(240,240,240);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+    outline: none;
   }
   #save {
     position: absolute;
     left: 92%;
-    top: 5%
+    top: 5%;
   }
-  #save:hover {
-    color: black;
-    background-color: rgb(240,240,240);
+  #create {
+    position: relative;
+    text-align: center;
+    top: 1%;
+    left: 10%;
+    width: 80%;
+    height: 30px;
+    background: rgb(255,255,255);
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+  #create:hover {
+    background: rgb(240,240,240);
+  }
+  #toDel {
+    position: relative;
+    top: 3%;
+    left: 9%;
+    width: 80%;
+    height: 18px;
+    border-radius: 5px;
+    border: 1px solid rgb(240,240,240);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+    outline: none;
+  }
+  #toDel:focus,#htmlTitle:focus {
+    transition:border linear .2s,box-shadow linear .5s;
+    -moz-transition:border linear .2s,-moz-box-shadow linear .5s;
+    -webkit-transition:border linear .2s,-webkit-box-shadow linear .5s;
+    outline:none;border-color:rgba(93,149,242,.75);
+    box-shadow:0 0 8px rgba(93,149,242,.105);
+    -moz-box-shadow:0 0 8px rgba(93,149,242,.5);
+    -webkit-box-shadow:0 0 8px rgba(93,149,242,3);
+  }
+  #Delete {
+    position: relative;
+    text-align: center;
+    left: 10%;
+    top: 5%;
+    width: 80%;
+    height: 30px;
+    background: rgb(255,255,255);
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+  #Delete:hover {
+    background: rgb(240,240,240);
   }
 </style>

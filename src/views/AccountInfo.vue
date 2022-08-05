@@ -116,11 +116,20 @@ export default {
           pw2.value = '';
 
         } else {
-          this.$message({
-            message: res.data.msg,
-            type: 'error',
-            showClose: true,
-          })
+          if(res.data.msg == '密码格式错误') {
+            this.$message({
+              message: res.data.msg + ":必须包含字母和数字，且长度在8和18之间",
+              type: 'error',
+              showClose: true,
+            })
+          }
+          else {
+            this.$message({
+              message: res.data.msg,
+              type: 'error',
+              showClose: true,
+            })
+          }
         }
 
       }).catch(err => {
@@ -303,12 +312,15 @@ export default {
 }
 
 .title {
-  height: 40px;
+  height: 70px;
 }
 
 .title p {
   font-size: 30px;
   font-weight: bold;
+  position: relative;
+  left: 40%;
+  top: 25px;
 }
 .form-group {
   position: relative;
@@ -408,6 +420,8 @@ input:focus::placeholder{
 }
 
 .form-box-right button{
+  position: relative;
+  left: 30%;
   width: 300px;
   margin-top: 30px;
   background-color: #feffff;
