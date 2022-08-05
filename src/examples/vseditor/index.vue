@@ -13,6 +13,7 @@ import {
   EVENT_COMPONENT_UNSELECT,
   EVENT_CONTENT_CHANGETOIMAGE,
   EVENT_APPLICATION_SAVE,
+  EVENT_APPLICATION_ESC,
 } from '@/examples/vseditor/event-enums'
 import FooterVue from '@/examples/vseditor/footer.vue'
 import HeaderVue from '@/examples/vseditor/header.vue'
@@ -404,8 +405,10 @@ export default {
       }).catch(err => {
         console.log(err)
       })
-
     },
+    Escape() {
+      this.$router.push('/designList')
+    }
   },
 
 
@@ -424,6 +427,7 @@ export default {
     this.eventbus.$on(EVENT_CONTENT_CHANGETOIMAGE, this.toImage)
 
     this.eventbus.$on(EVENT_APPLICATION_SAVE, this.handleSave)
+    this.eventbus.$on(EVENT_APPLICATION_ESC, this.Escape)
     // 绑定键盘按钮事件
     registerKeyboardAction(this)
 

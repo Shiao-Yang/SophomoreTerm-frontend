@@ -7,6 +7,7 @@ import {
   EVENT_COMPONENT_DUPLICATE,
   EVENT_CONTENT_CHANGETOIMAGE,
   EVENT_APPLICATION_SAVE,
+  EVENT_APPLICATION_ESC,
 } from './event-enums'
 export default {
   methods: {},
@@ -66,6 +67,13 @@ export default {
               onClick={() => this.eventbus.$emit(EVENT_APPLICATION_SAVE)}
           >
             SAVE
+          </button>
+          <button
+              title="Exit this page"
+              data-action="exit"
+              onClick={() => this.eventbus.$emit(EVENT_APPLICATION_ESC)}
+          >
+            EXIT
           </button>
         </div>
       </div>
