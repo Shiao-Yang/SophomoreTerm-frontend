@@ -77,7 +77,7 @@ export default Vue.extend({
       let params= {
         id:document.getElementById("toDel").value,
       }
-      axios.post('http://127.0.0.1:8000/api/project_manage/delete_document/',
+      axios.post(this.$store.state.base+'project_manage/delete_document/',
           qs.stringify(params))
           .then(function (Response) {
             console.log(Response)
@@ -100,7 +100,7 @@ export default Vue.extend({
       let params= {
        id:thisDoc.id
       }
-      axios.post('http://127.0.0.1:8000/api/project_manage/open_document/',
+      axios.post(this.$store.state.base+'project_manage/open_document/',
           qs.stringify(params))
           .then(function (Response) {
             //alert("新文档已保存。")
@@ -134,7 +134,7 @@ export default Vue.extend({
       }
       console.log(params)
       if(this.$store.state.doc_id===0){
-        axios.post('http://127.0.0.1:8000/api/project_manage/create_document/',
+        axios.post(this.$store.state.base+'project_manage/create_document/',
             qs.stringify(params))
             .then(function (Response) {
               console.log(Response);
@@ -146,7 +146,7 @@ export default Vue.extend({
             })
       }
       else{
-        axios.post('http://127.0.0.1:8000/api/project_manage/store_document/',
+        axios.post(this.$store.state.base+'project_manage/store_document/',
             qs.stringify(params2))
             .then(function (Response) {
               console.log(Response);
@@ -162,7 +162,7 @@ export default Vue.extend({
       let param= {
         pid:this.$store.state.pid,
       }
-      axios.post('http://127.0.0.1:8000/api/project_manage/get_documents/',
+      axios.post(this.$store.state.base+'project_manage/get_documents/',
           qs.stringify(param))
           .then(function (Response) {
             tempthis.docs=Response.data

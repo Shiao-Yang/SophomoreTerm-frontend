@@ -147,7 +147,7 @@ export default {
       let param = new FormData();  //创建表单对象
       param.append("avatar",fileToUpload);
       param.append("uid",tempthis.$store.state.userInfo.uid);
-      axios.post('http://127.0.0.1:8000/api/space/set_avatar/',
+      axios.post(this.$store.state.base+'space/set_avatar/',
           param,
           {headers:{'Content-Type':'multipart/form-data'}})
           .then(function (Response) {
