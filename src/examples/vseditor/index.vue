@@ -100,7 +100,7 @@ export default {
       //console.log(this.$store)
 
 
-      console.log(this.controls)
+      //console.log(this.controls)
       //sessionStorage.setItem('controls',this.controls);
       //console.log(sessionStorage.getItem('controls'));
     },
@@ -325,6 +325,7 @@ export default {
       console.log(this.dialogFormVisible);
     },
     toImage() {
+      this.setCurrentControl(this.getActiveComponent(this.controls))
       // 手动创建一个 canvas 标签
       const canvas = document.createElement("canvas")
       // 获取父标签，意思是这个标签内的 DOM 元素生成图片
@@ -372,6 +373,7 @@ export default {
       a.click()
     },
     handleSave() {
+      this.setCurrentControl(this.getActiveComponent(this.controls))
       let params = {
         picid: this.$store.state.pic_id,
         data: JSON.stringify(this.controls),
@@ -384,6 +386,11 @@ export default {
       }).then(res => {
         console.log(res.data);
         location.reload();
+        if(res.data === 0) {
+          console.log(params.picid);
+          console.log(params.data);
+        }
+        //location.reload();
       }).catch(err => {
         console.log(err)
       })
@@ -398,8 +405,9 @@ export default {
         url: this.$store.state.base + "design/get_one_design/",
         data: qs.stringify(params)
       }).then(res => {
+        console.log(res.data[0]);
         this.controls = JSON.parse(res.data[0].data);
-
+        //console.log(this.controls);
       }).catch(err => {
         console.log(err)
       })
@@ -430,8 +438,10 @@ export default {
     // 绑定键盘按钮事件
     registerKeyboardAction(this)
 
+    console.log("调用created");
     this.get_Pic(this.$store.state.pic_id);
-    // console.log(this.$store.state.controls);
+    console.log(this.controls);
+    console.log("调用完毕");
   },
   render() {
     return (
