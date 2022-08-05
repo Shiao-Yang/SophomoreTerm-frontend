@@ -14,7 +14,7 @@
       <li>
         <div class="profile-details">
           <div class="profile-content">
-            <img src="../assets/logo.png">
+<!--            <img src="../assets/logo.png">-->
           </div>
           <div class="profile-name">
             {{this.$store.state.userInfo.username}}
