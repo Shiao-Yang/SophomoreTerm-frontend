@@ -133,11 +133,13 @@ export default {
           .then(res=>{
             console.log(res.data);
             self.close();
-            if(res.data.errno === '0'){
+            if(res.data.errno === 0){
               self.$message.success("新建项目成功");
+              this.getProjects({gid:this.$store.state.gid});
             }
             else{
               self.$message.error("新建项目失败,错误代码:"+res.data.errno);
+
             }
           })
           .catch(err=>{
@@ -159,6 +161,7 @@ export default {
             this.close();
             if(res.data.errno === 0){
               this.$message.success("重命名项目成功");
+              this.getProjects({gid:this.$store.state.gid})
             }
             else{
               this.$message.error("重命名项目失败，错误代码:"+res.data.errno);
