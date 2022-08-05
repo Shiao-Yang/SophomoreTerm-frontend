@@ -15,7 +15,7 @@
         <div class="profile-details">
           <div class="profile-content">
             <img src="../assets/images/register.png" alt="加载失败" v-if="theAvatarUrl==='111'">
-            <img :src=" require('../../../moshu-backend/static/avatars/'+theAvatarUrl)" alt="加载失败" v-else>
+            <img :src=" require('../../static/avatars/'+theAvatarUrl)" alt="加载失败" v-else>
           </div>
           <div class="profile-name">
             {{this.$store.state.userInfo.username}}

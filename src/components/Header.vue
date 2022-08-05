@@ -16,7 +16,7 @@
       <div class="box">
 <!--        <el-avatar src="../assets/images/login.png"  v-if="$store.state.isLogin==='1'&&$store.state.userInfo.avatar===111">-->
 <!--          </el-avatar>-->
-<!--        <el-avatar :src=" require('../../../moshu-backend/static/avatars/'+$store.state.userInfo.avatar)"  v-else-if="$store.state.isLogin==='1'&&$store.state.userInfo.avatar!==111">-->
+<!--        <el-avatar :src=" require('../../static/avatars/'+$store.state.userInfo.avatar)"  v-else-if="$store.state.isLogin==='1'&&$store.state.userInfo.avatar!==111">-->
 <!--        </el-avatar>-->
 <!--        <el-avatar icon="el-icon-user-solid" v-else></el-avatar>-->
 
