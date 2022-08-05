@@ -2,7 +2,7 @@
   <div>
     <side-navigation></side-navigation>
     <div class="container">
-      <div class="img img1">
+      <div class="img img1" @click="toDesign">
         <div class="card">
           <p class="word">原型设计</p>
         </div>
@@ -47,6 +47,10 @@ export default {
     turnToEditor(){
       this.$router.push('/editor');
     },
+    toDesign() {
+      this.$router.push('/designList')
+    },
+
   }
 }
 </script>
