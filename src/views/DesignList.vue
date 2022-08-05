@@ -197,7 +197,7 @@ export default {
 
     createProject(name) {
       let params = {
-        picid: 2 /*this.$store.state.pid*/,
+        picid: this.$store.state.pid /*this.$store.state.pid*/,
         name: name,
       }
       console.log(params);
@@ -236,7 +236,7 @@ export default {
   },
 
   created() {
-    this.get_Picture(2);
+    this.get_Picture(this.$store.state.pid);
   },
 
   mounted() {
