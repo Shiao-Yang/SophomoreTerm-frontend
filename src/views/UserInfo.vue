@@ -3,10 +3,12 @@
     <div class="container">
       <div class="form-box-left">
         <div class="top">
-          <img src="../assets/images/register.png" alt="加载失败">
+          <img src="../assets/images/register.png" alt="加载失败" v-if="avatarUrl==='111'">
+          <img :src=" require('../../../moshu-backend/static/avatars/'+avatarUrl)" alt="加载失败" v-else>
           <p> {{this.$store.state.userInfo.username}} </p>
         </div>
-        <el-button @click="jump">去mode</el-button>
+        <input type="file" ref="pic">
+        <el-button @click="toChangeAvatar">上传头像</el-button>
         <div class="down1">
           <router-link to="/userInfo">个人资料</router-link>
         </div>
@@ -78,12 +80,15 @@
 
 <script>
 import qs from 'qs';
+import axios from "axios";
 
 export default {
   name: "UserInfo",
   data() {
     return {
-
+      avatarUrl:'111',
+      avatarArray:[],
+      theUid:0
     }
   },
 
@@ -91,14 +96,30 @@ export default {
     if(this.$store.state.isLogin === false){
       this.$router.push('/');
     }
-    console.log(sessionStorage.getItem('uid'));
     this.getInfo(sessionStorage.getItem('uid'));
   },
   methods: {
-    jump() {
-      this.$router.push('/prototype');
+    toChangeAvatar(){
+      const tempthis = this;
+      let fileToUpload = this.$refs.pic.files[0];
+      let param = new FormData();  //创建表单对象
+      param.append("avatar",fileToUpload);
+      param.append("uid",tempthis.$store.state.userInfo.uid);
+      axios.post('http://127.0.0.1:8000/api/space/set_avatar/',
+          param,
+          {headers:{'Content-Type':'multipart/form-data'}})
+          .then(function (Response) {
+            console.log(Response);
+            //const uuiidd = tempthis.$store.state.userInfo.uid;
+            //console.log(uuiidd)
+            tempthis.getInfo(tempthis.$store.state.userInfo.uid);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
     },
     getInfo(uid) {
+      const tempthis = this;
       let user;
       let params = {
         uid: uid,
@@ -114,8 +135,16 @@ export default {
         this.$store.state.userInfo.name = user.name;
         this.$store.state.userInfo.email = user.email;
         this.$store.state.userInfo.profile = user.profile;
-
-        console.log(this.$store.state.userInfo.username);
+        if(user.avatar!=='111')
+        {
+          tempthis.avatarArray=user.avatar.split('/')
+          this.$store.state.userInfo.avatar = tempthis.avatarArray[2];
+          tempthis.avatarUrl = this.$store.state.userInfo.avatar;
+        }
+        else{
+          tempthis.avatarUrl = '111'
+        }
+        console.log(user);
       }).catch(err => {
         console.log(err)
       })

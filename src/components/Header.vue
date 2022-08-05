@@ -14,8 +14,11 @@
 <!--        </nav>-->
       </div>
       <div class="box">
-        <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" v-if="$store.state.isLogin==='1'"></el-avatar>
-        <el-avatar icon="el-icon-user-solid" v-else></el-avatar>
+<!--        <el-avatar src="../assets/images/login.png"  v-if="$store.state.isLogin==='1'&&$store.state.userInfo.avatar===111">-->
+<!--          </el-avatar>-->
+<!--        <el-avatar :src=" require('../../../moshu-backend/static/avatars/'+$store.state.userInfo.avatar)"  v-else-if="$store.state.isLogin==='1'&&$store.state.userInfo.avatar!==111">-->
+<!--        </el-avatar>-->
+<!--        <el-avatar icon="el-icon-user-solid" v-else></el-avatar>-->
 
         <nav>
           <a v-if="$store.state.isLogin===true" @click="toVisitSelf">个人信息</a>
