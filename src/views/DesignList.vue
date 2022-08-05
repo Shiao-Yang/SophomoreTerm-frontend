@@ -4,6 +4,9 @@
       <SideNavigation></SideNavigation>
       <div class="main-container">
         <div class="header">
+          <router-link to="/project">
+            <img src="../assets/return.png" class="return">
+          </router-link>
           <button type="button" class="btn-new">
             <i class='bx bx-plus-circle'></i>
             <span class="btn-details" @click="isCreate=true">新建原型设计图</span>
@@ -288,7 +291,25 @@ export default {
   align-items: center;
   transition: all 0.3s ease;
 }
-
+.return {
+  display: flex;
+  color: #fff;
+  background-color: #1b9aee;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 8px;
+  height: 35px;
+  margin: 2px 10px;
+  line-height: 34px;
+  min-width: 68px;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+.return:hover{
+  background-color: #006cfa;
+  cursor: pointer;
+}
 .header .btn-new:hover{
   background-color: #006cfa;
   cursor: pointer;
