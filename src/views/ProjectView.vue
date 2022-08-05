@@ -28,7 +28,7 @@
             <div class="projectList">
               <ul class="projects">
                 <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== isActive && isActive === 1">
-                  <img class="project-logo" src="../assets/logo.png" title="进入项目" @click="toTurnToProject(project.id)">
+<!--                  <img class="project-logo" src="../assets/logo.png" title="进入项目" @click="toTurnToProject(project.id)">-->
                   <span class="project-info" title="进入项目" @click="toTurnToProject(project.id)">
                     <span class="project-name">{{project.name}}</span>
                     <span class="project-details">创建时间 : {{project.starttime}}</span>
@@ -38,7 +38,7 @@
                   <i class='bx bx-x delete' title="移动至回收站" @click="toBin(index)"></i>
                 </li>
                 <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== isActive && isActive === 0">
-                  <img class="project-logo" src="../assets/logo.png">
+<!--                  <img class="project-logo" src="../assets/logo.png">-->
                   <span class="project-info">
                     <span class="project-name">{{project.name}}</span>
                     <span class="project-details">创建时间 : {{project.starttime}}</span>

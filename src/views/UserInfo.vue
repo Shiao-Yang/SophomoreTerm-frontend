@@ -3,8 +3,8 @@
     <div class="container">
       <div class="form-box-left">
         <div class="top">
-          <img src="../assets/images/register.png" alt="加载失败" v-if="avatarUrl==='111'">
-          <img :src=" require('../../../moshu-backend/static/avatars/'+avatarUrl)" alt="加载失败" v-else>
+          <img src="../assets/images/register.png" alt="加载失败" v-if="this.$store.state.userInfo.avatar==='111'">
+          <img :src=" require('../../../moshu-backend/static/avatars/'+this.$store.state.userInfo.avatar)" alt="加载失败" v-else>
           <p> {{this.$store.state.userInfo.username}} </p>
         </div>
         <input type="file" ref="pic">
