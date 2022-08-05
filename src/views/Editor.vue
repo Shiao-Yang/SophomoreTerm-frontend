@@ -32,7 +32,7 @@
       />
       <input type="text" placeholder="保存前起一个标题吧" id="htmlTitle" v-if="this.$store.state.doc_id===0">
       <h4 id="htmlTitle" v-else>{{theTitle}}</h4>
-      <el-button @click="toSaveDoc" id="save">保存</el-button>
+      <el-button @click="toSaveDoc" id="save" size="small">保存</el-button>
     </div>
   </div>
 </template>
@@ -266,8 +266,11 @@ export default Vue.extend({
   }
   #htmlTitle {
     position: absolute;
+    padding: 5px;
     left: 75%;
     top: 7%;
+    font-size: 16px;
+    max-width: 150px;
     border-radius: 5px;
     border: 1px solid rgb(240,240,240);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
@@ -276,7 +279,7 @@ export default Vue.extend({
   #save {
     position: absolute;
     left: 92%;
-    top: 5%;
+    top: 7%;
   }
   #create {
     position: relative;
