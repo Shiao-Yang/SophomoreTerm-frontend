@@ -1,54 +1,80 @@
 <template>
 <div id="tl">
-  <el-button id="backbutton" @click="backPage">返回上一级</el-button>
-  <el-button id="createbutton" @click="createGroup(theUid)">创建新的团队</el-button>
-  <el-collapse v-model="activeNames" @change="handleChange">
-    <el-collapse-item title="我创建的团队" name="1">
-      <el-table
-          :data="createdGroup"
-          stripe
-          style="width: 100%"
-          @row-click="rowClick1">
-        <template v-for="(col ,index) in cols">
-        <el-table-column
-            :prop="col.prop"
-            :label="col.label"
-            width="180">
-        </el-table-column>
-        </template>
-      </el-table>
-    </el-collapse-item>
-    <el-collapse-item title="我管理的团队" name="2">
-      <el-table
-          :data="managedGroup"
-          stripe
-          style="width: 100%"
-          @row-click="rowClick2">
-        <template v-for="(col ,index) in cols">
-          <el-table-column
-              :prop="col.prop"
-              :label="col.label"
-              width="180">
-          </el-table-column>
-        </template>
-      </el-table>
-    </el-collapse-item>
-    <el-collapse-item title="我加入的团队" name="3">
-      <el-table
-          :data="participatedGroup"
-          stripe
-          style="width: 100%"
-          @row-click="rowClick3">
-        <template v-for="(col ,index) in cols">
-          <el-table-column
-              :prop="col.prop"
-              :label="col.label"
-              width="180">
-          </el-table-column>
-        </template>
-      </el-table>
-    </el-collapse-item>
-  </el-collapse>
+  <div class="container">
+    <el-button id="backbutton" @click="backPage">返回上一级</el-button>
+    <el-button id="createbutton" @click="createGroup(theUid)">创建新的团队</el-button>
+    <div class="main-container">
+      <el-collapse v-model="activeNames" @change="handleChange">
+        <el-collapse-item title="我创建的团队" name="1">
+            <el-table
+                :data="createdGroup"
+                stripe
+                style="width: 100%"
+                >
+              <template v-for="(col ,index) in cols">
+                <el-table-column
+                    :prop="col.prop"
+                    :label="col.label"
+                    width="180">
+                </el-table-column>
+                <
+              </template>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button
+                      size="mini"
+                      @click="rowClick1(scope.row, scope.$index)">进入团队</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+        </el-collapse-item>
+        <el-collapse-item title="我管理的团队" name="2">
+          <el-table
+              :data="managedGroup"
+              stripe
+              style="width: 100%;"
+              >
+            <template v-for="(col ,index) in cols">
+              <el-table-column
+                  :prop="col.prop"
+                  :label="col.label"
+                  width="180">
+              </el-table-column>
+            </template>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button
+                    size="mini"
+                    @click="rowClick2(scope.row, scope.$index)">进入团队</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-collapse-item>
+        <el-collapse-item title="我加入的团队" name="3">
+          <el-table
+              :data="participatedGroup"
+              stripe
+              style="width: 100%"
+              >
+            <template v-for="(col ,index) in cols">
+              <el-table-column
+                  :prop="col.prop"
+                  :label="col.label"
+                  width="180">
+              </el-table-column>
+            </template>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button
+                    size="mini"
+                    @click="rowClick3(scope.row, scope.$index)">进入团队</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-collapse-item>
+      </el-collapse>
+    </div>
+  </div>
 </div>
 </template>
 
@@ -206,6 +232,20 @@ export default {
 </script>
 
 <style scoped>
+.container{
+  width: 100%;
+  height:100%;
+  position: absolute;
+  left: 0;
+  top: 50px;
+  align-items: center;
+}
+
+.container .main-container{
+  width: 1000px;
+  min-width: 1000px;
+  margin: auto;
+}
 #tl{
   text-align: left;
   background: white;
@@ -217,6 +257,10 @@ export default {
 #createbutton{
   margin-top: 2vh;
   margin-bottom: 2vh;
+}
+
+tr{
+  cursor: pointer;
 }
 
 </style>
