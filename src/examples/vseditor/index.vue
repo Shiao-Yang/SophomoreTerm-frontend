@@ -377,14 +377,13 @@ export default {
         data: JSON.stringify(this.controls),
 
       }
-      //console.log(params);
       this.$axios({
         method: 'post',
         url: this.$store.state.base + "design/store/",
         data: qs.stringify(params)
       }).then(res => {
         console.log(res.data);
-
+        location.reload();
       }).catch(err => {
         console.log(err)
       })
@@ -399,15 +398,15 @@ export default {
         url: this.$store.state.base + "design/get_one_design/",
         data: qs.stringify(params)
       }).then(res => {
-        console.log(res.data[0]);
         this.controls = JSON.parse(res.data[0].data);
-        //console.log(this.controls);
+
       }).catch(err => {
         console.log(err)
       })
     },
     Escape() {
       this.$router.push('/designList')
+      location.reload()
     }
   },
 
@@ -432,7 +431,7 @@ export default {
     registerKeyboardAction(this)
 
     this.get_Pic(this.$store.state.pic_id);
-    console.log(this.$store.state.controls);
+    // console.log(this.$store.state.controls);
   },
   render() {
     return (
