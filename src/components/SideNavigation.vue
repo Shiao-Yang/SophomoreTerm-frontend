@@ -11,28 +11,32 @@
           <span class="link-name">项目</span>
         </router-link>
       </li>
-<!--      <li>-->
-<!--        <div class="profile-details">-->
-<!--          <div class="profile-content">-->
-<!--&lt;!&ndash;            <img src="../assets/logo.png">&ndash;&gt;-->
-<!--          </div>-->
-<!--          <div class="profile-name">-->
-<!--            {{this.$store.state.userInfo.username}}-->
-<!--          </div>-->
-<!--          <i class='bx bx-log-out-circle' style="cursor: pointer" @click="toExit"></i>-->
-<!--        </div>-->
-<!--      </li>-->
+      <li>
+        <div class="profile-details">
+          <div class="profile-content">
+            <img src="../assets/images/register.png" alt="加载失败" v-if="theAvatarUrl==='111'">
+            <img :src=" require('../../../moshu-backend/static/avatars/'+theAvatarUrl)" alt="加载失败" v-else>
+          </div>
+          <div class="profile-name">
+            {{this.$store.state.userInfo.username}}
+          </div>
+          <i class='bx bx-log-out-circle' style="cursor: pointer" @click="toExit"></i>
+        </div>
+      </li>
     </ul>
 
   </div>
 </template>
 
 <script>
+import qs from "qs";
+
 export default {
   name: "AsideNavigation",
   data() {
     return {
       username:"DEFAULT",
+      theAvatarUrl:'111'
     }
   },
   methods:{
@@ -43,9 +47,40 @@ export default {
       this.$store.state.isLogin = false;
       this.$router.push('/');
     },
+    getAvatar(uid) {
+      const tempthis = this;
+      let user;
+      let params = {
+        uid: uid,
+      }
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base+"space/get_info/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log(res.data[0]);
+        user = res.data[0];
+        // this.$store.state.userInfo.username = user.username;
+        // this.$store.state.userInfo.name = user.name;
+        // this.$store.state.userInfo.email = user.email;
+        // this.$store.state.userInfo.profile = user.profile;
+        if(user.avatar!=='111')
+        {
+          tempthis.avatarArray=user.avatar.split('/')
+          this.$store.state.userInfo.avatar = tempthis.avatarArray[2];
+          tempthis.theAvatarUrl = this.$store.state.userInfo.avatar;
+        }
+        else{
+          tempthis.theAvatarUrl = '111'
+        }
+        console.log(user);
+      }).catch(err => {
+        console.log(err)
+      })
+    },
   },
   created() {
-
+    this.getAvatar(this.$store.state.userInfo.uid)
   }
 }
 </script>

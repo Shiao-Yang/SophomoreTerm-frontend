@@ -3,9 +3,12 @@
     <div class="container">
       <div class="form-box-left">
         <div class="top">
-          <img src="../assets/images/register.png" alt="加载失败">
+          <img src="../assets/images/register.png" alt="加载失败" v-if="this.$store.state.userInfo.avatar==='111'">
+          <img :src=" require('../../../moshu-backend/static/avatars/'+this.$store.state.userInfo.avatar)" alt="加载失败" v-else>
           <p> {{this.$store.state.userInfo.username}} </p>
         </div>
+        <input type="file" ref="pic" class="inputText">
+        <el-button @click="toChangeAvatar">上传头像</el-button>
         <div class="down">
           <router-link to="/userInfo">个人资料</router-link>
         </div>
@@ -66,11 +69,13 @@
 
 <script>
 import qs from "qs";
+import axios from "axios";
 
 export default {
   name: "UserInfo",
   data() {
     return {
+      avatarUrl:'111',
       tabPosition: 'left'
     }
   },
@@ -136,7 +141,27 @@ export default {
         console.log(err)
       })
     },
+    toChangeAvatar(){
+      const tempthis = this;
+      let fileToUpload = this.$refs.pic.files[0];
+      let param = new FormData();  //创建表单对象
+      param.append("avatar",fileToUpload);
+      param.append("uid",tempthis.$store.state.userInfo.uid);
+      axios.post('http://127.0.0.1:8000/api/space/set_avatar/',
+          param,
+          {headers:{'Content-Type':'multipart/form-data'}})
+          .then(function (Response) {
+            console.log(Response);
+            //const uuiidd = tempthis.$store.state.userInfo.uid;
+            //console.log(uuiidd)
+            tempthis.getInfo(tempthis.$store.state.userInfo.uid);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
     getInfo(uid) {
+      const tempthis = this;
       let user;
       let params = {
         uid: uid,
@@ -152,8 +177,16 @@ export default {
         this.$store.state.userInfo.name = user.name;
         this.$store.state.userInfo.email = user.email;
         this.$store.state.userInfo.profile = user.profile;
-
-        console.log(this.$store.state.userInfo.username);
+        if(user.avatar!=='111')
+        {
+          tempthis.avatarArray=user.avatar.split('/')
+          this.$store.state.userInfo.avatar = tempthis.avatarArray[2];
+          tempthis.avatarUrl = this.$store.state.userInfo.avatar;
+        }
+        else{
+          tempthis.avatarUrl = '111'
+        }
+        console.log(user);
       }).catch(err => {
         console.log(err)
       })
@@ -439,5 +472,7 @@ input:focus::placeholder{
   color: #feffff;
   transition: background-color 0.5s ease;
 }
-
+.inputText{
+  color: black;
+}
 </style>
