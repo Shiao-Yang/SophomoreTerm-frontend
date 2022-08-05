@@ -11,17 +11,17 @@
           <span class="link-name">项目</span>
         </router-link>
       </li>
-      <li>
-        <div class="profile-details">
-          <div class="profile-content">
-<!--            <img src="../assets/logo.png">-->
-          </div>
-          <div class="profile-name">
-            {{this.$store.state.userInfo.username}}
-          </div>
-          <i class='bx bx-log-out-circle' style="cursor: pointer" @click="toExit"></i>
-        </div>
-      </li>
+<!--      <li>-->
+<!--        <div class="profile-details">-->
+<!--          <div class="profile-content">-->
+<!--&lt;!&ndash;            <img src="../assets/logo.png">&ndash;&gt;-->
+<!--          </div>-->
+<!--          <div class="profile-name">-->
+<!--            {{this.$store.state.userInfo.username}}-->
+<!--          </div>-->
+<!--          <i class='bx bx-log-out-circle' style="cursor: pointer" @click="toExit"></i>-->
+<!--        </div>-->
+<!--      </li>-->
     </ul>
 
   </div>
@@ -43,6 +43,9 @@ export default {
       this.$store.state.isLogin = false;
       this.$router.push('/');
     },
+  },
+  created() {
+
   }
 }
 </script>
