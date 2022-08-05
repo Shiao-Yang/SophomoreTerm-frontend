@@ -9,7 +9,7 @@
             <ul>
               <li>
                 <span class="label">项目名称</span>
-                <el-input v-model="project.name" placeholder="请输入项目名称"></el-input>
+                <el-input v-model="projectName" placeholder="请输入项目名称"></el-input>
               </li>
               <li>
                 <span class="label">创建人 :</span>
@@ -51,6 +51,7 @@ export default {
     return {
       founder:{},
       project: {},
+      projectName: "",
     }
   },
 
@@ -59,6 +60,11 @@ export default {
   },
   methods : {
     sure() {
+      if(this.projectName === ""){
+        this.$message.error("项目名称不能为空！")
+        return;
+      }
+      this.project.name = this.projectName;
       this.$emit('ok', this.project);
     },
     cancel() {
@@ -102,12 +108,19 @@ export default {
     },
     getProject(){
       this.project = this.p;
+      this.projectName = this.project.name;
+      // this.project.id = this.p.id;
+      // this.project.name = this.p.name;
+      // this.project.uid = this.p.uid;
+      // this.project.starttime = this.p.starttime;
+      // this.project.staus = this.p.staus;
+      // this.name = this.p.name;
+      // console.log(this.project);
     }
   },
   created() {
     this.getProject();
     this.getFounder(this.project.uid);
-
   }
 }
 </script>
