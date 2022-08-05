@@ -249,13 +249,10 @@ export default {
   text-align: left;
   background: white;
 }
-#backbutton{
-  margin-top: 2vh;
-  margin-bottom: 2vh;
-}
 #createbutton{
   margin-top: 2vh;
   margin-bottom: 2vh;
+  margin-left: 16%;
 }
 
 tr{

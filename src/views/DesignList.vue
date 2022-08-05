@@ -26,7 +26,7 @@
             <div class="projectList">
               <ul class="projects">
                 <li class="project-item" v-for="(project, index) in this.projects">
-                  <img class="project-logo" src="../assets/logo.png">
+<!--                  <img class="project-logo" src="../assets/logo.png">-->
                   <span class="project-info">
                     <span class="project-name">{{project.name}}</span>
                     <!--<span class="project-details">创建时间 : {{project.starttime}}</span>-->
