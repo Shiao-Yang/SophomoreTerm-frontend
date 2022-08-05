@@ -1,7 +1,6 @@
 <template>
 <div id="tl">
   <div class="container">
-    <el-button id="backbutton" @click="backPage">返回上一级</el-button>
     <el-button id="createbutton" @click="createGroup(theUid)">创建新的团队</el-button>
     <div class="main-container">
       <el-collapse v-model="activeNames" @change="handleChange">

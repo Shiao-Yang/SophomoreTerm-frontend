@@ -2,7 +2,7 @@
   <div>
     <div id="top">
       <div id="search">
-        <input type="text" autocomplete="off" name="username" id="input" v-model="input" placeholder="请输入姓名" @keyup.enter="search"></input>
+        <input type="text" autocomplete="off" name="username" id="input" v-model="input" placeholder="请输入昵称" @keyup.enter="search"></input>
         <img src="../assets/search.png" id="searchBtn" @click="search">
       </div>
       <router-link to="/adminTeam">
@@ -103,7 +103,7 @@ export default {
       if (this.input!=='') {
         let i,j,len=this.members.length;
         for (i = 0; i < len; i++) {
-          if (this.input===this.members[i].name) {
+          if (this.input===this.members[i].username) {
             this.members[i].visible = true;
           } else {
             this.members[i].visible = false;
