@@ -19,7 +19,7 @@
           <div class="profile-name">
             {{this.$store.state.userInfo.username}}
           </div>
-          <i class='bx bx-log-out-circle'></i>
+          <i class='bx bx-log-out-circle' style="cursor: pointer" @click="toExit"></i>
         </div>
       </li>
     </ul>
@@ -38,6 +38,10 @@ export default {
   methods:{
     toHome(){
       this.$router.push('/')
+    },
+    toExit:function (){
+      this.$store.state.isLogin = false;
+      this.$router.push('/');
     },
   }
 }
