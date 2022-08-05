@@ -10,7 +10,7 @@
           <router-link to="/userInfo">个人资料</router-link>
         </div>
         <div class="down1">
-          <router-link to="/accountInfo">账号信息</router-link>
+          <router-link to="/accountInfo">修改密码</router-link>
         </div>
 <!--        <div class="down">-->
 <!--          <router-link to="/teamList">团队列表</router-link>-->
@@ -20,7 +20,7 @@
 
       <div class="form-box-right">
         <div class="title">
-          <p>账号信息</p>
+          <p>修改密码</p>
         </div>
 
         <div class="form-group">

@@ -13,7 +13,7 @@
           <router-link to="/userInfo">个人资料</router-link>
         </div>
         <div class="down">
-          <router-link to="/accountInfo">账号信息</router-link>
+          <router-link to="/accountInfo">修改密码</router-link>
         </div>
 <!--        <div class="down">-->
 <!--&lt;!&ndash;          <router-link to="/addedTeam">已加入团队</router-link>&ndash;&gt;-->
