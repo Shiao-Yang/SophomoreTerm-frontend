@@ -6,9 +6,9 @@
     </router-link>
 
     <div id="list">
-      <el-button @click="toStartCreateDoc">创建新的文档</el-button><br>
+      <el-button @click="toStartCreateDoc" class="btn">创建新的文档</el-button><br>
       <input type="text" placeholder="输入文档id来删除它" id="toDel">
-      <el-button @click="toDelectTheDoc">确认删除文档</el-button>
+      <el-button @click="toDelectTheDoc" class="btn">确认删除文档</el-button>
       <div class="file" v-for="item in docs">
         <p @click="toEditThisDoc(item)">&nbsp;&nbsp;{{item.id}}:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
       </div>
@@ -29,7 +29,7 @@
           id="editor"
       />
       <input type="text" placeholder="保存前起一个标题吧" id="htmlTitle">
-      <el-button @click="toSaveDoc" id="save">保存</el-button>
+      <el-button @click="toSaveDoc" class="save">保存</el-button>
     </div>
   </div>
 </template>
@@ -247,12 +247,12 @@ export default Vue.extend({
     left: 75%;
     top: 7%;
   }
-  #save {
+  .save {
     position: absolute;
     left: 92%;
     top: 5%
   }
-  #save:hover {
+  .save:hover,.btn:hover,.save:active,.btn:active {
     color: black;
     background-color: rgb(240,240,240);
   }
