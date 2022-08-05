@@ -44,7 +44,7 @@
       </div>
       <div class="main-container" v-if="isSet !== -1">
         <template>
-          <SetProjectWindow @ok="rename" @cancel="close" :project="projects[isSet]"></SetProjectWindow>
+          <SetDesignWindow @ok="rename" @cancel="close" :p="projects[isSet]"></SetDesignWindow>
         </template>
       </div>
     </div>
@@ -54,15 +54,15 @@
 <script>
 import SideNavigation from "@/components/SideNavigation";
 import CreateProjectWindow from "@/components/CreateProjectWindow";
-import SetProjectWindow from "@/components/SetProjectWindow";
+import SetDesignWindow from "@/components/SetDesignWindow";
 import qs from "qs";
 
 export default {
   name: "ProjectView",
   components: {
+    SetDesignWindow,
     CreateProjectWindow,
     SideNavigation,
-    SetProjectWindow,
   },
   data(){
     return{
@@ -131,6 +131,7 @@ export default {
         data: qs.stringify(params)
       }).then(res => {
         //console.log(res.data);
+        this.close();
         if(res.data.errno === 0) {
 
           this.$message({
@@ -139,7 +140,7 @@ export default {
             showClose: true,
           })
           //this.projects.push({picid: params.picid, name: params.name, data: []});
-          this.isCreate = false;
+
           //this.projects[index].name = ;
           //location.reload();
 
