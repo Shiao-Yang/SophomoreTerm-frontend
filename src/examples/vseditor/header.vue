@@ -24,56 +24,56 @@ export default {
             data-action="undo"
             onClick={() => this.eventbus.$emit(EVENT_APPLICATION_UNDO)}
           >
-            Undo
+            撤销
           </button>
           <button
             title="Return to the next state"
             data-action="redo"
             onClick={() => this.eventbus.$emit(EVENT_APPLICATION_REDO)}
           >
-            Redo
+            重做
           </button>
           <button
             title="Duplicate selected component"
             data-action="duplicate"
             onClick={() => this.eventbus.$emit(EVENT_COMPONENT_DUPLICATE)}
           >
-            Duplicate
+            复制
           </button>
           <button
             title="Delete selected component"
             data-action="delete"
             onClick={() => this.eventbus.$emit(EVENT_COMPONENT_DELETE)}
           >
-            Delete
+            删除
           </button>
           <button
             title="Clear all components in the editing area"
             data-action="clear"
             onClick={() => this.eventbus.$emit(EVENT_APPLICATION_CLEAR)}
           >
-            Clear
+            清空
           </button>
           <button
             title="Change this page to image and download"
             data-action="export"
             onClick={() => this.eventbus.$emit(EVENT_CONTENT_CHANGETOIMAGE)}
           >
-            Export
+            导出
           </button>
           <button
               title="Save all components in the editing area"
               data-action="save"
               onClick={() => this.eventbus.$emit(EVENT_APPLICATION_SAVE)}
           >
-            SAVE
+            保存
           </button>
           <button
               title="Exit this page"
               data-action="exit"
               onClick={() => this.eventbus.$emit(EVENT_APPLICATION_ESC)}
           >
-            EXIT
+            退出
           </button>
         </div>
       </div>
