@@ -487,6 +487,7 @@ export default {
     display: flex;
     flex: 1;
     height: 0;
+    background-color: #ffffff;
     .vs-editor {
       flex: 1;
       position: relative;

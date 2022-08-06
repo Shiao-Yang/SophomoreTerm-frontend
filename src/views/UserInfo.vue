@@ -3,12 +3,13 @@
     <div class="container">
       <div class="form-box-left">
         <div class="top">
-          <img src="../assets/images/register.png" alt="加载失败" v-if="this.$store.state.userInfo.avatar==='111'">
-          <img :src=" require('../../static/avatars/'+this.$store.state.userInfo.avatar)" alt="加载失败" v-else>
+<!--          <img src="../assets/images/register.png" alt="加载失败" v-if="this.$store.state.userInfo.avatar==='111'">-->
+<!--          <img :src=" require('../../../moshu-backend/static/avatars/'+this.$store.state.userInfo.avatar)" alt="加载失败" v-else>-->
+          <img src="../assets/images/register.png">
           <p> {{this.$store.state.userInfo.username}} </p>
         </div>
-        <input type="file" ref="pic">
-        <el-button @click="toChangeAvatar">上传头像</el-button>
+<!--        <input type="file" ref="pic">-->
+<!--          <el-button @click="toChangeAvatar">上传头像</el-button>-->
         <div class="down1">
           <router-link to="/userInfo">个人资料</router-link>
         </div>

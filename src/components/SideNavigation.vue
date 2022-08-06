@@ -14,8 +14,9 @@
       <li>
         <div class="profile-details">
           <div class="profile-content">
-            <img src="../assets/images/register.png" alt="加载失败" v-if="theAvatarUrl==='111'">
-            <img :src=" require('../../static/avatars/'+theAvatarUrl)" alt="加载失败" v-else>
+<!--            <img src="../assets/images/register.png" alt="加载失败" v-if="theAvatarUrl==='111'">-->
+<!--            <img :src=" require('../../../moshu-backend/static/avatars/'+theAvatarUrl)" alt="加载失败" v-else>-->
+            <img src="src/assets/images/register.png">
           </div>
           <div class="profile-name">
             {{this.$store.state.userInfo.username}}
@@ -101,7 +102,7 @@ export default {
   height: 100%;
   width: 230px;
   background: #292c2f;
-  box-shadow: 3px 3px 3px #111;
+  /*box-shadow: 3px 3px 3px #111;*/
 }
 
 .sidebar .logo-details{
