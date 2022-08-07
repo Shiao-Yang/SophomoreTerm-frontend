@@ -11,7 +11,7 @@
     </div>
     <div id="contentBgd">
       <div id="contentBox">
-        <div class="result" v-for="(item,index) in members" v-if="item.visible">
+        <div class="result" v-for="(item,index) in members">
           <img src="../assets/logo.png" class="avatar">
           <span class="info">ID：{{item.id}}</span>
           <span class="info">昵称：{{item.username}}</span>
@@ -32,7 +32,6 @@ export default {
   name: "Invite",
   created() {
     window.myData = this;
-    this.get_user();
     //if (!this.$store.state.isLogin) {
     //  this.$store.state.warning = true
     //  this.$router.push('/')
@@ -45,26 +44,30 @@ export default {
     }
   },
   methods: {
-    get_user() {
+    search() {
+      let params = {
+        gid: this.$store.state.gid,
+        keyword: this.input
+      }
       this.axios({
-        method: 'get',
-        url: this.$store.state.base+"team_manage/get_user/",
+        method: 'post',
+        url: this.$store.state.base+'group_manage/search_users/',
+        data: qs.stringify(params)
       })
           .then(res => {
-            console.log(res)
-            for (let i = 0; i < res.data.length; i++) {
-              let tmp = {
-                id: res.data[i].id,
-                username: res.data[i].username,
-                name: res.data[i].name,
-                email: res.data[i].email,
-                group: res.data[i].team,
-                avatar: res.data[i].avatar,
-                visible: true,
-              }
-              if (!this.exit(tmp.group)) {
-                this.members.push(tmp)
-              }
+            console.log(res.data)
+            switch (res.data.errno) {
+              case 4:
+                this.$message.warning(res.data.msg)
+                break
+              case 5:
+                this.$message.warning(res.data.msg)
+                break
+              case 1001:
+                this.$message.warning(res.data.msg)
+                break
+              default:
+                this.members = res.data
             }
           })
     },
@@ -98,23 +101,6 @@ export default {
                 break
             }
           })
-    },
-    search() {
-      if (this.input!=='') {
-        let i,j,len=this.members.length;
-        for (i = 0; i < len; i++) {
-          if (this.input===this.members[i].username) {
-            this.members[i].visible = true;
-          } else {
-            this.members[i].visible = false;
-          }
-        }
-      } else {
-        let i,len=this.members.length;
-        for (i = 0; i < len; i++) {
-          this.members[i].visible = true;
-        }
-      }
     },
     exit(group) {
       let len = group.length,i;

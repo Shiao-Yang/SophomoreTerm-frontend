@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div v-if="this.$route.path!=='/invite'&&this.$route.path!=='/editor'"><Header/></div>
+    <div v-if="this.$route.path!=='/invite'&&this.$route.path!=='/editor'&&this.$route.path!=='/docCenter'"><Header/></div>
     <router-view/>
   </div>
 

@@ -19,6 +19,7 @@ import DesignList from "@/views/DesignList"
 import Home from "@/views/Home";
 import TeamList from "@/views/TeamList";
 import designList from "@/views/DesignList";
+import docCenter from "@/views/DocCenter";
 Vue.use(VueRouter)
 
 
@@ -108,6 +109,11 @@ const routes = [
     path: '/designList',
     name: 'designList',
     component: designList
+  },
+  {
+    path: '/docCenter',
+    name: 'docCenter',
+    component: docCenter
   }
 
 ]
