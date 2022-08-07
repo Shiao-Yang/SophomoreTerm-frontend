@@ -14,25 +14,26 @@ export default {
   data() {
     return {
       inputs: [
-        { type: 'number', name: 'x' },
-        { type: 'number', name: 'y' },
-        { type: 'number', name: 'width' },
-        { type: 'number', name: 'height' },
-        { type: 'number', name: 'rotation' },
-        { type: 'number', name: 'minWidth' },
-        { type: 'number', name: 'minHeight' },
-        { type: 'grid', name: 'grid' },
+        { type: 'number', name: 'x', cn_name: 'x'  },
+        { type: 'number', name: 'y', cn_name: 'y'  },
+        { type: 'number', name: 'width', cn_name: '宽度' },
+        { type: 'number', name: 'height', cn_name: '高度' },
+        { type: 'number', name: 'rotation', cn_name: '旋转' },
+        { type: 'number', name: 'minWidth', cn_name: '最小宽度' },
+        { type: 'number', name: 'minHeight', cn_name: '最小高度' },
+        { type: 'grid', name: 'grid', cn_name: '移动尺寸' },
         {
           type: 'radio',
           name: 'axis',
+          cn_name: '移动方式',
           options: [{ label: 'y', value: 'y' }, { label: 'x', value: 'x' }, { label: 'xy', value: 'xy' }],
         },
-        { type: 'checkbox', name: 'fixedRatio' },
-        { type: 'checkbox', name: 'draggable' },
-        { type: 'checkbox', name: 'resizable' },
-        { type: 'checkbox', name: 'rotatable' },
-        { type: 'checkbox', name: 'active' },
-        { type: 'checkbox', name: 'parent' },
+        { type: 'checkbox', name: 'fixedRatio', cn_name: '移动方式' },
+        { type: 'checkbox', name: 'draggable', cn_name: '是否可拖动' },
+        { type: 'checkbox', name: 'resizable', cn_name: '是否可缩放' },
+        { type: 'checkbox', name: 'rotatable', cn_name: '是否可旋转' },
+        { type: 'checkbox', name: 'active', cn_name: '是否选中' },
+        { type: 'checkbox', name: 'parent', cn_name: '是否为父容器' },
       ],
       extraInputs: [{ type: 'text', name: 'value' }, { type: 'text', name: 'label' }],
     }
@@ -61,7 +62,7 @@ export default {
           let DyInput = PropInputImpl[item.type]
           return (
             <div class="input-item" key={item.name}>
-              <label class="input-label">{item.name}</label>
+              <label class="input-label">{item.cn_name}</label>
               <DyInput
                 options={item.options}
                 value={this.controlled[item.name]}

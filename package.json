@@ -21,7 +21,8 @@
     "vue-axios": "^3.4.1",
     "vue-router": "^3.5.1",
     "vuex": "^3.6.2",
-    "yoyoo-ddr": "^0.6.1"
+    "yoyoo-ddr": "^0.6.1",
+    "jquery": "^3.5.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",

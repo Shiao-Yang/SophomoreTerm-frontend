@@ -5,6 +5,7 @@ import store from './store'
 import ElementUI from 'element-ui'; // 2.1引入结构
 import 'element-ui/lib/theme-chalk/index.css'; // 2.2引入样式
 import axios from 'axios'
+import $ from 'jquery'
 import VueAxios from 'vue-axios'
 
 Vue.prototype.$axios = axios

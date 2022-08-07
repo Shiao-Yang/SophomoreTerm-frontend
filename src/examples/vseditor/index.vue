@@ -30,6 +30,7 @@ import PluginSelectionVue from '@/examples/vseditor/plugins/plugin-selection.vue
 import PluginGridVue from '@/examples/vseditor/plugins/plugin-grid.vue'
 import { registerKeyboardAction } from '@/examples/vseditor/plugins/keyboard'
 import html2canvas from "html2canvas";
+import $ from 'jquery'
 import qs from "qs";
 let historys = [[]]
 let historyPointer = 0
@@ -41,9 +42,20 @@ export default {
       currentId: '',
       currentPath: [],
       controlled: {},
+      width: 800,
+      height: 500,
     }
   },
   methods: {
+    setSize(width, height) {
+      /*
+      var container = document.getElementsByClassName('container')[0];
+      container.style.height = width + 'px';
+      container.style.width = height + 'px';
+
+       */
+      $(".container").css({width: width + 'px',height: height + 'px'})
+    },
     getComponents(components, parentId) {
       return components.map((item) => ({
         type: item.type,
@@ -418,6 +430,9 @@ export default {
     }
   },
 
+  mounted() {
+    this.setSize(this.width, this.height);
+  },
 
   created() {
     // 使用独立的事件对象来处理，避免多层透传回调函数
@@ -450,10 +465,11 @@ export default {
         <div class="content">
           <ComponentsVue />
           <div class="temp" ref="imageTofile">
-            <EditorViewVue ref="editor" value={this.controls}>
-              <PluginSelectionVue application={this} />
-              <PluginGridVue />
-            </EditorViewVue>
+            <div class="container">
+              <EditorViewVue ref="editor" value={this.controls}>
+                <PluginSelectionVue application={this}/>
+              </EditorViewVue>
+            </div>
           </div>
           <PropInspectorVue onChange={this.handleChange} controlled={this.controlled} />
         </div>
@@ -471,11 +487,21 @@ export default {
 }
 
 .temp{
+  background-color: #d0cdcd;
   flex: 1;
   position: relative;
   width: 100%;
-  overflow: scroll;
+  overflow: hidden;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .container {
+    background-color: #fcfcfc;
+    overflow: hidden;
+
+  }
 }
 
 .vs-editor-app {
@@ -487,12 +513,14 @@ export default {
     display: flex;
     flex: 1;
     height: 0;
-    background-color: #ffffff;
+    /*background-color: #ffffff;
+
+     */
     .vs-editor {
       flex: 1;
       position: relative;
       width: 100%;
-      overflow: scroll;
+      overflow: hidden;
       height: 100%;
     }
   }
