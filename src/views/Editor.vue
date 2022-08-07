@@ -7,14 +7,26 @@
 
     <div id="list">
       <div @click="toStartCreateDoc" id="create"><p style="position:absolute;left: 22%;top: 15%">创建新的文档</p></div>
-      <input type="text" placeholder="输入文档id来删除它" id="toDel">
-      <div @click="toDeleteTheDoc" id="Delete"><p style="position:absolute;left: 22%;top: 15%">确认删除文档</p></div>
       <div id="files">
-        <div class="file" v-for="item in docs" @click="toEditThisDoc(item)">
-          <p>&nbsp;&nbsp;{{item.id}}:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
+        <div class="file" v-for="item in docs">
+          <p style="font-size: 13px;width: 80%"@click="toEditThisDoc(item)">&nbsp;&nbsp;文件名:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
+          <p style="font-size: 10px;position: absolute;right: 5px" @click="dele(item.id,item.name)">删除</p>
         </div>
       </div>
     </div>
+
+    <el-dialog
+        title="提示"
+        :visible.sync="Del"
+        :close-on-click-modal ="false"
+        width="30%">
+      <i class="el-icon-warning-outline" style="color: #ffd952"></i>
+      <span>您确定要删除文件{{name}}吗？</span>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="Del = false" class="cancel">取 消</el-button>
+          <el-button type="primary" @click="toDeleteTheDoc(id)" class="confirm">确 定</el-button>
+        </span>
+    </el-dialog>
 
     <div id="box">
       <Toolbar
@@ -56,6 +68,9 @@ export default Vue.extend({
   data() {
     return {
       editor: null,
+      id: 0,
+      Del: false,
+      name: '',
       html: '',
       toolbarConfig: { },
       editorConfig: { placeholder: '请输入内容...' },
@@ -65,6 +80,11 @@ export default Vue.extend({
     }
   },
   methods: {
+    dele(id,name) {
+      this.Del = true
+      this.id = id
+      this.name = name
+    },
     onCreated(editor) {
       this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
     },
@@ -72,10 +92,11 @@ export default Vue.extend({
       this.$store.state.doc_id=0;
       this.html='';
     },
-    toDeleteTheDoc(){
+    toDeleteTheDoc(id){
       const tempthis = this;
+      this.Del = false
       let params= {
-        id:document.getElementById("toDel").value,
+        id: id,
       }
       axios.post(this.$store.state.base+'project_manage/delete_document/',
           qs.stringify(params))
@@ -83,7 +104,6 @@ export default Vue.extend({
             console.log(Response)
             tempthis.getAllDoc();
             if(Response.data.errno===0){
-              alert("已删除")
               tempthis.toStartCreateDoc()
             }
             else if(Response.data.errno===2)
@@ -262,7 +282,7 @@ export default Vue.extend({
     position: absolute;
     width: 80%;
     left: 10%;
-    top: 24%;
+    top: 10%;
   }
   #htmlTitle {
     position: absolute;
