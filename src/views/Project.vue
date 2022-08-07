@@ -64,12 +64,15 @@ export default {
   .container {
     position: absolute;
     text-align: center;
+    width: 79%;
+    height: 85%;
     left: 20%;
     top: 10%;
   }
   .img {
-    width: 360px;
-    height: 650px;
+    position: absolute;
+    width: 30%;
+    height: 100%;
     display: inline-block;
     margin: 10px;
     background-size: cover;
@@ -81,24 +84,22 @@ export default {
   }
   .img1 {
     background-image: url("../assets/projectBgd1.jpg");
-    position: absolute;
+    left: 0%;
 
   }
   .img2 {
     background-image: url("../assets/projectBgd2.jpg");
-    position: absolute;
-    left: 400px;
+    left: 33%;
   }
   .img3 {
     background-image: url("../assets/projectBgd3.jpg");
-    position: absolute;
-    left: 800px;
+    left: 66%;
   }
   .card {
     margin: 0px;
     position: absolute;
-    width: 280px;
-    height: 280px;
+    width: 78%;
+    height: 40%;
     background-color: rgb(240,240,240,0.9);
     border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
