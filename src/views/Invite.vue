@@ -2,7 +2,7 @@
   <div>
     <div id="top">
       <div id="search">
-        <input type="text" autocomplete="off" name="username" id="input" v-model="input" placeholder="请输入昵称" @keyup.enter="search"></input>
+        <input type="text" autocomplete="off" name="username" id="input" v-model="input" placeholder="请输入要邀请成员的姓名" @keyup.enter="search"></input>
         <img src="../assets/search.png" id="searchBtn" @click="search">
       </div>
       <router-link to="/adminTeam">
