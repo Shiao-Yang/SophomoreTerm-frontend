@@ -32,7 +32,7 @@
       />
     </div>
     <input type="text" placeholder="为文件命名" id="htmlTitle" v-if="this.$store.state.doc_id===0">
-    <h4 id="htmlTitle" v-else>{{theTitle}}</h4>
+    <div id="title" v-else>{{theTitle}}</div>
     <el-button @click="toSaveDoc" id="save" size="small">保存</el-button>
   </div>
 </template>
@@ -272,6 +272,20 @@ export default Vue.extend({
     font-size: 16px;
     max-width: 7%;
     border-radius: 5px;
+    border: 1px solid rgb(240,240,240);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+    outline: none;
+  }
+  #title {
+    position: absolute;
+    padding: 5px;
+    right: 1%;
+    top: 5%;
+    font-size: 16px;
+    width: 7%;
+    border-radius: 5px;
+    background-color: white;
+    text-align: center;
     border: 1px solid rgb(240,240,240);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
     outline: none;
