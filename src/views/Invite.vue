@@ -17,7 +17,7 @@
           <span class="info">昵称：{{item.username}}</span>
           <span class="info">姓名：{{item.name}}</span>
           <span class="info">邮箱：{{item.email}}</span>
-          <img src="../assets/add.png" id="add" @click="invite(item.id,index)">
+          <img src="../assets/add.png" id="add" @click="invite(item.id)">
         </div>
       </div>
     </div>
@@ -40,6 +40,7 @@ export default {
   data() {
     return {
       input: '',
+      flag: true,
       members: [],
     }
   },
@@ -71,9 +72,10 @@ export default {
             }
           })
     },
-    invite(uid,index) {
+    invite(uid) {
       let params = {
-        uid: uid,
+        invitee: uid,
+        inviter: this.$store.state.userInfo.uid,
         gid: this.$store.state.gid
       }
       this.axios({
@@ -86,10 +88,10 @@ export default {
               case 1001:
                 this.$message.warning(res.data.msg)
                 break
-              case 1002:
+              case 1003:
                 this.$message.warning(res.data.msg)
                 break
-              case 1003:
+              case 1004:
                 this.$message.warning(res.data.msg)
                 break
               case 1005:
@@ -97,19 +99,9 @@ export default {
                 break
               case 0:
                 this.$message.success(res.data.msg)
-                  this.members.splice(index,1)
                 break
             }
           })
-    },
-    exit(group) {
-      let len = group.length,i;
-      for (i = 0; i < len; i++) {
-        if (this.$store.state.gid===group[i]){
-          return true
-        }
-      }
-      return false
     }
   }
 }
