@@ -275,7 +275,7 @@ export default {
 
 .main-container{
   position: relative;
-  margin-left: 230px;
+  margin-left: 15%;
   padding: 10px 48px 0 48px;
 }
 
