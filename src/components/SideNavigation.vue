@@ -8,7 +8,7 @@
       <li>
         <router-link to="/projectList">
           <i class='bx bxs-pie-chart-alt-2'></i>
-          <span class="link-name">项目</span>
+          <span class="link-name">项目列表</span>
         </router-link>
       </li>
       <li>
@@ -100,7 +100,7 @@ export default {
   top: 0;
   left: 0;
   height: 100%;
-  width: 230px;
+  width: 16%;
   background: #292c2f;
   /*box-shadow: 3px 3px 3px #111;*/
 }

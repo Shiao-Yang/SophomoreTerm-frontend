@@ -7,13 +7,13 @@
           <input type="text" placeholder="用户名" id="un1">
           <input type="email" placeholder="邮箱" id="email">
           <input type="password" placeholder="密码" id="pw1">
-          <input type="password" placeholder="确认密码" id="pw2">
+          <input type="password" placeholder="确认密码" id="pw2" @keyup.enter="toRegister">
           <button @click="toRegister()">确认注册</button>
         </div>
         <div class="login-box">
           <h1>login</h1>
           <input type="text" placeholder="用户名" id="un">
-          <input type="password" placeholder="密码" id="pw">
+          <input type="password" placeholder="密码" id="pw" @keyup.enter="toLogin">
           <button @click="toLogin()">登录</button>
         </div>
       </div>

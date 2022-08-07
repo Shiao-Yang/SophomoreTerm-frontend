@@ -143,16 +143,21 @@ export default {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
   }
   #search {
+    width: 1000px;
+    height: 40px;
   }
   #input {
     display: inline;
-    width: 500px;
-    height: 40px;
+    position: absolute;
+    width: 35%;
+    height: 25%;
     border-radius: 8px;
     font-size: 18px;
     border: 1px solid rgb(240,240,240);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
     outline: none;
+    left: 32%;
+    top: 37%;
   }
   #input:focus{
     transition:border linear .2s,box-shadow linear .5s;
@@ -165,12 +170,12 @@ export default {
   }
   #searchBtn {
     position: absolute;
-    height: 45px;
-    width: 45px;
+    height: 27%;
+    width: 3%;
     cursor: pointer;
     background-color: white;
-    top: 55px;
-    left: 1020px;
+    top: 35%;
+    left: 70%;
     border: 1px solid rgb(240,240,240);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
     border-radius: 45px;
@@ -202,10 +207,10 @@ export default {
   }
   #contentBox {
     position: absolute;
-    width: 800px;
-    height: 540px;
+    width: 55%;
+    height: 85%;
     background: white;
-    top: 50px;
+    top: 5%;
     left: 24%;
     border-radius: 10px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
@@ -213,8 +218,8 @@ export default {
   }
   .result {
     display: flex;
-    height: 80px;
-    width: 600px;
+    height: 15%;
+    width: 75%;
     background: rgb(240,240,240);
     margin: 40px auto;
     border-radius: 10px;
@@ -222,15 +227,15 @@ export default {
   }
   .avatar {
     position: relative;
-    height: 80px;
-    width: 80px;
+    height: 100%;
+    width: 13%;
     clear: both;
     border-radius: 80px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.05);
   }
   .info {
     display: inline-block;
-    width: 50px;
+    width: 10%;
     margin: auto 10px;
   }
   #add {
@@ -239,7 +244,7 @@ export default {
     cursor: pointer;
     height: 40px;
     width: 40px;
-    right: 100px;
+    right: 13%;
     clear: both;
     border-radius: 40px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);

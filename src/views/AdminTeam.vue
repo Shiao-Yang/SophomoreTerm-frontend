@@ -425,13 +425,13 @@ export default {
     width: 36px;
     height: 36px;
     top: 10px;
-    left: 660px;
+    left: 78%;
   }
   #dismiss {
     width: 36px;
     height: 36px;
     top: 10px;
-    left: 710px;
+    left: 83%;
   }
 
 </style>

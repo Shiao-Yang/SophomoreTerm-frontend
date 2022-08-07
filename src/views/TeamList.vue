@@ -241,8 +241,8 @@ export default {
 }
 
 .container .main-container{
-  width: 1000px;
-  min-width: 1000px;
+  width: 68%;
+  min-width: 68%;
   margin: auto;
 }
 #tl{

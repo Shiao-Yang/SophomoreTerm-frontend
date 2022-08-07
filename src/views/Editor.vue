@@ -8,10 +8,10 @@
     <div id="list">
       <div @click="toStartCreateDoc" id="create"><p style="position:absolute;left: 22%;top: 15%">创建新的文档</p></div>
       <input type="text" placeholder="输入文档id来删除它" id="toDel">
-      <div @click="toDelectTheDoc" id="Delete"><p style="position:absolute;left: 22%;top: 15%">确认删除文档</p></div>
+      <div @click="toDeleteTheDoc" id="Delete"><p style="position:absolute;left: 22%;top: 15%">确认删除文档</p></div>
       <div id="files">
-        <div class="file" v-for="item in docs">
-          <p @click="toEditThisDoc(item)">&nbsp;&nbsp;{{item.id}}:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
+        <div class="file" v-for="item in docs" @click="toEditThisDoc(item)">
+          <p>&nbsp;&nbsp;{{item.id}}:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
         </div>
       </div>
     </div>
@@ -30,10 +30,10 @@
           @onCreated="onCreated"
           id="editor"
       />
-      <input type="text" placeholder="保存前起一个标题吧" id="htmlTitle" v-if="this.$store.state.doc_id===0">
-      <h4 id="htmlTitle" v-else>{{theTitle}}</h4>
-      <el-button @click="toSaveDoc" id="save" size="small">保存</el-button>
     </div>
+    <input type="text" placeholder="为文件命名" id="htmlTitle" v-if="this.$store.state.doc_id===0">
+    <h4 id="htmlTitle" v-else>{{theTitle}}</h4>
+    <el-button @click="toSaveDoc" id="save" size="small">保存</el-button>
   </div>
 </template>
 
@@ -72,7 +72,7 @@ export default Vue.extend({
       this.$store.state.doc_id=0;
       this.html='';
     },
-    toDelectTheDoc(){
+    toDeleteTheDoc(){
       const tempthis = this;
       let params= {
         id:document.getElementById("toDel").value,
@@ -267,10 +267,10 @@ export default Vue.extend({
   #htmlTitle {
     position: absolute;
     padding: 5px;
-    left: 75%;
-    top: 7%;
+    right: 1%;
+    top: 5%;
     font-size: 16px;
-    max-width: 150px;
+    max-width: 7%;
     border-radius: 5px;
     border: 1px solid rgb(240,240,240);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
@@ -278,8 +278,12 @@ export default Vue.extend({
   }
   #save {
     position: absolute;
-    left: 92%;
-    top: 7%;
+    right: 1.5%;
+    top: 10%;
+    width: 7%;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+
   }
   #create {
     position: relative;
