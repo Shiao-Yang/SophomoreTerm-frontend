@@ -59,6 +59,7 @@ export default Vue.extend({
   components: { Editor, Toolbar },
   created() {
     window.myData = this;
+    this.$store.state.doc_id=0
     this.getAllDoc();
     //if (!this.$store.state.isLogin) {
     //   this.$store.state.warning = true
