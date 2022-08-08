@@ -63,6 +63,7 @@ export default {
                 break
               case 5:
                 this.$message.warning(res.data.msg)
+                  this.members=[]
                 break
               case 1001:
                 this.$message.warning(res.data.msg)
