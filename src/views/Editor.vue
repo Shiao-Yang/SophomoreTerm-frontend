@@ -55,11 +55,15 @@ import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import axios from "axios";
 import qs from "qs";
 
+import { DomEditor } from '@wangeditor/editor'
+import { IToolbarConfig } from '@wangeditor/editor'
+
 export default Vue.extend({
   components: { Editor, Toolbar },
   created() {
     window.myData = this;
-    this.getAllDoc();
+    this.toPrepare()
+    // this.getAllDoc();
     //if (!this.$store.state.isLogin) {
     //   this.$store.state.warning = true
     //  this.$router.push('/')
@@ -145,17 +149,12 @@ export default Vue.extend({
     },
     toSaveDoc(){
       const tempthis = this;
-      let params= {
-        pid:this.$store.state.pid,
-        name:document.getElementById("htmlTitle").value,
-        data:tempthis.editor.getHtml()
-      }
-      let params2= {
-        id:this.$store.state.doc_id,
-        data:tempthis.editor.getHtml()
-      }
-      console.log(params)
       if(this.$store.state.doc_id===0){
+        let params= {
+          pid:this.$store.state.pid,
+          name:document.getElementById("htmlTitle").value,
+          data:tempthis.editor.getHtml()
+        }
         axios.post(this.$store.state.base+'project_manage/create_document/',
             qs.stringify(params))
             .then(function (Response) {
@@ -168,6 +167,10 @@ export default Vue.extend({
             })
       }
       else{
+        let params2= {
+          id:this.$store.state.doc_id,
+          data:tempthis.editor.getHtml()
+        }
         axios.post(this.$store.state.base+'project_manage/store_document/',
             qs.stringify(params2))
             .then(function (Response) {
@@ -179,7 +182,19 @@ export default Vue.extend({
             })
       }
     },
+    toPrepare(){
+      const Tempthis = this
+      // const toolbar = DomEditor.getToolbar(tempthis.editor)
+      // console.log(toolbar.getConfig())
+      // const curToolbarConfig = toolbar.getConfig()
+      // console.log(curToolbarConfig.toolbarKeys)
+      Tempthis.toolbarConfig.excludeKeys=[
+        'emotion',
+        'group-video'
+      ]
+    },
     getAllDoc(){
+
       const tempthis = this;
       let param= {
         pid:this.$store.state.pid,
@@ -198,7 +213,9 @@ export default Vue.extend({
   },
 
   mounted() {
+    this.toPrepare()
     this.getAllDoc();
+    this.toStartCreateDoc();
     // 模拟 ajax 请求，异步渲染编辑器
     //setTimeout(() => {
     //  this.html = '<p>模拟 Ajax 异步设置内容 HTML</p>'

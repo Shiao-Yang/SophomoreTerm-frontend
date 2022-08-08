@@ -3,13 +3,18 @@
     <div class="container">
       <div class="form-box-left">
         <div class="top">
-<!--          <img src="../assets/images/register.png" alt="加载失败" v-if="this.$store.state.userInfo.avatar==='111'">-->
-<!--          <img :src=" require('../../../moshu-backend/static/avatars/'+this.$store.state.userInfo.avatar)" alt="加载失败" v-else>-->
-          <img src="../assets/images/register.png">
+
+<!--          <img src="../assets/images/register.png">-->
+
+          <!--部署前把下边两行注释改成正文,并注释掉上边一行代码-->
+
+        <img src="../assets/images/register.png" v-if="this.$store.state.userInfo.avatar==='src/assets/images/login'" alt="">
+          <img :src=this.$store.state.userInfo.avatar v-else alt="">
+
           <p> {{this.$store.state.userInfo.username}} </p>
         </div>
-<!--        <input type="file" ref="pic">-->
-<!--          <el-button @click="toChangeAvatar">上传头像</el-button>-->
+        <input type="file" ref="pic">
+          <el-button @click="toChangeAvatar">上传头像</el-button>
         <div class="down1">
           <router-link to="/userInfo">个人资料</router-link>
         </div>
@@ -87,7 +92,6 @@ export default {
   name: "UserInfo",
   data() {
     return {
-      avatarUrl:'111',
       avatarArray:[],
       theUid:0
     }
@@ -138,9 +142,8 @@ export default {
         this.$store.state.userInfo.profile = user.profile;
         if(user.avatar!=='111')
         {
-          tempthis.avatarArray=user.avatar.split('/')
-          this.$store.state.userInfo.avatar = tempthis.avatarArray[2];
-          tempthis.avatarUrl = this.$store.state.userInfo.avatar;
+          tempthis.avatarArray=user.avatar.split('/');
+          this.$store.state.userInfo.avatar = user.avatar;
         }
         else{
           tempthis.avatarUrl = '111'
