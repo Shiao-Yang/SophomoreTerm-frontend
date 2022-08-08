@@ -131,11 +131,11 @@ export default {
   methods : {
     reset() {
       console.log(this.width, this.height);
-      let w = document.getElementById('w');
-      let h = document.getElementById('h');
-      w.value = "";
-      h.value = "";
-      console.log(document.getElementById('w').value,document.getElementById('h').value)
+      let w2 = document.getElementById('w2');
+      let h2 = document.getElementById('h2');
+      w2.value = "";
+      h2.value = "";
+      console.log(document.getElementById('w2').value,document.getElementById('h2').value)
     },
 
     changeType1() {
@@ -161,9 +161,9 @@ export default {
     },
     output() {
       console.log(this.radio,this.type,this.width,this.height);
-      let w = document.getElementById('w').value;
-      let h = document.getElementById('h').value;
-      console.log(w,h);
+      let w2 = document.getElementById('w2').value;
+      let h2 = document.getElementById('h2').value;
+      console.log(w2,h2);
     },
     sure() {
       //console.log(this.radio, this.width, this.height);
@@ -177,13 +177,19 @@ export default {
       if(this.radio === '2') {
         //console.log(2)
         if(this.type === 3) {
-          this.width = document.getElementById('w').value;
-          this.height = document.getElementById('h').value;
+          this.width = document.getElementById('w2').value;
+          this.height = document.getElementById('h2').value;
           if(this.width > 1100) {
             this.width = 1100;
           }
+          else if(this.width < 200) {
+            this.width = 200;
+          }
           if(this.height > 660) {
             this.height = 660;
+          }
+          if(this.height < 300) {
+            this.height = 300
           }
         }
       }
