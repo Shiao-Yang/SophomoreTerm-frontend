@@ -111,7 +111,7 @@ export default Vue.extend({
               tempthis.toStartCreateDoc()
             }
             else if(Response.data.errno===2)
-              alert("不存在此文档")
+              tempthis.$message.warning("不存在此文档")
           })
           .catch(function (error) {
             console.log(error);
@@ -149,7 +149,7 @@ export default Vue.extend({
       const tempthis = this;
       let params= {
         pid:this.$store.state.pid,
-        name:document.getElementById("htmlTitle").value,
+        name:tempthis.inputContent,
         data:tempthis.editor.getHtml()
       }
       let params2= {
@@ -163,7 +163,7 @@ export default Vue.extend({
             .then(function (Response) {
               console.log(Response);
               tempthis.getAllDoc();
-              alert("新文档已保存。")
+              tempthis.$message.success("新文档已保存。")
             })
             .catch(function (error) {
               console.log(error);
@@ -174,7 +174,7 @@ export default Vue.extend({
             qs.stringify(params2))
             .then(function (Response) {
               console.log(Response);
-              alert("对文档的修改已保存。")
+              tempthis.$message.success("对文档的修改已保存。")
             })
             .catch(function (error) {
               console.log(error);
