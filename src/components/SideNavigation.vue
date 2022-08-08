@@ -12,6 +12,19 @@
         </router-link>
       </li>
       <li>
+        <router-link to="/adminTeam">
+          <i class="bx bxs-pie-chart-alt-2"></i>
+          <span class="link-name">团队管理</span>
+        </router-link>
+      </li>
+      <li>
+
+        <router-link to="/docCenter">
+          <i class="bx bxs-pie-chart-alt-2"></i>
+          <span class="link-name">文档中心</span>
+        </router-link>
+      </li>
+      <li>
         <div class="profile-details">
           <div class="profile-content">
 <!--            <img src="../assets/images/register.png" alt="加载失败" v-if="theAvatarUrl==='111'">-->
