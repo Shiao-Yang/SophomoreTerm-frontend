@@ -66,7 +66,6 @@ export default {
     return (
       <div class="guide">
         <div>拖拽组件或本地图片到此区域开始编辑</div>
-        <div>Drag component or local pictures to this area to start editing</div>
       </div>
     )
   },
