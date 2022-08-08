@@ -1,79 +1,86 @@
 <template>
-  <div class="main">
-    <div class="container">
-      <div class="form-box-left">
-        <div class="top">
-<!--          <img src="../assets/images/register.png" alt="加载失败" v-if="this.$store.state.userInfo.avatar==='111'">-->
-<!--          <img :src=" require('../../../moshu-backend/static/avatars/'+this.$store.state.userInfo.avatar)" alt="加载失败" v-else>-->
-          <img src="../assets/images/register.png">
-          <p> {{this.$store.state.userInfo.username}} </p>
+  <div>
+    <Header></Header>
+    <div class="main">
+
+      <div class="container">
+        <div class="form-box-left">
+          <div class="top">
+            <!--          <img src="../assets/images/register.png" alt="加载失败" v-if="this.$store.state.userInfo.avatar==='111'">-->
+            <!--          <img :src=" require('../../../moshu-backend/static/avatars/'+this.$store.state.userInfo.avatar)" alt="加载失败" v-else>-->
+            <img src="../assets/images/register.png">
+            <p> {{this.$store.state.userInfo.username}} </p>
+          </div>
+          <!--        <input type="file" ref="pic" class="inputText">-->
+          <!--        <el-button @click="toChangeAvatar">上传头像</el-button>-->
+          <div class="down">
+            <router-link to="/userInfo">个人资料</router-link>
+          </div>
+          <div class="down1">
+            <router-link to="/accountInfo">修改密码</router-link>
+          </div>
+          <!--        <div class="down">-->
+          <!--          <router-link to="/teamList">团队列表</router-link>-->
+          <!--        </div>-->
+
         </div>
-<!--        <input type="file" ref="pic" class="inputText">-->
-<!--        <el-button @click="toChangeAvatar">上传头像</el-button>-->
-        <div class="down">
-          <router-link to="/userInfo">个人资料</router-link>
+
+        <div class="form-box-right">
+          <div class="title">
+            <p>修改密码</p>
+          </div>
+
+          <div class="form-group">
+            <div class="field">
+              <p>旧密码</p>
+            </div>
+            <div class="content">
+              <div class="inputPlace">
+                <input type="password" id="pw">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="field">
+              <p>新密码</p>
+            </div>
+            <div class="content">
+              <div class="inputPlace">
+                <input type="password" id="pw1">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="field">
+              <p>确认密码</p>
+            </div>
+            <div class="content">
+              <div class="inputPlace">
+                <input type="password" id="pw2">
+              </div>
+            </div>
+          </div>
+
+          <button @click="changePassword" id="changPassword">确认更改</button>
+
         </div>
-        <div class="down1">
-          <router-link to="/accountInfo">修改密码</router-link>
-        </div>
-<!--        <div class="down">-->
-<!--          <router-link to="/teamList">团队列表</router-link>-->
-<!--        </div>-->
 
       </div>
-
-      <div class="form-box-right">
-        <div class="title">
-          <p>修改密码</p>
-        </div>
-
-        <div class="form-group">
-          <div class="field">
-            <p>旧密码</p>
-          </div>
-          <div class="content">
-            <div class="inputPlace">
-              <input type="password" id="pw">
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="field">
-            <p>新密码</p>
-          </div>
-          <div class="content">
-            <div class="inputPlace">
-              <input type="password" id="pw1">
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="field">
-            <p>确认密码</p>
-          </div>
-          <div class="content">
-            <div class="inputPlace">
-              <input type="password" id="pw2">
-            </div>
-          </div>
-        </div>
-
-        <button @click="changePassword" id="changPassword">确认更改</button>
-
-      </div>
-
     </div>
   </div>
+
 </template>
 
 <script>
 import qs from "qs";
 import axios from "axios";
+import Header from "@/components/Header";
 
 export default {
   name: "UserInfo",
+  components: {Header},
   data() {
     return {
       avatarUrl:'111',

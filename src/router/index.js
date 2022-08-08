@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import LoginAndRegister from '../views/LoginAndRegister.vue'
 import UserInfo from "@/views/UserInfo";
 import AccountInfo from "@/views/AccountInfo";

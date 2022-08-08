@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Header></Header>
     <div class="container">
       <SideNavigation></SideNavigation>
       <div class="main-container">
@@ -59,10 +60,12 @@ import SideNavigation from "@/components/SideNavigation";
 import SetDesignWindow from "@/components/SetDesignWindow";
 import qs from "qs";
 import CreateDesignWindow from "@/components/CreateDesignWindow";
+import Header from "@/components/Header";
 
 export default {
   name: "ProjectView",
   components: {
+    Header,
     SetDesignWindow,
     CreateDesignWindow,
     SideNavigation,
@@ -271,8 +274,8 @@ export default {
 
 .main-container{
   position: relative;
-  margin-left: 15%;
-  padding: 10px 48px 0 48px;
+  margin-left: 230px;
+  padding: 20px 48px 0 48px;
 }
 
 .header{

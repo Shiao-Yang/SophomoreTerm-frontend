@@ -1,5 +1,6 @@
 <template>
 <div id="tl">
+  <Header></Header>
   <div class="container">
     <el-button id="createbutton" @click="createGroup(theUid)">创建新的团队</el-button>
     <div class="main-container">
@@ -79,9 +80,11 @@
 
 <script>
 import qs from "qs";
+import Header from "@/components/Header";
 
 export default {
   name: "TeamList",
+  components: {Header},
   data() {
     return {
       theUid:0,

@@ -1,95 +1,101 @@
 <template>
-  <div class="main">
-    <div class="container">
-      <div class="form-box-left">
-        <div class="top">
+  <div>
+    <Header></Header>
+    <div class="main">
+      <div class="container">
+        <div class="form-box-left">
+          <div class="top">
 
-<!--          <img src="../assets/images/register.png">-->
+            <!--          <img src="../assets/images/register.png">-->
 
-          <!--部署前把下边两行注释改成正文,并注释掉上边一行代码-->
+            <!--部署前把下边两行注释改成正文,并注释掉上边一行代码-->
 
         <img src="../assets/images/register.png" v-if="this.$store.state.userInfo.avatar==='src/assets/images/login'" alt="">
           <img :src="avatarUrl" v-else alt="">
 
-          <p> {{this.$store.state.userInfo.username}} </p>
-        </div>
-        <input type="file" ref="pic">
+            <p> {{this.$store.state.userInfo.username}} </p>
+          </div>
+          <input type="file" ref="pic">
           <el-button @click="toChangeAvatar">上传头像</el-button>
-        <div class="down1">
-          <router-link to="/userInfo">个人资料</router-link>
+          <div class="down1">
+            <router-link to="/userInfo">个人资料</router-link>
+          </div>
+          <div class="down">
+            <router-link to="/accountInfo">修改密码</router-link>
+          </div>
+          <!--        <div class="down">-->
+          <!--&lt;!&ndash;          <router-link to="/addedTeam">已加入团队</router-link>&ndash;&gt;-->
+          <!--          <router-link to="/teamList">团队列表</router-link>-->
+          <!--        </div>-->
+
         </div>
-        <div class="down">
-          <router-link to="/accountInfo">修改密码</router-link>
+
+        <div class="form-box-right">
+          <div class="title">
+            <p>个人资料</p>
+          </div>
+          <div class="form-group">
+            <div class="field">
+              <p>昵称</p>
+            </div>
+            <div class="content">
+              <div class="inputPlace">
+                <input type="text" :placeholder=this.$store.state.userInfo.username id="username">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="field">
+              <p>姓名</p>
+            </div>
+            <div class="content">
+              <div class="inputPlace">
+                <input type="text" :placeholder=this.$store.state.userInfo.name id="name">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="field">
+              <p>邮箱</p>
+            </div>
+            <div class="content">
+              <div class="inputPlace">
+                <input type="text" :placeholder=this.$store.state.userInfo.email id="email">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="field">
+              <p>个人简介</p>
+            </div>
+            <div class="content">
+              <div class="inputPlace">
+                <input type="text" :placeholder=this.$store.state.userInfo.profile maxlength="40" id="profile">
+              </div>
+            </div>
+          </div>
+
+          <button @click="changeInfo" id="changInfo">保存</button>
+
         </div>
-<!--        <div class="down">-->
-<!--&lt;!&ndash;          <router-link to="/addedTeam">已加入团队</router-link>&ndash;&gt;-->
-<!--          <router-link to="/teamList">团队列表</router-link>-->
-<!--        </div>-->
 
       </div>
-
-      <div class="form-box-right">
-        <div class="title">
-          <p>个人资料</p>
-        </div>
-        <div class="form-group">
-          <div class="field">
-            <p>昵称</p>
-          </div>
-          <div class="content">
-            <div class="inputPlace">
-              <input type="text" :placeholder=this.$store.state.userInfo.username id="username">
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="field">
-            <p>姓名</p>
-          </div>
-          <div class="content">
-            <div class="inputPlace">
-              <input type="text" :placeholder=this.$store.state.userInfo.name id="name">
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="field">
-            <p>邮箱</p>
-          </div>
-          <div class="content">
-            <div class="inputPlace">
-              <input type="text" :placeholder=this.$store.state.userInfo.email id="email">
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="field">
-            <p>个人简介</p>
-          </div>
-          <div class="content">
-            <div class="inputPlace">
-              <input type="text" :placeholder=this.$store.state.userInfo.profile maxlength="40" id="profile">
-            </div>
-          </div>
-        </div>
-
-        <button @click="changeInfo" id="changInfo">保存</button>
-
-      </div>
-
     </div>
   </div>
+
 </template>
 
 <script>
 import qs from 'qs';
 import axios from "axios";
+import Header from "@/components/Header";
 
 export default {
   name: "UserInfo",
+  components: {Header},
   data() {
     return {
       avatarUrl:"http://43.138.26.134/api"+this.$store.state.userInfo.avatar,

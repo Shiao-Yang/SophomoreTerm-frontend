@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Header></Header>
     <side-navigation></side-navigation>
     <div id="bgd">
       <div id="membersDiv">
@@ -116,10 +117,12 @@
 
 import qs from "qs";
 import sideNavigation from "@/components/SideNavigation";
+import Header from "@/components/Header";
 
 export default {
   name: "TeamAdmin",
   components: {
+    Header,
     sideNavigation,
   },
   created() {

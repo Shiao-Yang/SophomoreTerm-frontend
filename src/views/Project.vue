@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Header></Header>
     <side-navigation></side-navigation>
     <div class="container">
       <div class="img img1" @click="toDesign">
@@ -27,9 +28,11 @@
 
 <script>
 import sideNavigation from "@/components/SideNavigation";
+import Header from "@/components/Header";
 export default {
   name: "Project",
   components: {
+    Header,
     sideNavigation,
   },
   created() {
