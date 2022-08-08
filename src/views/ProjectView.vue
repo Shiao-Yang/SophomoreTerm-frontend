@@ -11,7 +11,7 @@
             </button>
           </div>
           <div class="search">
-            <input class="search-input" v-model="searchInput" placeholder="请输入关键字"></input>
+            <input class="search-input" v-model="searchInput" placeholder="请输入关键字" @keyup.enter="searchProject"></input>
             <i class='bx bx-search search-btn' title="点击搜索" @click="searchProject"></i>
           </div>
         </div>
