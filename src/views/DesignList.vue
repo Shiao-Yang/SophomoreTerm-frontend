@@ -8,17 +8,18 @@
           <router-link to="/project">
             <img src="../assets/return.png" class="return">
           </router-link>
-          <button type="button" class="btn-new">
-            <i class='bx bx-plus-circle'></i>
-            <span class="btn-details" @click="isCreate=true">新建原型设计图</span>
-          </button>
         </div>
         <div class="content">
           <div class="content-bar">
             <ul class="nav-list">
               <li class="nav-item">
-                <div class="nav-details" :class="{'active':(isActive === 1)}" @click="isActive=1">
+                <div class="nav-details">
                   <span>设计图列表</span>
+                </div>
+              </li>
+              <li>
+                <div class="add-design">
+                  <i class='bx bx-plus-circle' @click="isCreate=true" title="新建原型设计图"></i>
                 </div>
               </li>
             </ul>
@@ -272,6 +273,20 @@ export default {
   background: #ffffff;
 }
 
+.add-design {
+  position: relative;
+  top: 7px;
+  font-size: 30px;
+  color: #aeafb0;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.add-design:hover {
+  font-size: 30px;
+  color: #1b9aee;
+}
+
 .main-container{
   position: relative;
   margin-left: 230px;
@@ -352,9 +367,12 @@ export default {
   height: 100%;
   line-height: 20px;
   background-color: transparent;
-  color: #8c8c8c;
+  /*color: #8c8c8c;*/
   margin-right: 24px;
   text-align: center;
+  font-size: 20px;
+  color: #262626;
+  font-weight: 600;
   cursor: pointer;
   border-bottom: solid #006cfa 0;
   transition: all 0.3s ease;
@@ -362,9 +380,10 @@ export default {
 
 .content-bar .nav-list .nav-item .nav-details{
   padding: 12px 0;
-  font-size: 18px;
+  font-size: 32px;
 }
 
+/*
 .content-bar .nav-list .nav-item .active{
   font-size: 20px;
   color: #262626;
@@ -372,9 +391,14 @@ export default {
   border-bottom: solid #006cfa 3px;
 }
 
+ */
+
+
 .content-bar .nav-list .nav-item:hover{
   border-bottom: solid #006cfa 3px;
 }
+
+
 
 .content-details .projectList .projects{
   list-style: none;

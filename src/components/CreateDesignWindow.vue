@@ -11,14 +11,93 @@
                 <span>图名</span>
                 <el-input v-model="input" placeholder="请输入图名"></el-input>
               </li>
-              <li>
-                <el-radio v-model="radio" label="1">desktop(800×600)</el-radio>
-                <el-radio v-model="radio" label="2">iPhone(400×600)</el-radio>
+              <li style="position: relative; left: -15px">
+                <span>画布类型</span>
+                <el-radio style="margin-top: 5px" v-model="radio" label="1">从模板创建</el-radio>
+                <el-radio style="margin-top: 5px" v-model="radio" label="2">新建空白画布</el-radio>
               </li>
+              <!--
               <li>
                 <button @click="output">test</button>
               </li>
+              -->
             </ul>
+          </div>
+          <!------- 模板选择 ------->
+          <!--- 空白模板 --->
+          <div class="non-model" v-if="radio==='2'">
+            <div class="desktop" :class="{'active' : (this.type === 1)}" @click="changeType1">
+              <div class="image">
+                <i class='bx bx-desktop'></i>
+              </div>
+              <div class="text">
+                desktop
+              </div>
+              <div class="text">
+                1000×800
+              </div>
+            </div>
+            <div class="desktop" :class="{'active' : (this.type === 2)}" @click="changeType2">
+              <div class="image">
+                <i class='bx bx-mobile-alt'></i>
+              </div>
+              <div class="text">
+                phone
+              </div>
+              <div class="text">
+                400×600
+              </div>
+            </div>
+            <div class="desktop" :class="{'active' : (this.type === 3)}" @click="changeType3">
+              <div class="image">
+                <i class='bx bx-plus'></i>
+              </div>
+              <div class="text">
+                <span>自定义</span>
+              </div>
+              <div class="text" style="margin-left: 15px">
+                <input placeholder="宽度" :disabled="this.radio === 2 && this.type ===3" id="w2"></input>
+                <span>×</span>
+                <input placeholder="高度" :disabled="this.radio === 2 && this.type ===3" id="h2"></input>
+              </div>
+            </div>
+          </div>
+          <div class="non-model" v-if="radio==='1'">
+            <div class="desktop" :class="{'active' : (this.type === 1)}" @click="changeType1">
+              <div class="image">
+                <i class='bx bx-desktop'></i>
+              </div>
+              <div class="text">
+                desktop
+              </div>
+              <div class="text">
+                1000×800
+              </div>
+            </div>
+            <div class="desktop" :class="{'active' : (this.type === 2)}" @click="changeType2">
+              <div class="image">
+                <i class='bx bx-mobile-alt'></i>
+              </div>
+              <div class="text">
+                phone
+              </div>
+              <div class="text">
+                400×600
+              </div>
+            </div>
+            <div class="desktop" :class="{'active' : (this.type === 3)}" @click="changeType3">
+              <div class="image">
+                <i class='bx bx-plus'></i>
+              </div>
+              <div class="text">
+                <span>自定义</span>
+              </div>
+              <div class="text" style="margin-left: 15px">
+                <input placeholder="宽度" :disabled="this.radio === 2 && this.type ===3" id="w1"></input>
+                <span>×</span>
+                <input placeholder="高度" :disabled="this.radio === 2 && this.type ===3" id="h1"></input>
+              </div>
+            </div>
           </div>
         </div>
         <!-- 按钮 -->
@@ -26,6 +105,7 @@
           <el-button @click="sure" type="success">确认创建</el-button>
           <el-button @click="cancel" type="danger">退出</el-button>
         </div>
+        <button @click="output">test</button>
       </div>
     </div>
   </div>
@@ -37,9 +117,10 @@ export default {
   data() {
     return {
       input: '',
-      width: 800,
-      height: 600,
-      radio: '1',
+      width: 1000,
+      height: 800,
+      radio: '2',
+      type: 1,
     }
   },
 
@@ -48,23 +129,73 @@ export default {
   },
 
   methods : {
+    reset() {
+      console.log(this.width, this.height);
+      let w = document.getElementById('w');
+      let h = document.getElementById('h');
+      w.value = "";
+      h.value = "";
+      console.log(document.getElementById('w').value,document.getElementById('h').value)
+    },
+
+    changeType1() {
+      if(this.type === 1) return;
+      this.type = 1;
+      this.width = 1000;
+      this.height = 800;
+      this.reset();
+    },
+    changeType2() {
+      if(this.type === 2) return;
+      this.type = 2;
+      this.width = 400;
+      this.height = 600;
+      this.reset();
+    },
+    changeType3() {
+      if(this.type === 3) return;
+      this.type = 3;
+      this.width = "";
+      this.height = "";
+      this.reset();
+    },
     output() {
-      console.log(this.radio,this.width,this.height);
+      console.log(this.radio,this.type,this.width,this.height);
+      let w = document.getElementById('w').value;
+      let h = document.getElementById('h').value;
+      console.log(w,h);
     },
     sure() {
       //console.log(this.radio, this.width, this.height);
       //console.log(typeof this.radio)
       if(this.radio === '1') {
         //console.log(1)
-        this.width = 800;
-        this.height = 600;
+        this.width = 1200;
+        this.height = 800;
       }
       //console.log(4);
       if(this.radio === '2') {
         //console.log(2)
-        this.width = 400;
-        this.height = 600;
+        if(this.type === 3) {
+          this.width = document.getElementById('w').value;
+          this.height = document.getElementById('h').value;
+          if(this.width > 1100) {
+            this.width = 1100;
+          }
+          if(this.height > 660) {
+            this.height = 660;
+          }
+        }
       }
+      if(this.input === '') {
+        this.$message ({
+          message: '请填写设计图名称',
+          type: "warning",
+          showClose: true,
+        })
+        return;
+      }
+
       //console.log(this.radio, this.width, this.height);
       this.$emit('ok', this.input, this.width, this.height);
     },
@@ -76,6 +207,102 @@ export default {
 </script>
 
 <style scoped>
+.non-model {
+  width: 100%;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.non-model .desktop {
+  height: 100%;
+  background-color: #eff1f0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 175px;
+  margin-right: 30px;
+  margin-left: 30px;
+  border: 1px solid #83807f;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.non-model .active {
+  height: 100%;
+  background-color: #eff1f0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 175px;
+  margin-right: 30px;
+  margin-left: 30px;
+  border: 3px solid #98adec;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.non-model .desktop .image {
+  margin-bottom: 10px;
+  align-items: center;
+  font-size: 100px;
+}
+
+.non-model .desktop .image i {
+  position: relative;
+  top: 20px;
+}
+
+.non-model .phone {
+  flex: 1;
+  font-size: 120px;
+  border-width: 5px;
+  border-color: #555555;
+}
+
+.non-model .pad {
+  flex: 1;
+  font-size: 100px;
+  border-width: 5px;
+  border-color: #555555;
+}
+
+.text {
+  margin-bottom: 10px;
+}
+input{
+  background-color: transparent;
+  width: 40%;
+  color: #858080;
+  /* 下边框样式 */
+  border: none;
+  border-bottom: 2px solid rgba(72, 92, 129, 0.4);
+  text-indent: 10px;
+  margin-right: 5px;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+input::placeholder{
+  color: #858080;
+}
+input:focus{
+  color: #8e9aaf;
+  outline: none;
+  border-bottom: 2px solid rgba(50, 102, 238, 0.5);
+  transition: 0.5s;
+}
+input:focus::placeholder{
+  opacity: 0;
+}
+
+input:disabled {
+  cursor: not-allowed;
+}
+
 .mark {
   width: 100%;
   height: 100%;
@@ -97,6 +324,7 @@ export default {
 }
 
 .cont {
+  height: 350px;
   border-bottom: 2px solid #f0f3ef;
 }
 
@@ -118,6 +346,11 @@ export default {
   display: inline-block;
   position: relative;
   margin-bottom: 10px;
+}
+
+.type-select {
+  position: relative;
+  left: 20px;
 }
 
 .aside {
@@ -160,6 +393,7 @@ button {
 }
 
 .btns {
+  height: 30px;
   margin: 30px auto;
   text-align: center;
 }

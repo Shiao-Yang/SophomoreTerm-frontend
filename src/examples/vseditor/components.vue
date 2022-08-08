@@ -130,7 +130,7 @@ export default {
   flex-direction: column;
   font-weight: 300;
   &:hover {
-    background: #f5f5f5;
+    background: #dbdcde;
   }
 }
 </style>
