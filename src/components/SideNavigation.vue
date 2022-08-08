@@ -73,10 +73,10 @@ export default {
       }).then(res => {
         console.log(res.data[0]);
         user = res.data[0];
-        // this.$store.state.userInfo.username = user.username;
-        // this.$store.state.userInfo.name = user.name;
-        // this.$store.state.userInfo.email = user.email;
-        // this.$store.state.userInfo.profile = user.profile;
+        this.$store.state.userInfo.username = user.username;
+        this.$store.state.userInfo.name = user.name;
+        this.$store.state.userInfo.email = user.email;
+        this.$store.state.userInfo.profile = user.profile;
         if(user.avatar!=='111')
         {
           tempthis.avatarArray=user.avatar.split('/')

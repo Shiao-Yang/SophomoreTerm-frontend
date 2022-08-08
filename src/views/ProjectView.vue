@@ -154,10 +154,10 @@ export default {
     },
 
     returnProject(index){
-      if(viewType === 2){
+      if(this.viewType === 2){
         return this.searchProjects[index];
       }
-      else if(viewType === 1){
+      else if(this.viewType === 1){
         return this.projects[index];
       }
     },
@@ -228,10 +228,10 @@ export default {
 
     toBin(index){
       let formData = new FormData;
-      if(viewType === 1){
+      if(this.viewType === 1){
         formData.append("id", this.projects[index].id);
       }
-      else if(viewType === 2){
+      else if(this.viewType === 2){
         formData.append("id", this.searchProjects[index].id);
       }
       this.$axios({
@@ -243,7 +243,6 @@ export default {
             console.log(res.data);
             if(res.data.errno === 0){
               this.$message.success("移动至回收站成功");
-              this.$router.push('/projectList');
               this.getProjects({gid:this.$store.state.gid });
             }
             else{
@@ -264,7 +263,6 @@ export default {
             console.log(res.data);
             if(res.data.errno === 0){
               this.$message.success("删除项目成功");
-              this.$router.push('/projectList');
               this.getProjects({gid:this.$store.state.gid });
             }
             else{
@@ -285,7 +283,6 @@ export default {
             console.log(res.data);
             if(res.data.errno === 0){
               this.$message.success("移出回收站成功");
-              this.$router.push('/projectList');
               this.getProjects({gid:this.$store.state.gid });
             }
             else{
@@ -295,7 +292,25 @@ export default {
     },
 
     copyProject(index){
-
+      let formData = new FormData;
+      formData.append("id", this.returnProject(index).id);
+      formData.append("uid", this.$store.state.userInfo.uid);
+      this.$axios({
+        method: "POST",
+        // url: this.$store.state.base + "project_manage/copy/",
+        url: "http://127.0.0.1:8000/api/project_manage/copy/",
+        data: formData,
+      })
+          .then(res=>{
+            console.log(res.data);
+            if(res.data.errno === 0) {
+              this.$message.success("复制项目成功");
+              this.getProjects({gid:this.$store.state.gid});
+            }
+            else{
+              this.$message.error("复制项目失败，错误代码"+res.data.errno);
+            }
+          })
     },
 
     searchProject(){
