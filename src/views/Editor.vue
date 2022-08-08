@@ -130,7 +130,6 @@ export default Vue.extend({
       axios.post(this.$store.state.base+'project_manage/open_document/',
           qs.stringify(params))
           .then(function (Response) {
-            //alert("新文档已保存。")
             tempthis.html=Response.data.data
             console.log("此文档已打开，现在的html代码是"+tempthis.html);
             //console.log(Response)
@@ -162,6 +161,8 @@ export default Vue.extend({
               console.log(Response);
               tempthis.getAllDoc();
               tempthis.$message.success("新文档已保存。")
+              tempthis.theTitle=params.name;
+              tempthis.$store.state.doc_id=-1;  //这里让他等于-1无实际含义，只是为了让doc_id！=0，从而条件渲染出标题
             })
             .catch(function (error) {
               console.log(error);
