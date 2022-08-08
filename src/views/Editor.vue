@@ -43,7 +43,7 @@
           id="editor"
       />
     </div>
-    <input type="text" placeholder="为文件命名" id="htmlTitle" v-if="this.$store.state.doc_id===0">
+    <input type="text" placeholder="为文件命名" id="htmlTitle" v-if="this.$store.state.doc_id===0" :value="inputContent">
     <div id="title" v-else>{{theTitle}}</div>
     <el-button @click="toSaveDoc" id="save" size="small">保存</el-button>
   </div>
@@ -70,6 +70,7 @@ export default Vue.extend({
       editor: null,
       id: 0,
       Del: false,
+      inputContent: '',
       name: '',
       html: '',
       toolbarConfig: { },
@@ -90,6 +91,7 @@ export default Vue.extend({
     },
     toStartCreateDoc(){
       this.$store.state.doc_id=0;
+      this.inputContent=''
       this.html='';
     },
     toDeleteTheDoc(id){
