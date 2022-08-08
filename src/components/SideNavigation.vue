@@ -6,21 +6,20 @@
     </div>
     <ul class="nav-links">
       <li>
+        <router-link to="/adminTeam">
+          <i class='bx bxs-group'></i>
+          <span class="link-name">团队管理</span>
+        </router-link>
+      </li>
+      <li>
         <router-link to="/projectList">
           <i class='bx bxs-pie-chart-alt-2'></i>
           <span class="link-name">项目列表</span>
         </router-link>
       </li>
       <li>
-        <router-link to="/adminTeam">
-          <i class="bx bxs-pie-chart-alt-2"></i>
-          <span class="link-name">团队管理</span>
-        </router-link>
-      </li>
-      <li>
-
         <router-link to="/docCenter">
-          <i class="bx bxs-pie-chart-alt-2"></i>
+          <i class='bx bx-book-open'></i>
           <span class="link-name">文档中心</span>
         </router-link>
       </li>
@@ -29,12 +28,12 @@
           <div class="profile-content">
 <!--            <img src="../assets/images/register.png" alt="加载失败" v-if="theAvatarUrl==='111'">-->
 <!--            <img :src=" require('../../../moshu-backend/static/avatars/'+theAvatarUrl)" alt="加载失败" v-else>-->
-            <img src="src/assets/images/register.png">
+            <img src="@/assets/images/register.png">
           </div>
           <div class="profile-name">
             {{this.$store.state.userInfo.username}}
           </div>
-          <i class='bx bx-log-out-circle' style="cursor: pointer" @click="toExit"></i>
+          <i class='bx bx-log-out-circle' style="cursor: pointer" @click="toExit" title="退出登录"></i>
         </div>
       </li>
     </ul>
@@ -113,7 +112,7 @@ export default {
   top: 0;
   left: 0;
   height: 100%;
-  width: 16%;
+  width: 230px;
   background: #292c2f;
   /*box-shadow: 3px 3px 3px #111;*/
 }

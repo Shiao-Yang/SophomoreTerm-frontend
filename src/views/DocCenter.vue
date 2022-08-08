@@ -16,7 +16,7 @@
       </div>
       -->
       <el-collapse v-model="activeNames">
-        <el-collapse-item v-for="(item,index) in projects" :title="item.name" :name="item.name">
+        <el-collapse-item v-for="(item,index) in projects" :key="index" :title="item.name" :name="item.name">
           <div>1</div>
         </el-collapse-item>
       </el-collapse>
