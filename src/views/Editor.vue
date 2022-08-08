@@ -161,8 +161,10 @@ export default Vue.extend({
               console.log(Response);
               tempthis.getAllDoc();
               tempthis.$message.success("新文档已保存。")
-              tempthis.theTitle=params.name;
-              tempthis.$store.state.doc_id=-1;  //这里让他等于-1无实际含义，只是为了让doc_id！=0，从而条件渲染出标题
+              if(Response.errno!==0){
+                tempthis.theTitle=params.name;
+                tempthis.$store.state.doc_id=Response.id;
+              }
             })
             .catch(function (error) {
               console.log(error);
