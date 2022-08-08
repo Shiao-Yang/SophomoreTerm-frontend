@@ -158,9 +158,9 @@ export default Vue.extend({
               console.log(Response);
               tempthis.getAllDoc();
               tempthis.$message.success("新文档已保存。")
-              if(Response.errno!==0){
+              if(Response.data.errno!==0){
                 tempthis.theTitle=params.name;
-                tempthis.$store.state.doc_id=Response.id;
+                tempthis.$store.state.doc_id=Response.data.id;
               }
             })
             .catch(function (error) {
