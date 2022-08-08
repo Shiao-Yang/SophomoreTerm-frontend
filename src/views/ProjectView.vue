@@ -12,20 +12,25 @@
           </div>
           <div class="search">
             <input class="search-input" v-model="searchInput" placeholder="请输入关键字"></input>
-            <i class='bx bx-search search-btn' title="点击搜索"></i>
+            <i class='bx bx-search search-btn' title="点击搜索" @click="searchProject"></i>
           </div>
         </div>
         <div class="content">
           <div class="content-bar">
             <ul class="nav-list">
               <li class="nav-item">
-                <div class="nav-details" :class="{'active':(isActive === 1)}" @click="isActive=1">
-                  <span>团队项目</span>
+                <div class="nav-details" :class="{'active':(viewType === 1)}" @click="viewType=1">
+                  <span>全部项目</span>
                 </div>
               </li>
               <li class="nav-item">
-                <div class="nav-details" :class="{'active':(isActive === 0)}" @click="isActive=0">
+                <div class="nav-details" :class="{'active':(viewType === 0)}" @click="viewType=0">
                   <span>回收站</span>
+                </div>
+              </li>
+              <li class="nav-item">
+                <div class="nav-details" :class="{'active':(viewType === 2)}" @click="viewType=2">
+                  <span>搜索结果</span>
                 </div>
               </li>
               <li class="nav-item nav-more">
@@ -51,7 +56,7 @@
           <div class="content-details">
             <div class="projectList">
               <ul class="projects">
-                <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== isActive && isActive === 1">
+                <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== viewType && viewType === 1">
 <!--                  <img class="project-logo" src="../assets/logo.png" title="进入项目" @click="toTurnToProject(project.id)">-->
                   <span class="project-info" title="进入项目" @click="toTurnToProject(project.id)">
                     <span class="project-name">{{project.name}}</span>
@@ -62,7 +67,7 @@
                   <i class='bx bxs-copy' title="复制项目" @click="copyProject(index)"></i>
                   <i class='bx bx-x delete' title="移动至回收站" @click="toBin(index)"></i>
                 </li>
-                <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== isActive && isActive === 0">
+                <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== viewType && viewType === 0">
 <!--                  <img class="project-logo" src="../assets/logo.png">-->
                   <span class="project-info">
                     <span class="project-name">{{project.name}}</span>
@@ -70,6 +75,17 @@
                   </span>
                   <i class='bx bxs-log-out-circle first' title="移出回收站" @click="outBin(index)"></i>
                   <i class='bx bx-x delete' title="删除项目" @click="deleteProject(index)"></i>
+                </li>
+                <li class="project-item" v-for="(project, index) in this.searchProjects" v-if="viewType === 2">
+                  <!--                  <img class="project-logo" src="../assets/logo.png">-->
+                  <span class="project-info">
+                    <span class="project-name">{{project.name}}</span>
+                    <span class="project-details">创建时间 : {{project.starttime}}</span>
+                  </span>
+                  <i class='bx bxs-log-in first' title="进入项目" @click="toTurnToProject(project.id)"></i>
+                  <i class='bx bxs-cog' title="项目管理" @click="changeIsSet(index)"></i>
+                  <i class='bx bxs-copy' title="复制项目" @click="copyProject(index)"></i>
+                  <i class='bx bx-x delete' title="移动至回收站" @click="toBin(index)"></i>
                 </li>
               </ul>
             </div>
@@ -83,7 +99,7 @@
       </div>
       <div class="main-container" v-if="isSet !== -1">
         <template>
-          <SetProjectWindow @ok="renameProject" @cancel="close" :p="projects[isSet]"></SetProjectWindow>
+          <SetProjectWindow @ok="renameProject" @cancel="close" :p="returnProject(isSet)"></SetProjectWindow>
         </template>
       </div>
     </div>
@@ -104,13 +120,14 @@ export default {
   },
   data(){
     return{
-      isActive: 1,
+      viewType: 1,
       isCreate: false,
       isSet: -1,
       projects:[],
       founders:[],
       sortType: 1,
       searchInput: "",
+      searchProjects: [],
     }
   },
   methods: {
@@ -134,6 +151,15 @@ export default {
             });
             this.initIsSet();
           });
+    },
+
+    returnProject(index){
+      if(viewType === 2){
+        return this.searchProjects[index];
+      }
+      else if(viewType === 1){
+        return this.projects[index];
+      }
     },
 
     createProject(name){
@@ -189,12 +215,10 @@ export default {
 
     initIsSet(){
       this.isSet = -1;
-      console.log(this.isSet);
     },
 
     changeIsSet(index){
       this.isSet = index;
-      console.log(this.isSet);
     },
 
     close(){
@@ -204,7 +228,12 @@ export default {
 
     toBin(index){
       let formData = new FormData;
-      formData.append("id", this.projects[index].id);
+      if(viewType === 1){
+        formData.append("id", this.projects[index].id);
+      }
+      else if(viewType === 2){
+        formData.append("id", this.searchProjects[index].id);
+      }
       this.$axios({
         method:"POST",
         url: this.$store.state.base + "project_manage/to_bin/",
@@ -267,7 +296,26 @@ export default {
 
     copyProject(index){
 
-    }
+    },
+
+    searchProject(){
+      let formData = new FormData;
+      formData.append("gid", this.$store.state.gid);
+      formData.append("keyword", this.searchInput);
+      this.$axios({
+        method:"POST",
+        url: this.$store.state.base + "project_manage/search_projects/",
+        data: formData,
+      })
+          .then(res=>{
+            this.searchProjects = res.data;
+            console.log(this.searchProjects);
+            this.viewType = 2;
+          })
+          .catch(err=>{
+            console.log(err);
+          })
+    },
   },
 
   created() {
@@ -298,6 +346,7 @@ export default {
         }
       }
     },
+
   },
 
 }
