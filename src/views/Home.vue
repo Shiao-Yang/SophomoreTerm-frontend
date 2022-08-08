@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Header/>
   <h1>墨书，让小组合作更简单</h1>
   <div class="container">
     <div class="panel active" style="background-image: url('https://images.unsplash.com/photo-1558979158-65a1eaa08691?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80')">
@@ -22,8 +23,10 @@
 </template>
 
 <script>
+import Header from "@/components/Header";
 export default {
   name: "Home",
+  components: {Header},
   data(){
     return{
       panels:null

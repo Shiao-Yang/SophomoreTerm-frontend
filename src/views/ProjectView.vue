@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Header></Header>
     <div class="container">
       <SideNavigation></SideNavigation>
       <div class="main-container">
@@ -110,10 +111,12 @@
 import SideNavigation from "@/components/SideNavigation";
 import CreateProjectWindow from "@/components/CreateProjectWindow";
 import SetProjectWindow from "@/components/SetProjectWindow";
+import Header from "@/components/Header";
 
 export default {
   name: "ProjectView",
   components: {
+    Header,
     SetProjectWindow,
     CreateProjectWindow,
     SideNavigation,
