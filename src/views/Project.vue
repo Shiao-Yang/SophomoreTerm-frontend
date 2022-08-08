@@ -66,8 +66,8 @@ export default {
     text-align: center;
     width: 79%;
     height: 85%;
-    left: 20%;
-    top: 10%;
+    left: 240px;
+    top: 60px;
   }
   .img {
     position: absolute;
@@ -78,6 +78,7 @@ export default {
     background-size: cover;
     background-repeat: no-repeat;
     transition: 2s;
+    border-radius: 20px;
   }
   .img:hover {
     background-position: bottom center;
