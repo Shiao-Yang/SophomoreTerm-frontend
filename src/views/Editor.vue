@@ -54,10 +54,8 @@ import Vue from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import axios from "axios";
 import qs from "qs";
-
 import { DomEditor } from '@wangeditor/editor'
 import { IToolbarConfig } from '@wangeditor/editor'
-
 export default Vue.extend({
   components: { Editor, Toolbar },
   created() {
@@ -121,11 +119,10 @@ export default Vue.extend({
           })
     },
     toEditThisDoc(thisDoc){
-
       this.$store.state.doc_id=thisDoc.id
       const tempthis = this;
       let params= {
-       id:thisDoc.id
+        id:thisDoc.id
       }
       axios.post(this.$store.state.base+'project_manage/open_document/',
           qs.stringify(params))
@@ -214,7 +211,6 @@ export default Vue.extend({
           })
     }
   },
-
   mounted() {
     this.toPrepare()
     this.getAllDoc();
@@ -234,161 +230,160 @@ export default Vue.extend({
 
 <style src="@wangeditor/editor/dist/css/style.css"></style>
 <style scoped>
-  #bgd {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: url("../assets/editorBgd.jpg");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-  }
-  #return {
-    position: absolute;
-    height: 40px;
-    width: 60px;
-    left: 10px;
-    top: 10px;
-    cursor: pointer;
-    transition: 0.1s linear;
-  }
-  #return:hover{
-    transform: scale(1.2);
-  }
-  #list {
-    position: absolute;
-    top: 10%;
-    left: 3%;
-    width: 15%;
-    height: 70%;
-    background-color: white;
-    opacity: 0.90;
-    overflow-y: auto;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
-  }
-  #box {
-    position: absolute;
-    top: 5%;
-    left: 20%;
-    width: 70%;
-    height: 85%;
-    opacity: 0.97;
-  }
-  #toolbar {
-    border-radius: 5px;
-    border-bottom: 1px solid #ccc;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
-  }
-  #editor {
-    height: 90%;
-    overflow-y: hidden;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
-  }
-  .file {
-    display: flex;
-    height: 5%;
-    width: 100%;
-    background: rgb(255,255,255);
-    margin: 10px auto;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  .file:hover {
-    transform: scale(1.1);
-    background-color: rgb(240,240,240);
-  }
-  #files {
-    position: absolute;
-    width: 80%;
-    left: 10%;
-    top: 10%;
-  }
-  #htmlTitle {
-    position: absolute;
-    padding: 5px;
-    right: 1%;
-    top: 5%;
-    font-size: 16px;
-    max-width: 7%;
-    border-radius: 5px;
-    border: 1px solid rgb(240,240,240);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
-    outline: none;
-  }
-  #title {
-    position: absolute;
-    padding: 5px;
-    right: 1%;
-    top: 5%;
-    font-size: 16px;
-    width: 7%;
-    border-radius: 5px;
-    background-color: white;
-    text-align: center;
-    border: 1px solid rgb(240,240,240);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
-    outline: none;
-  }
-  #save {
-    position: absolute;
-    right: 1.5%;
-    top: 10%;
-    width: 7%;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
-
-  }
-  #create {
-    position: relative;
-    text-align: center;
-    top: 1%;
-    left: 10%;
-    width: 80%;
-    height: 30px;
-    background: rgb(255,255,255);
-    border-radius: 5px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-  }
-  #create:hover {
-    background: rgb(240,240,240);
-  }
-  #toDel {
-    position: relative;
-    top: 3%;
-    left: 9%;
-    width: 80%;
-    height: 18px;
-    border-radius: 5px;
-    border: 1px solid rgb(240,240,240);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
-    outline: none;
-  }
-  #toDel:focus,#htmlTitle:focus {
-    transition:border linear .2s,box-shadow linear .5s;
-    -moz-transition:border linear .2s,-moz-box-shadow linear .5s;
-    -webkit-transition:border linear .2s,-webkit-box-shadow linear .5s;
-    outline:none;border-color:rgba(93,149,242,.75);
-    box-shadow:0 0 8px rgba(93,149,242,.105);
-    -moz-box-shadow:0 0 8px rgba(93,149,242,.5);
-    -webkit-box-shadow:0 0 8px rgba(93,149,242,3);
-  }
-  #Delete {
-    position: relative;
-    text-align: center;
-    left: 10%;
-    top: 5%;
-    width: 80%;
-    height: 30px;
-    background: rgb(255,255,255);
-    border-radius: 5px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-  }
-  #Delete:hover {
-    background: rgb(240,240,240);
-  }
+#bgd {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url("../assets/editorBgd.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+#return {
+  position: absolute;
+  height: 40px;
+  width: 60px;
+  left: 10px;
+  top: 10px;
+  cursor: pointer;
+  transition: 0.1s linear;
+}
+#return:hover{
+  transform: scale(1.2);
+}
+#list {
+  position: absolute;
+  top: 10%;
+  left: 3%;
+  width: 15%;
+  height: 70%;
+  background-color: white;
+  opacity: 0.90;
+  overflow-y: auto;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+}
+#box {
+  position: absolute;
+  top: 5%;
+  left: 20%;
+  width: 70%;
+  height: 85%;
+  opacity: 0.97;
+}
+#toolbar {
+  border-radius: 5px;
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+}
+#editor {
+  height: 90%;
+  overflow-y: hidden;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+}
+.file {
+  display: flex;
+  height: 5%;
+  width: 100%;
+  background: rgb(255,255,255);
+  margin: 10px auto;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: 0.3s;
+}
+.file:hover {
+  transform: scale(1.1);
+  background-color: rgb(240,240,240);
+}
+#files {
+  position: absolute;
+  width: 80%;
+  left: 10%;
+  top: 10%;
+}
+#htmlTitle {
+  position: absolute;
+  padding: 5px;
+  right: 1%;
+  top: 5%;
+  font-size: 16px;
+  max-width: 7%;
+  border-radius: 5px;
+  border: 1px solid rgb(240,240,240);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+  outline: none;
+}
+#title {
+  position: absolute;
+  padding: 5px;
+  right: 1%;
+  top: 5%;
+  font-size: 16px;
+  width: 7%;
+  border-radius: 5px;
+  background-color: white;
+  text-align: center;
+  border: 1px solid rgb(240,240,240);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+  outline: none;
+}
+#save {
+  position: absolute;
+  right: 1.5%;
+  top: 10%;
+  width: 7%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+}
+#create {
+  position: relative;
+  text-align: center;
+  top: 1%;
+  left: 10%;
+  width: 80%;
+  height: 30px;
+  background: rgb(255,255,255);
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+#create:hover {
+  background: rgb(240,240,240);
+}
+#toDel {
+  position: relative;
+  top: 3%;
+  left: 9%;
+  width: 80%;
+  height: 18px;
+  border-radius: 5px;
+  border: 1px solid rgb(240,240,240);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+  outline: none;
+}
+#toDel:focus,#htmlTitle:focus {
+  transition:border linear .2s,box-shadow linear .5s;
+  -moz-transition:border linear .2s,-moz-box-shadow linear .5s;
+  -webkit-transition:border linear .2s,-webkit-box-shadow linear .5s;
+  outline:none;border-color:rgba(93,149,242,.75);
+  box-shadow:0 0 8px rgba(93,149,242,.105);
+  -moz-box-shadow:0 0 8px rgba(93,149,242,.5);
+  -webkit-box-shadow:0 0 8px rgba(93,149,242,3);
+}
+#Delete {
+  position: relative;
+  text-align: center;
+  left: 10%;
+  top: 5%;
+  width: 80%;
+  height: 30px;
+  background: rgb(255,255,255);
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+#Delete:hover {
+  background: rgb(240,240,240);
+}
 </style>
