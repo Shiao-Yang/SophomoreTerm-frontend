@@ -105,6 +105,7 @@ export default Vue.extend({
           .then(function (Response) {
             console.log(Response)
             tempthis.getAllDoc();
+            tempthis.$message.success("删除成功！")
             if(Response.data.errno===0){
               tempthis.toStartCreateDoc()
             }
