@@ -34,7 +34,7 @@
                 desktop
               </div>
               <div class="text">
-                1000×800
+                1000×600
               </div>
             </div>
             <div class="desktop" :class="{'active' : (this.type === 2)}" @click="changeType2">
@@ -118,7 +118,7 @@ export default {
     return {
       input: '',
       width: 1000,
-      height: 800,
+      height: 600,
       radio: '2',
       type: 1,
     }
@@ -142,7 +142,7 @@ export default {
       if(this.type === 1) return;
       this.type = 1;
       this.width = 1000;
-      this.height = 800;
+      this.height = 600;
       this.reset();
     },
     changeType2() {
@@ -170,8 +170,8 @@ export default {
       //console.log(typeof this.radio)
       if(this.radio === '1') {
         //console.log(1)
-        this.width = 1200;
-        this.height = 800;
+        this.width = 1000;
+        this.height = 600;
       }
       //console.log(4);
       if(this.radio === '2') {
