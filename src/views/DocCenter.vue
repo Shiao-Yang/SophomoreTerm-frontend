@@ -1,7 +1,7 @@
 <template>
   <div id="bgd">
 
-    <router-link to="/project">
+    <router-link to="/adminTeam">
       <img src="../assets/return.png" id="return">
     </router-link>
 
@@ -16,8 +16,11 @@
       </div>
       -->
       <el-collapse v-model="activeNames">
-        <el-collapse-item v-for="(item,index) in projects" :title="item.name" :name="item.name">
-          <div>1</div>
+        <el-collapse-item v-for="(item,index) in projects" :title="item.name" :name="index">
+          <div v-for="(item2,index2) in projectDocs[index]" class="doc">
+            <p style="width: 80%;display: inline-block" class="fileName" @click="toEditThisDoc(item2)">文件名:{{item2.name}}</p>
+            <span style="position: absolute;" class="delete" @click="dele(item2.id,item2.name,item.id,index,index2)">删除</span>
+          </div>
         </el-collapse-item>
       </el-collapse>
     </div>
@@ -74,9 +77,13 @@ export default Vue.extend({
   },
   data() {
     return {
-      activeNames: '',
+      activeNames: 0,
       editor: null,
       id: 0,
+      pid: 0,
+      index: 0,
+      index2: 0,
+      projectDocs: [],
       Del: false,
       name: '',
       html: '',
@@ -89,23 +96,46 @@ export default Vue.extend({
     }
   },
   methods: {
-      getProjects(gid){
-        let self = this;
-        self.$axios({
-          method: 'GET',
-          url: self.$store.state.base+"project_manage/get_project/",
-          params: gid,
+    getProjects(gid){
+      let self = this;
+      self.$axios({
+        method: 'GET',
+        url: self.$store.state.base+"project_manage/get_project/",
+        params: gid,
+      })
+          .then(res =>{
+            self.projects = res.data;
+            console.log(this.projects)
+            this.activeNames=this.projects[0].name
+            this.getFiles()
+          });
+    },
+    getFiles() {
+      let i, len = this.projects.length
+      for (i = 0; i < len; i++) {
+        this.getProjectDoc(this.projects[i].id,i)
+      }
+    },
+    getProjectDoc(pid,index) {
+        let params = {
+          pid: pid
+        }
+        this.axios({
+          method: "post",
+          url: this.$store.state.base+'project_manage/get_documents/',
+          data: qs.stringify(params)
         })
-            .then(res =>{
-              self.projects = res.data;
-              console.log(this.projects)
-              this.activeNames=this.projects[0].name
-            });
-      },
-    dele(id,name) {
+            .then(res => {
+              this.projectDocs[index]=res.data
+            })
+    },
+    dele(id,name,pid,index,index2) {
       this.Del = true
       this.id = id
       this.name = name
+      this.pid = pid
+      this.index = index
+      this.index2 = index2
     },
     onCreated(editor) {
       this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
@@ -124,7 +154,8 @@ export default Vue.extend({
           qs.stringify(params))
           .then(function (Response) {
             console.log(Response)
-            tempthis.getAllDoc();
+            tempthis.projectDocs[tempthis.index].splice(tempthis.index2,1)
+            tempthis.$message.success('删除成功！')
             if(Response.data.errno===0){
               tempthis.toStartCreateDoc()
             }
@@ -202,14 +233,12 @@ export default Vue.extend({
     getAllDoc(){
       const tempthis = this;
       let param= {
-        pid:this.$store.state.pid,
+        pid: this.pid,
       }
       axios.post(this.$store.state.base+'project_manage/get_documents/',
           qs.stringify(param))
           .then(function (Response) {
-            tempthis.docs=Response.data
-            console.log("本项目所有文档信息如下：")
-            console.log(tempthis.docs);
+            console.log("111")
           })
           .catch(function (error) {
             console.log(error);
@@ -218,7 +247,7 @@ export default Vue.extend({
   },
 
   mounted() {
-    this.getAllDoc();
+    // this.getAllDoc();
     // 模拟 ajax 请求，异步渲染编辑器
     //setTimeout(() => {
     //  this.html = '<p>模拟 Ajax 异步设置内容 HTML</p>'
@@ -266,6 +295,18 @@ export default Vue.extend({
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
 }
+.doc {
+  width: 90%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.doc:hover {
+  transform: scale(1.1);
+  background-color: rgb(240,240,240);
+}
 #box {
   position: absolute;
   top: 5%;
@@ -284,27 +325,6 @@ export default Vue.extend({
   overflow-y: hidden;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
-}
-.file {
-  display: flex;
-  height: 5%;
-  width: 100%;
-  background: rgb(255,255,255);
-  margin: 10px auto;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  transition: 0.3s;
-}
-.file:hover {
-  transform: scale(1.1);
-  background-color: rgb(240,240,240);
-}
-#files {
-  position: absolute;
-  width: 80%;
-  left: 10%;
-  top: 10%;
 }
 #htmlTitle {
   position: absolute;
