@@ -1,10 +1,7 @@
 <template>
   <div id="bgd">
 
-    <router-link to="/adminTeam">
-      <img src="../assets/return.png" id="return">
-    </router-link>
-
+      <img src="../assets/return.png" id="return" @click="back()">
     <div id="list">
       <!--
       <div @click="toStartCreateDoc" id="create"><p style="position:absolute;left: 22%;top: 15%">创建新的文档</p></div>
@@ -16,14 +13,22 @@
       </div>
       -->
       <el-collapse v-model="activeNames">
-        <el-collapse-item v-for="(item,index) in projects" :title="item.name" :name="index">
-          <div v-for="(item2,index2) in projectDocs[index]" class="doc">
-            <p style="width: 80%;display: inline-block" class="fileName" @click="toEditThisDoc(item2)">文件名:{{item2.name}}</p>
+        <el-collapse-item v-for="(item,index) in projects" :title="item.name" :name="index" :key="index">
+          <template slot="title" >
+            <p @click="pid=item.id" style="width: 75%;margin-left: 5%;">{{item.name}}</p>
+            <img src="../assets/plus.png" class="plus" @click.stop.prevent="toStartCreateDoc(item.id,index)">
+          </template>
+          <div v-for="(item2,index2) in projectDocs[index]" class="doc" :key="index2">
+            <p style="width: 80%;display: inline-block;" class="fileName" @click="toEditThisDoc(item2)">文件名:{{item2.name}}</p>
             <span style="position: absolute;" class="delete" @click="dele(item2.id,item2.name,item.id,index,index2)">删除</span>
           </div>
         </el-collapse-item>
       </el-collapse>
     </div>
+    <input type="text" placeholder="为文件命名" id="htmlTitle" v-if="this.$store.state.doc_id===0">
+    <div id="title" v-else>{{theTitle}}</div>
+    <el-button @click="toSaveDoc" id="save" size="small" v-if="this.$store.state.doc_id===0">保存</el-button>
+    <el-button @click="toSaveDoc" id="modify" size="small" v-else>修改保存</el-button>
 
     <el-dialog
         title="提示"
@@ -53,15 +58,12 @@
           id="editor"
       />
     </div>
-    <input type="text" placeholder="为文件命名" id="htmlTitle" v-if="this.$store.state.doc_id===0">
-    <div id="title" v-else>{{theTitle}}</div>
-    <el-button @click="toSaveDoc" id="save" size="small">保存</el-button>
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
-import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import Vue from 'vue';
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import axios from "axios";
 import qs from "qs";
 
@@ -69,6 +71,7 @@ export default Vue.extend({
   components: { Editor, Toolbar },
   created() {
     window.myData = this;
+    this.$store.state.doc_id = 0
     this.getProjects({gid: this.$store.state.gid})
     //if (!this.$store.state.isLogin) {
     //   this.$store.state.warning = true
@@ -77,8 +80,9 @@ export default Vue.extend({
   },
   data() {
     return {
-      activeNames: 0,
+      activeNames: [],
       editor: null,
+      input: '',
       id: 0,
       pid: 0,
       index: 0,
@@ -96,17 +100,18 @@ export default Vue.extend({
     }
   },
   methods: {
+    back() {
+      this.$router.go(-1);
+    },
     getProjects(gid){
-      let self = this;
-      self.$axios({
+      this.$axios({
         method: 'GET',
-        url: self.$store.state.base+"project_manage/get_project/",
+        url: this.$store.state.base+"project_manage/get_project/",
         params: gid,
       })
           .then(res =>{
-            self.projects = res.data;
+            this.projects = res.data;
             console.log(this.projects)
-            this.activeNames=this.projects[0].name
             this.getFiles()
           });
     },
@@ -127,6 +132,7 @@ export default Vue.extend({
         })
             .then(res => {
               this.projectDocs[index]=res.data
+              this.$forceUpdate()
             })
     },
     dele(id,name,pid,index,index2) {
@@ -140,35 +146,41 @@ export default Vue.extend({
     onCreated(editor) {
       this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
     },
-    toStartCreateDoc(){
-      this.$store.state.doc_id=0;
-      this.html='';
+    toStartCreateDoc(id,index){
+      this.$store.state.doc_id = 0;
+      this.input = ''
+      this.html = ''
+      this.pid = id
+      this.index = index
     },
     toDeleteTheDoc(id){
-      const tempthis = this;
       this.Del = false
       let params= {
         id: id,
       }
-      axios.post(this.$store.state.base+'project_manage/delete_document/',
-          qs.stringify(params))
-          .then(function (Response) {
+      this.axios({
+        method: 'post',
+        url: this.$store.state.base+'project_manage/delete_document/',
+        data: qs.stringify(params)
+      })
+          .then(Response =>  {
             console.log(Response)
-            tempthis.projectDocs[tempthis.index].splice(tempthis.index2,1)
-            tempthis.$message.success('删除成功！')
-            if(Response.data.errno===0){
-              tempthis.toStartCreateDoc()
+            //this.projectDocs[this.index].splice(this.index2, 1)
+            this.getProjects({gid: this.$store.state.gid})
+            this.$message.success('删除成功！')
+            if(Response.data.errno===0 && this.$store.state.doc_id===id){
+              this.toStartCreateDoc(this.projects[0].id,0)
             }
             else if(Response.data.errno===2)
-              alert("不存在此文档")
+              this.$message.warning("不存在此文档")
           })
-          .catch(function (error) {
+          .catch(error => {
             console.log(error);
           })
     },
     toEditThisDoc(thisDoc){
 
-      this.$store.state.doc_id=thisDoc.id
+      this.$store.state.doc_id = thisDoc.id
       const tempthis = this;
       let params= {
         id:thisDoc.id
@@ -177,73 +189,64 @@ export default Vue.extend({
           qs.stringify(params))
           .then(function (Response) {
             //alert("新文档已保存。")
+            tempthis.html=''
             tempthis.html=Response.data.data
             console.log("此文档已打开，现在的html代码是"+tempthis.html);
             //console.log(Response)
             let i;
             //console.log(tempthis.docs.length)
-            for(i=0;i<tempthis.docs.length;i++){
-              if(tempthis.docs[i].id===thisDoc.id){
-                tempthis.theTitle=tempthis.docs[i].name;
-                //alert(i+tempthis.docs[i].id)
-                break;
-              }
-            }
+            tempthis.theTitle=thisDoc.name
           })
           .catch(function (error) {
             console.log(error);
           })
     },
     toSaveDoc(){
-      const tempthis = this;
-      let params= {
-        pid:this.$store.state.pid,
-        name:document.getElementById("htmlTitle").value,
-        data:tempthis.editor.getHtml()
-      }
-      let params2= {
-        id:this.$store.state.doc_id,
-        data:tempthis.editor.getHtml()
-      }
-      console.log(params)
+
       if(this.$store.state.doc_id===0){
-        axios.post(this.$store.state.base+'project_manage/create_document/',
-            qs.stringify(params))
-            .then(function (Response) {
+        let params= {
+          pid: this.pid,
+          name: document.getElementById("htmlTitle").value,
+          data: this.editor.getHtml()
+        }
+        console.log(params)
+        this.axios({
+          method: "post",
+          url: this.$store.state.base+'project_manage/create_document/',
+          data: qs.stringify(params)
+        })
+            .then(Response => {
               console.log(Response);
-              tempthis.getAllDoc();
-              alert("新文档已保存。")
+              console.log("参数params："+"pid:"+params.pid+" name:"+params.name+" data:"+params.data)
+              // this.projectDocs[this.index].push(params)
+              this.$message.success("新文档已保存。")
+              this.getProjects({gid: this.$store.state.gid})
+              this.theTitle=params.name;
+              this.$store.state.doc_id=Response.data.id;
             })
-            .catch(function (error) {
-              console.log(error);
+            .catch(error => {
+              console.log(error)
             })
       }
       else{
-        axios.post(this.$store.state.base+'project_manage/store_document/',
-            qs.stringify(params2))
-            .then(function (Response) {
+        let params2= {
+          id:this.$store.state.doc_id,
+          data:this.editor.getHtml()
+        }
+        this.axios({
+          method: "post",
+          url: this.$store.state.base+'project_manage/store_document/',
+          data: qs.stringify(params2)
+        })
+            .then(Response => {
               console.log(Response);
-              alert("对文档的修改已保存。")
+              this.$message.success("对文档的修改已保存。")
             })
-            .catch(function (error) {
+            .catch(error => {
               console.log(error);
             })
       }
     },
-    getAllDoc(){
-      const tempthis = this;
-      let param= {
-        pid: this.pid,
-      }
-      axios.post(this.$store.state.base+'project_manage/get_documents/',
-          qs.stringify(param))
-          .then(function (Response) {
-            console.log("111")
-          })
-          .catch(function (error) {
-            console.log(error);
-          })
-    }
   },
 
   mounted() {
@@ -340,11 +343,12 @@ export default Vue.extend({
 }
 #title {
   position: absolute;
-  padding: 5px;
-  right: 1%;
-  top: 5%;
+  padding: 2px;
+  right: 42%;
+  top: 1%;
   font-size: 16px;
-  width: 7%;
+  min-width: 7%;
+  max-width: 7%;
   border-radius: 5px;
   background-color: white;
   text-align: center;
@@ -359,22 +363,27 @@ export default Vue.extend({
   width: 7%;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
-
 }
-#create {
-  position: relative;
-  text-align: center;
-  top: 1%;
-  left: 10%;
-  width: 80%;
-  height: 30px;
-  background: rgb(255,255,255);
+#modify {
+  position: absolute;
+  right: 1.5%;
+  top: 5%;
+  width: 7%;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+}
+.plus {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 80%;
+  border-radius: 9px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5), 0 6px 20px 0 rgba(0, 0, 0, 0.5);
+  transition: 0.2s;
   cursor: pointer;
 }
-#create:hover {
-  background: rgb(240,240,240);
+.plus:hover {
+  transform: scale(1.1);
 }
 #toDel {
   position: relative;
