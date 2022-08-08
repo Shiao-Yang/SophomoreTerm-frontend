@@ -9,7 +9,7 @@
           <!--部署前把下边两行注释改成正文,并注释掉上边一行代码-->
 
         <img src="../assets/images/register.png" v-if="this.$store.state.userInfo.avatar==='src/assets/images/login'" alt="">
-          <img :src=this.$store.state.userInfo.avatar v-else alt="">
+          <img :src="avatarUrl" v-else alt="">
 
           <p> {{this.$store.state.userInfo.username}} </p>
         </div>
@@ -92,6 +92,7 @@ export default {
   name: "UserInfo",
   data() {
     return {
+      avatarUrl:"http://43.138.26.134/api"+this.$store.state.userInfo.avatar,
       avatarArray:[],
       theUid:0
     }
