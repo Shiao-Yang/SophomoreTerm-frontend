@@ -198,11 +198,14 @@ export default {
       })
     },
 
-    createProject(name) {
+    createProject(name, width, height) {
       let params = {
         picid: this.$store.state.pid /*this.$store.state.pid*/,
         name: name,
+        width: width,
+        height: height,
       }
+      console.log('createDesign')
       console.log(params);
       this.$axios({
         method: 'post',

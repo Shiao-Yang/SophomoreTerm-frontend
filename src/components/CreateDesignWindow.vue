@@ -11,6 +11,13 @@
                 <span>图名</span>
                 <el-input v-model="input" placeholder="请输入图名"></el-input>
               </li>
+              <li>
+                <el-radio v-model="radio" label="1">desktop(800×600)</el-radio>
+                <el-radio v-model="radio" label="2">iPhone(400×600)</el-radio>
+              </li>
+              <li>
+                <button @click="output">test</button>
+              </li>
             </ul>
           </div>
         </div>
@@ -30,6 +37,9 @@ export default {
   data() {
     return {
       input: '',
+      width: 800,
+      height: 600,
+      radio: '1',
     }
   },
 
@@ -38,8 +48,25 @@ export default {
   },
 
   methods : {
+    output() {
+      console.log(this.radio,this.width,this.height);
+    },
     sure() {
-      this.$emit('ok', this.input);
+      //console.log(this.radio, this.width, this.height);
+      //console.log(typeof this.radio)
+      if(this.radio === '1') {
+        //console.log(1)
+        this.width = 800;
+        this.height = 600;
+      }
+      //console.log(4);
+      if(this.radio === '2') {
+        //console.log(2)
+        this.width = 400;
+        this.height = 600;
+      }
+      //console.log(this.radio, this.width, this.height);
+      this.$emit('ok', this.input, this.width, this.height);
     },
     cancel() {
       this.$emit('cancel');

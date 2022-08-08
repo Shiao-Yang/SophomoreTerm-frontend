@@ -28,7 +28,7 @@ export default {
           cn_name: '移动方式',
           options: [{ label: 'y', value: 'y' }, { label: 'x', value: 'x' }, { label: 'xy', value: 'xy' }],
         },
-        { type: 'checkbox', name: 'fixedRatio', cn_name: '移动方式' },
+        { type: 'checkbox', name: 'fixedRatio', cn_name: 'fixedRation' },
         { type: 'checkbox', name: 'draggable', cn_name: '是否可拖动' },
         { type: 'checkbox', name: 'resizable', cn_name: '是否可缩放' },
         { type: 'checkbox', name: 'rotatable', cn_name: '是否可旋转' },

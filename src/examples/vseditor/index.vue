@@ -418,8 +418,16 @@ export default {
         data: qs.stringify(params)
       }).then(res => {
         console.log(res.data[0]);
-        this.controls = JSON.parse(res.data[0].data);
+        if(res.data[0].data === '') {
+          this.controls = [];
+        }
+        else
+          this.controls = JSON.parse(res.data[0].data);
         //console.log(this.controls);
+        this.width = res.data[0].width;
+        this.height = res.data[0].height;
+        console.log(this.width, this.height);
+        this.setSize(this.width, this.height);
       }).catch(err => {
         console.log(err)
       })
@@ -431,6 +439,7 @@ export default {
   },
 
   mounted() {
+    console.log('mounted',this.width, this.height);
     this.setSize(this.width, this.height);
   },
 
@@ -464,8 +473,8 @@ export default {
         <HeaderVue />
         <div class="content">
           <ComponentsVue />
-          <div class="temp" ref="imageTofile">
-            <div class="container">
+          <div class="temp" >
+            <div class="container" ref="imageTofile">
               <EditorViewVue ref="editor" value={this.controls}>
                 <PluginSelectionVue application={this}/>
               </EditorViewVue>

@@ -109,11 +109,12 @@ export default Vue.extend({
           .then(function (Response) {
             console.log(Response)
             tempthis.getAllDoc();
+            tempthis.$message.success("删除成功！")
             if(Response.data.errno===0){
               tempthis.toStartCreateDoc()
             }
             else if(Response.data.errno===2)
-              alert("不存在此文档")
+              tempthis.$message.warning("不存在此文档")
           })
           .catch(function (error) {
             console.log(error);
@@ -160,7 +161,7 @@ export default Vue.extend({
             .then(function (Response) {
               console.log(Response);
               tempthis.getAllDoc();
-              alert("新文档已保存。")
+              tempthis.$message.success("新文档已保存。")
             })
             .catch(function (error) {
               console.log(error);
@@ -175,7 +176,7 @@ export default Vue.extend({
             qs.stringify(params2))
             .then(function (Response) {
               console.log(Response);
-              alert("对文档的修改已保存。")
+              tempthis.$message.success("对文档的修改已保存。")
             })
             .catch(function (error) {
               console.log(error);
@@ -194,7 +195,6 @@ export default Vue.extend({
       ]
     },
     getAllDoc(){
-
       const tempthis = this;
       let param= {
         pid:this.$store.state.pid,
