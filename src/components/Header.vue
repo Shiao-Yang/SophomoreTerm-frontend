@@ -99,8 +99,6 @@ export default {
         this.$store.state.userInfo.profile = user.profile;
         this.$store.state.userInfo.avatar = user.avatar;
         this.avatarUrl=tempthis.$store.state.base+user.avatar
-        console.log(this.$store.state.userInfo.avatar);
-        console.log(this.avatarUrl)
       }).catch(err => {
         console.log(err)
       })
@@ -168,8 +166,7 @@ export default {
   color: #fff;
   text-decoration: none; /*字体增加装饰：去除下划线*/
   background: linear-gradient(
-      90deg,#03a9f4, #f441a5, #ffeb3b,
-      #03a9f4, #f441a5, #ffeb3b, #03a9f4); /*渐变背景*/
+      20deg,#03a9f4,  #f441a5,#03a9f4, #f441a5); /*渐变背景*/
   border-radius: 10px; /*边框圆角*/
   background-size: 400%; /*背景大小*/
   z-index: 1; /*层叠定位*/
@@ -195,8 +192,7 @@ export default {
   position: absolute; /*绝对定位*/
   z-index: -1;
   background: linear-gradient(
-      90deg,#03a9f4, #f441a5, #ffeb3b, #03a9f4,
-      #f441a5, #ffeb3b, #03a9f4);
+      20deg,#03a9f4, #f441a5,#03a9f4, #f441a5);
   border-radius: 40px;
   background-size: 400%;
   filter: blur(20px); /*过渡：模糊*/

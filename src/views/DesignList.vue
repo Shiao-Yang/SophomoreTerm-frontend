@@ -4,11 +4,6 @@
     <div class="container">
       <SideNavigation></SideNavigation>
       <div class="main-container">
-        <div class="header">
-          <router-link to="/project">
-            <img src="../assets/return.png" class="return">
-          </router-link>
-        </div>
         <div class="content">
           <div class="content-bar">
             <ul class="nav-list">

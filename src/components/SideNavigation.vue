@@ -4,7 +4,7 @@
         <i class='bx bxs-book-reader'></i>
         <span class="logo-name">墨&nbsp书</span>
     </div>
-    <ul class="nav-links">
+    <ul class="nav-links" v-if="this.checkRoute() === 1">
       <li :class="{'active': isSelectSide === 1}">
         <router-link to="/projectList">
           <i class='bx bxs-pie-chart-alt-2' :class="{'active': isSelectSide === 1}"></i>
@@ -23,8 +23,39 @@
           <span class="link-name" :class="{'active': isSelectSide === 3}">团队管理</span>
         </router-link>
       </li>
+      <li class="active">
+        <div class="profile-details">
+          <div class="profile-content">
+            <img :src="theAvatarUrl">
+          </div>
+          <div class="profile-name">
+            {{this.$store.state.userInfo.username}}
+          </div>
+          <i class='bx bx-log-out-circle exit-btn' @click="toExit" title="退出登录"></i>
+        </div>
+      </li>
+    </ul>
+    <ul class="nav-links" v-if="this.checkRoute() === 2">
+      <li :class="{'active': isSelectSide === 1}">
+        <router-link to="/designList">
+          <i class='bx bx-shape-triangle' :class="{'active': isSelectSide === 1}"></i>
+          <span class="link-name" :class="{'active': isSelectSide === 1}">原型设计</span>
+        </router-link>
+      </li>
+      <li :class="{'active': isSelectSide === 2}">
+        <router-link to="/docList">
+          <i class='bx bxs-edit' :class="{'active': isSelectSide === 2}"></i>
+          <span class="link-name" :class="{'active': isSelectSide === 2}">文档编辑</span>
+        </router-link>
+      </li>
+      <li :class="{'active': isSelectSide === 3}">
+        <router-link to="/adminTeam">
+          <i class='bx bxs-collection':class="{'active': isSelectSide === 3}" ></i>
+          <span class="link-name" :class="{'active': isSelectSide === 3}">UML绘制</span>
+        </router-link>
+      </li>
       <li class="return">
-        <router-link to="#">
+        <router-link to="/projectList">
           <i class='bx bx-undo'></i>
           <span class="link-name">返回上级</span>
         </router-link>
@@ -95,21 +126,40 @@ export default {
         console.log(err)
       })
     },
-    checkSelect(){
-      if(this.$route.path === "/projectList") {
-        this.isSelectSide = 1;
+
+    checkSelect(index){
+      if(index === 1){
+        if(this.$route.path === "/projectList") {
+          this.isSelectSide = 1;
+        }
+        else if(this.$route.path === "/docCenter") {
+          this.isSelectSide = 2;
+        }
+        else if(this.$route.path === "/adminTeam") {
+          this.isSelectSide = 3;
+        }
       }
-      else if(this.$route.path === "/docCenter") {
-        this.isSelectSide = 2;
+      else if(index===2){
+        if(this.$route.path === '/designList'){
+          this.isSelectSide = 1;
+        }
+        else if(this.$route.path === '/docList'){
+          this.isSelectSide = 2;
+        }
       }
-      else if(this.$route.path === "/adminTeam") {
-        this.isSelectSide = 3;
+    },
+    checkRoute(){
+      if(this.$route.path === '/projectList' || this.$route.path === "/docCenter" || this.$route.path === "/adminTeam"){
+        return 1;
+      }
+      else if(this.$route.path === '/designList' || this.$route.path === '/docList'){
+        return 2;
       }
     }
   },
   created() {
     this.getAvatar(this.$store.state.userInfo.uid)
-    this.checkSelect();
+    this.checkSelect(this.checkRoute());
   }
 }
 </script>

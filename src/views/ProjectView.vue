@@ -137,7 +137,7 @@ export default {
     toTurnToProject(pid){
       this.$store.state.pid=pid;
       console.log(pid)
-      this.$router.push("/project")
+      this.$router.push("/designList")
       console.log(this.$store.state.pid)
     },
     getProjects(gid){
