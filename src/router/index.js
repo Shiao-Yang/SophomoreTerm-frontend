@@ -20,6 +20,7 @@ import TeamList from "@/views/TeamList";
 import designList from "@/views/DesignList";
 import docCenter from "@/views/DocCenter";
 import docList from "@/views/docList";
+import userSet from "@/views/UserSet";
 Vue.use(VueRouter)
 
 
@@ -124,6 +125,11 @@ const routes = [
     path: '/docList',
     name: 'docList',
     component: docList
+  },
+  {
+    path: '/userSet',
+    name: 'userSet',
+    component: userSet,
   }
 
 ]

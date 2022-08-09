@@ -108,7 +108,7 @@ export default {
     return {
       avatarUrl:this.$store.state.base+this.$store.state.userInfo.avatar,
       theUid:0,
-      changeAvatarVissible:false
+      changeAvatarVissible:false,
     }
   },
 
