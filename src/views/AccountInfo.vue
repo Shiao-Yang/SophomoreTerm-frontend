@@ -210,7 +210,6 @@ export default {
   width: 100%;
   /* 弹性布局 水平+垂直居中 */
   display: flex;
-  position: absolute;
   justify-content: center;
   align-items: center;
   /* 渐变背景 */

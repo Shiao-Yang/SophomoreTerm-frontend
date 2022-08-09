@@ -71,7 +71,6 @@ export default {
         url: this.$store.state.base+"space/get_info/",
         data: qs.stringify(params)
       }).then(res => {
-        console.log(res.data[0]);
         user = res.data[0];
         this.$store.state.userInfo.username = user.username;
         this.$store.state.userInfo.name = user.name;
@@ -86,7 +85,6 @@ export default {
         else{
           tempthis.theAvatarUrl = '111'
         }
-        console.log(user);
       }).catch(err => {
         console.log(err)
       })
@@ -208,6 +206,4 @@ export default {
   font-size: 18px;
   font-weight: 500;
 }
-
-
 </style>

@@ -92,6 +92,48 @@ const Rect = {
   },
 }
 
+const Search = {
+  render() {
+    return <div class="match-parent" class="rect"/>
+  },
+}
+
+const Cart = {
+  render() {
+    return <div class="match-parent" class="rect"/>
+  },
+}
+
+const Message = {
+  render() {
+    return <div class="match-parent" class="rect"/>
+  },
+}
+
+const User = {
+  render() {
+    return <div class="match-parent" class="rect"/>
+  },
+}
+
+const Shopping = {
+  render() {
+    return <div class="match-parent" class="rect"/>
+  },
+}
+
+const Home = {
+  render() {
+    return <div class="match-parent" class="rect"/>
+  },
+}
+
+const NewProduct = {
+  render() {
+    return <div class="match-parent" class="rect"/>
+  },
+}
+
 export default {
   img: Img,
   input: Input,
@@ -99,4 +141,11 @@ export default {
   rect: Rect,
   label: Label,
   container: Container,
+  search: Search,
+  cart: Cart,
+  message: Message,
+  user: User,
+  shopping: Shopping,
+  home: Home,
+  newProduct: NewProduct,
 }

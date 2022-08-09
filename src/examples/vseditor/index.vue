@@ -80,7 +80,7 @@ export default {
         parentId,
         resizeHandler: ['tl', 'tm', 'tr', 'r', 'br', 'bm', 'l', 'bl'],
         extra: item,
-        grid: [10, 10],
+        grid: [1, 1],
         axis: 'xy',
       }))
     },
@@ -495,6 +495,10 @@ export default {
   padding: 0;
 }
 
+.block {
+
+}
+
 .temp{
   background-color: #d0cdcd;
   flex: 1;
@@ -534,11 +538,14 @@ export default {
     }
   }
   .component-impl,
+
   .match-parent {
     width: 100%;
     height: 100%;
     display: block;
   }
+
+
   .input-has-label {
     display: flex;
     align-items: center;

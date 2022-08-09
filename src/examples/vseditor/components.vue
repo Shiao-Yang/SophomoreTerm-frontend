@@ -72,6 +72,48 @@ export default {
           height: 200,
           children: [],
         },
+        {
+          type: 'search',
+          name: '搜索',
+          width: 100,
+          height: 100,
+        },
+        {
+          type: 'cart',
+          name: '购物车',
+          width: 100,
+          height: 100,
+        },
+        {
+          type: 'message',
+          name: '消息',
+          width: 50,
+          height: 50,
+        },
+        {
+          type: 'user',
+          name: '用户',
+          width: 50,
+          height: 50,
+        },
+        {
+          type: 'shopping',
+          name: '逛店',
+          width: 50,
+          height: 50,
+        },
+        {
+          type: 'newProduct',
+          name: '新品',
+          width: 50,
+          height: 50,
+        },
+        {
+          type: 'home',
+          name: '首页',
+          width: 50,
+          height: 50,
+        },
       ],
     }
   },
@@ -87,7 +129,7 @@ export default {
         {this.components.map((item, index) => {
           return (
             <div ondragstart={(e) => this.handleDrag(e, item)} draggable="true" class="components-item" key={index}>
-              <img class="components-icon" src={require('@/assets/' + (item.inputType || item.type) + '.png')} />
+              <img class="components-icon" src={require('@/assets/' + (item.inputType || item.type) + '.png')}/>
               {item.name}
             </div>
           )

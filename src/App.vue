@@ -10,9 +10,9 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  background: #efefbb;
-  background: linear-gradient(to right, #d4d3dd, #efefbb);
+  /*color: #2c3e50;*/
+  /*!*background: #efefbb;*!*/
+  /*!*background: linear-gradient(to right, #d4d3dd, #efefbb);*!*/
 }
 
 

@@ -237,7 +237,6 @@ export default {
 .container{
   width: 100%;
   height:100%;
-  position: absolute;
   left: 0;
   top: 50px;
   align-items: center;

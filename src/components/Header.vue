@@ -1,52 +1,59 @@
 <template>
   <div>
     <div class="header">
-      <div class="box">
-        <h1 class="moshuLogo">
-  <!--          <img src="../assets/logo.png">-->
-<!--          <button @click="toVisitHome">Mobook</button>-->
-            <span @click="toVisitHome">Mobook</span>
-        </h1>
-<!--        <nav>-->
-<!--          <router-link active-class="active" to="/home">首页</router-link>-->
-<!--          <router-link active-class="active" to="/ask">问答</router-link>-->
-<!--          <router-link active-class="active" to="/community">社区</router-link>-->
-<!--        </nav>-->
+      <div class="logo-box" @click="toVisitHome">
+        <i class='bx bxs-book-reader'></i>
+        <span class="logo-name">墨书</span>
       </div>
-      <div class="box">
-<!--        <el-avatar src="../assets/images/login.png"  v-if="$store.state.isLogin==='1'&&$store.state.userInfo.avatar===111">-->
-<!--          </el-avatar>-->
-<!--        <el-avatar :src=" require('../../static/avatars/'+$store.state.userInfo.avatar)"  v-else-if="$store.state.isLogin==='1'&&$store.state.userInfo.avatar!==111">-->
-<!--        </el-avatar>-->
-<!--        <el-avatar icon="el-icon-user-solid" v-else></el-avatar>-->
-
-        <nav>
-          <a v-if="$store.state.isLogin===true" @click="toVisitSelf">个人信息</a>
-          <a v-else @click="toLogin">登录</a>
-          <a v-if="$store.state.isLogin===true" @click="toVisitTeamList">团队列表</a>
-          <a v-else @click="toRegister">注册</a>
-          <a v-if="$store.state.isLogin===true" @click="toExit">退出登录</a>
-
-<!--          <router-link to="/prototype">试用</router-link>-->
-        </nav>
+      <div class="main">
+        <ul class="nav-links">
+          <li class="nav-item login-btn" v-if="this.$store.state.isLogin === false">
+            <router-link to="/login&register">
+              <span>登录/注册</span>
+            </router-link>
+          </li>
+          <li class="nav-item" :class="{'selected':isSelected}" v-if="this.$store.state.isLogin === true">
+            <div class="user-box">
+              <img class="user-avatar" :title="this.$store.state.userInfo.username" :class="{'selected': isSelected}" src="../assets/images/register.png" @click="isSelected=!isSelected">
+            </div>
+            <ul class="sub-menu" v-show="isSelected">
+              <span class="user-name">{{this.$store.state.userInfo.username}}</span>
+              <li class="sub-item" @click="toVisitSelf">
+                <i class='bx bx-user'></i>
+                <span>个人信息</span>
+                <i class='bx bx-chevron-right right'></i>
+              </li>
+              <li class="sub-item bottom-bor" @click="toVisitTeamList">
+                <i class='bx bx-group'></i>
+                <span>我的团队</span>
+                <i class='bx bx-chevron-right right'></i>
+              </li>
+              <li class="sub-item log-out" @click="toExit">
+                <i class='bx bx-log-out-circle'></i>
+                <span>退出登录</span>
+                <i class='bx bx-chevron-right right'></i>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </div>
     </div>
-<!--    <div class="contents">-->
-<!--      <div class="content">-->
-<!--        &lt;!&ndash;指定组件的位置&ndash;&gt;-->
-<!--        <router-view></router-view>-->
-<!--      </div>-->
-<!--    </div>-->
-
   </div>
 </template>
 
 <script>
 export default {
   name: "Header",
+  data(){
+    return {
+      isSelected: false,
+    }
+  },
+
   methods:{
     toVisitHome:function (){
       this.$router.push('/');
+      location.reload();
     },
     toLogin:function (){
       this.$router.push('/login&register');
@@ -74,54 +81,203 @@ export default {
   align-items: center;
   justify-content: space-between;
   height: 50px;
-  background-color:#292c2f;
-  color: #ffffff;
-
-  /*吸顶效果*/
-  /* position: sticky;
-   position: -webkit-sticky;    !*兼容 -webkit 内核的浏览器*!
-   top: 0px;                    !*必须设一个值，否则不生效*!*/
-
+  background-color:#ffffff;
+  color: #c4cbcf;
 }
-.box{
+
+.header .logo-box{
+  margin-left: 100px;
   display: flex;
   align-items: center;
+  color: #47484c;
+  height: 50px;
+  line-height: 50px;
+  cursor: pointer;
 }
-h1{
+
+.header .logo-box i{
+  font-size: 30px;
+  min-width: 48px;
+  color: black;
+  text-align: center;
+}
+
+.header .logo-box .logo-name{
+  font-size: 28px;
+  font-weight: 700;
+  font-family: 华文新魏;
+}
+
+.header .main{
+  margin-right: 50px;
   display: flex;
+  height: 50px;
   align-items: center;
-  font: normal 28px Cookie, Arial, Helvetica, sans-serif;
-  padding: 0px 20px;
+  line-height: 50px;
 }
-img{
-  width: 40px;
+
+.header .main .nav-links{
+  list-style: none;
+}
+
+.header .main .nav-links .nav-item{
+  align-items: center;
+}
+
+.header .main .nav-links .login-btn a{
+  width: 80px;
   height: 40px;
+  text-align: center; /*字体水平居中*/
+  font-size: 14px; /*字体大小*/
+  font-weight: bold;
+  line-height: 40px; /*行高*/
+  color: #fff;
+  text-decoration: none; /*字体增加装饰：去除下划线*/
+  background: linear-gradient(
+      90deg,#03a9f4, #f441a5, #ffeb3b,
+      #03a9f4, #f441a5, #ffeb3b, #03a9f4); /*渐变背景*/
+  border-radius: 10px; /*边框圆角*/
+  background-size: 400%; /*背景大小*/
+  z-index: 1; /*层叠定位*/
 }
 
-nav {
-  display: flex;
-  align-items: center;
-  margin: 0px 40px;
-  font:16px Arial, Helvetica, sans-serif;
+.header .main .nav-links .login-btn a:hover{
+  animation: animate 8s linear infinite alternate; /*动画: 名称 时间 线性 循环 播放完回退播放*/
 }
-nav a{
-  padding: 0 15px;
-  width: 32px;
-  text-decoration:none;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: normal;
-  opacity: 0.9;
+@keyframes animate{
+  0%{
+    background-position: 0%; /*修改背景定位，实现渐变色炫光*/
+  }
+  50%{
+    background-position: 100%;
+  }
+  100%{
+    background-position: 0%;
+  }
 }
 
-nav a:hover {
+.header .main .nav-links .login-btn a::before{ /*之前添加*/
+  content: ''; /*内容*/
+  position: absolute; /*绝对定位*/
+  z-index: -1;
+  background: linear-gradient(
+      90deg,#03a9f4, #f441a5, #ffeb3b, #03a9f4,
+      #f441a5, #ffeb3b, #03a9f4);
+  border-radius: 40px;
+  background-size: 400%;
+  filter: blur(20px); /*过渡：模糊*/
+  opacity: 0; /*透明度*/
+  transition: 1s; /*过渡时间*/
+}
+
+.header .main .nav-links .login-btn a:hover::before{
+  filter: blur(20px);
   opacity: 1;
+  animation: animate 8s linear infinite; /*注意动画名称统一*/
 }
 
-.moshuLogo:hover{
-  cursor:pointer
+.header .main .nav-links .nav-item{
+  display: flex;
+  position: relative;
+  height: 100%;
+  line-height: 50px;
+  background-color: transparent;
+  margin-right: 20px;
+  text-align: center;
 }
-a:hover{
-  cursor:pointer
+
+.header .main .nav-links .nav-item .user-box{
+  height: 45px;
+  width: 45px;
+  border-radius: 10%;
+  background-color: #ffffff;
 }
+
+.header .main .nav-links .nav-item .user-box .user-avatar{
+  height: 40px;
+  width: 40px;
+  border: #eeeeee 2px solid;
+  border-radius: 10%;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+.header .main .nav-links .nav-item .user-box .user-avatar.selected{
+  position: relative;
+  border-radius: 50%;
+  margin-top: 10px;
+  margin-left: -60px;
+  z-index: 2;
+  border: #cdd1d3 1px solid;
+  background-color: #cdd1d3;
+  width: 80px;
+  height: 80px;
+
+}
+
+.header .main .nav-links .nav-item.selected .sub-menu{
+  opacity: 1;
+  display: block;
+}
+
+.header .main .nav-links .nav-item .sub-menu{
+  position: absolute;
+  left: -120px;
+  top:100%;
+  width: 200px;
+  color: black;
+  background-color: #fff;
+  border-radius: 10px;
+  z-index: 1;
+  padding: 40px 10px 10px 10px;
+  border: #eeeeee 2px solid;
+  box-shadow: #eeeeee 3px 3px 3px;
+  transition: all 0.8s ease;
+  transition-delay: 0.2s;
+  opacity: 0;
+}
+
+.header .main .nav-links .nav-item .sub-menu .user-name{
+  color: #03a9f4;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+
+.header .main .nav-links .nav-item .sub-menu li{
+  display: flex;
+  height: 30px;
+  line-height: 30px;
+  padding: 5px 8px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.header .main .nav-links .nav-item .sub-menu li:hover{
+  border-radius: 10px;
+  background-color: #e4e4e4;
+}
+
+.header .main .nav-links .nav-item .sub-menu .sub-item .right{
+  margin-left: auto;
+}
+
+.header .main .nav-links .nav-item .sub-menu li i{
+  font-size: 20px;
+  height: 30px;
+  min-width: 30px;
+  line-height: 30px;
+  text-align: center;
+}
+
+.header .main .nav-links .nav-item .sub-menu .bottom-bor{
+  border-bottom: #dddddd 1px solid;
+}
+
+.header .main .nav-links .nav-item .sub-menu .log-out:hover{
+  border-radius: 10px;
+  background-color: #ed5a65;
+  color: #fff;
+}
+
 </style>
