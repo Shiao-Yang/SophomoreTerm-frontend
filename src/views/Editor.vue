@@ -8,8 +8,8 @@
     <div id="list">
       <div @click="toStartCreateDoc" id="create"><p style="position:absolute;left: 22%;top: 15%">创建新的文档</p></div>
       <div id="files">
-        <div class="file" v-for="item in docs">
-          <p style="font-size: 13px;width: 80%"@click="toEditThisDoc(item)">&nbsp;&nbsp;文件名:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
+        <div class="file" v-for="(item,index) in docs" :class="{'active':(Active === index),'notActive':(Active !== index)}">
+          <p style="font-size: 13px;width: 80%"@click="toEditThisDoc(item);Active=index">&nbsp;&nbsp;文件名:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
           <p style="font-size: 10px;position: absolute;right: 5px" @click="dele(item.id,item.name)">删除</p>
         </div>
       </div>
@@ -44,7 +44,6 @@
       />
     </div>
     <input type="text" placeholder="为文件命名" id="htmlTitle" v-if="this.$store.state.doc_id===0" :value="inputContent">
-    <div id="title" v-else>{{theTitle}}</div>
     <el-button @click="toSaveDoc" id="save" size="small">保存</el-button>
   </div>
 </template>
@@ -69,6 +68,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      Active: -1,
       editor: null,
       id: 0,
       Del: false,
@@ -121,28 +121,35 @@ export default Vue.extend({
     toEditThisDoc(thisDoc){
       this.$store.state.doc_id=thisDoc.id
       this.$store.state.doc = thisDoc
-      const tempthis = this;
       let params= {
-        id:thisDoc.id
+        id: thisDoc.id
       }
-      axios.post(this.$store.state.base+'project_manage/open_document/',
-          qs.stringify(params))
-          .then(function (Response) {
-            tempthis.html=Response.data.data
-            console.log("此文档已打开，现在的html代码是"+tempthis.html);
+      console.log("id:"+thisDoc.id)
+      this.axios({
+        method:"post",
+        url: this.$store.state.base+'project_manage/open_document/',
+        data: qs.stringify(params)
+      })
+          .then(Response => {
+            console.log(Response.data)
+            console.log("url:"+this.$store.state.base+'project_manage/open_document/')
+            console.log("Response:"+Response.data[0].name+" "+Response.data[0].url)
+            this.$axios.get(this.$store.state.base+Response.data[0].url)
+                .then( res => {
+                  this.html = res.data
+                  console.log("res.data:"+res.data)
+                  console.log("此文档已打开，现在的html代码是"+this.html);
+                })
             //console.log(Response)
             let i;
             //console.log(tempthis.docs.length)
-            for(i=0;i<tempthis.docs.length;i++){
-              if(tempthis.docs[i].id===thisDoc.id){
-                tempthis.theTitle=tempthis.docs[i].name;
+            for(i=0;i<this.docs.length;i++) {
+              if (this.docs[i].id === thisDoc.id) {
+                this.theTitle = this.docs[i].name;
                 //alert(i+tempthis.docs[i].id)
                 break;
               }
             }
-          })
-          .catch(function (error) {
-            console.log(error);
           })
     },
     toSaveDoc(){
@@ -168,18 +175,32 @@ export default Vue.extend({
             })
       }
       else{
-        let params2= {
-          id:this.$store.state.doc_id,
-          data:tempthis.editor.getHtml()
+        let str = tempthis.editor.getHtml()
+        console.log("str:"+str)
+        let blob = new Blob([str])
+        let formData = new FormData()
+        formData.append("id", JSON.stringify(this.$store.state.doc_id))
+        formData.append("file", blob)
+
+        for (var value of formData.values()) {
+          console.log(value);
+          console.log(typeof value);
         }
-        axios.post(this.$store.state.base+'project_manage/store_document/',
-            qs.stringify(params2))
-            .then(function (Response) {
-              console.log(Response);
-              tempthis.$message.success("对文档的修改已保存。")
-            })
-            .catch(function (error) {
-              console.log(error);
+        this.axios ({
+          method: "post",
+          url: this.$store.state.base+'project_manage/store_document/',
+          data: formData
+        })
+            .then(res => {
+              console.log(res)
+              switch (res.data.errno) {
+                case 0:
+                  tempthis.$message.success("对文档的修改已保存。")
+                  break
+                default:
+                  tempthis.$message.warning(res.data.msg)
+                  break
+              }
             })
       }
     },
@@ -219,6 +240,8 @@ export default Vue.extend({
     // this.docs = this.$store.state.docs
     this.toPrepare()
     this.getAllDoc();
+    this.Active = this.$route.query.index
+    this.$forceUpdate()
     // 模拟 ajax 请求，异步渲染编辑器
     //setTimeout(() => {
     //  this.html = '<p>模拟 Ajax 异步设置内容 HTML</p>'
@@ -296,9 +319,13 @@ export default Vue.extend({
   cursor: pointer;
   transition: 0.3s;
 }
-.file:hover {
+.file.notActive:hover{
   transform: scale(1.1);
   background-color: rgb(240,240,240);
+}
+.active {
+  background-color: rgb(240,240,240);
+  scale: 1.1;
 }
 #files {
   position: absolute;
