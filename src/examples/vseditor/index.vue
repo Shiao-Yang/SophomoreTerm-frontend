@@ -58,6 +58,7 @@ export default {
 
        */
       $(".container").css({width: width + 'px',height: height + 'px'})
+      console.log(this.controls);
     },
     getComponents(components, parentId) {
       return components.map((item) => ({
@@ -406,7 +407,7 @@ export default {
         data: formData
       }).then(res => {
         console.log(res.data);
-        location.reload();
+        //location.reload();
         if(res.data === 0) {
           //console.log(params.picid);
           //console.log(params.data);
@@ -444,6 +445,7 @@ export default {
         this.height = ans.height;
         console.log(this.width, this.height);
         this.setSize(this.width, this.height);
+        console.log(this.controls);
       }).catch(err => {
         console.log(err)
       })
@@ -453,10 +455,7 @@ export default {
       location.reload()
     },
     Export() {
-      var data = JSON.stringify(this.controls);
-      let str = new Blob([data], {type: ''})
-      saveAs(str, 'a.json');
-      alert('导出成功');
+      console.log(JSON.stringify(this.controls));
     },
 
     /*
