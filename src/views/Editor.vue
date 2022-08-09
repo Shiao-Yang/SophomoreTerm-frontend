@@ -1,7 +1,7 @@
 <template>
   <div id="bgd">
 
-    <router-link to="/project">
+    <router-link to="/docList">
       <img src="../assets/return.png" id="return">
     </router-link>
 
@@ -108,7 +108,7 @@ export default Vue.extend({
             console.log(Response)
             tempthis.getAllDoc();
             tempthis.$message.success("删除成功！")
-            if(Response.data.errno===0){
+            if(Response.data.errno===0 && tempthis.id===tempthis.$store.state.doc_id){
               tempthis.toStartCreateDoc()
             }
             else if(Response.data.errno===2)
@@ -120,6 +120,7 @@ export default Vue.extend({
     },
     toEditThisDoc(thisDoc){
       this.$store.state.doc_id=thisDoc.id
+      this.$store.state.doc = thisDoc
       const tempthis = this;
       let params= {
         id:thisDoc.id
@@ -158,10 +159,9 @@ export default Vue.extend({
               console.log(Response);
               tempthis.getAllDoc();
               tempthis.$message.success("新文档已保存。")
-              if(Response.data.errno!==0){
-                tempthis.theTitle=params.name;
-                tempthis.$store.state.doc_id=Response.data.id;
-              }
+              tempthis.$store.state.doc = {id: Response.data.id,name: params.name,pid: params.pid}
+              tempthis.theTitle=params.name;
+              tempthis.$store.state.doc_id=Response.data.id;
             })
             .catch(function (error) {
               console.log(error);
@@ -205,6 +205,10 @@ export default Vue.extend({
             tempthis.docs=Response.data
             console.log("本项目所有文档信息如下：")
             console.log(tempthis.docs);
+
+            if (tempthis.$store.state.doc_id !== 0) {
+              tempthis.toEditThisDoc(tempthis.$store.state.doc)
+            }
           })
           .catch(function (error) {
             console.log(error);
@@ -212,9 +216,9 @@ export default Vue.extend({
     }
   },
   mounted() {
+    // this.docs = this.$store.state.docs
     this.toPrepare()
     this.getAllDoc();
-    this.toStartCreateDoc();
     // 模拟 ajax 请求，异步渲染编辑器
     //setTimeout(() => {
     //  this.html = '<p>模拟 Ajax 异步设置内容 HTML</p>'
