@@ -12,7 +12,9 @@
     "axios": "^0.27.2",
     "core-js": "^3.8.3",
     "element-ui": "^2.15.9",
+    "file-saver": "^2.0.5",
     "html2canvas": "^1.4.1",
+    "jquery": "^3.5.1",
     "keyboardjs": "^2.6.4",
     "less": "^3.13.1",
     "lodash": "^4.17.21",
@@ -21,8 +23,7 @@
     "vue-axios": "^3.4.1",
     "vue-router": "^3.5.1",
     "vuex": "^3.6.2",
-    "yoyoo-ddr": "^0.6.1",
-    "jquery": "^3.5.1"
+    "yoyoo-ddr": "^0.6.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",

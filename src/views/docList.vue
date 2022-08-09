@@ -16,7 +16,7 @@
               </li>
               <li>
                 <div class="add-design">
-                  <i class='bx bx-plus-circle' @click="create=true;titleInput=''" title="新建文档"></i>
+                  <i class='bx bx-plus-circle' @click="create=true;titleInput='';radio='1';radio2='1'" title="新建文档"></i>
                 </div>
               </li>
             </ul>
@@ -30,7 +30,7 @@
                     <span class="project-name">{{project.name}}</span>
                     <!--<span class="project-details">创建时间 : {{project.starttime}}</span>-->
                   </span>
-                  <i class='bx bxl-sketch first' title="编辑" @click="open(project.id,project)"></i>
+                  <i class='bx bxl-sketch first' title="编辑" @click="open(project.id,project,index)"></i>
                   <i class='bx bxs-edit-alt' title="重命名" @click="Rename(project.id)"></i>
                   <i class='bx bxs-trash delete' title="删除" @click="Delete(project.id,project.name)"></i>
                 </li>
@@ -69,11 +69,35 @@
           title="提示"
           :visible.sync="create"
           :close-on-click-modal ="false"
-          width="30%">
-        <input placeholder="请输入标题" style="width: 70%;height: 15%;top: 38%;outline: none;position: absolute;left: 15%" v-model="titleInput"></input>
+          width="30%"
+          height="50%">
+        <div>
+          <input placeholder="请输入标题" style="width: 70%;height: 30px;outline: none;position:relative;left: 4%" v-model="titleInput"></input>
+        </div>
+        <div style="margin: 20px auto">
+          <template>
+            <el-radio v-model="radio" label="1" style="margin-left: 4%">自定义</el-radio>
+            <el-radio v-model="radio" label="2">选择模板</el-radio>
+          </template>
+        </div>
+        <div style="margin: 20px auto">
+          <template v-if="radio==='2'">
+            <el-radio v-model="radio2" label="1" style="margin-left: 4%">软件开发计划书模板</el-radio>
+            <el-radio v-model="radio2" label="2">需求规格说明书模板</el-radio>
+            <el-radio v-model="radio2" label="3" style="margin-left: 4%;margin-top: 10px">会议纪要模板</el-radio>
+            <el-radio v-model="radio2" label="4" style="margin-top: 10px">项目计划书模板</el-radio>
+          </template>
+          <template v-else>
+            <el-radio disabled v-model="radio2" label="1" style="margin-left: 4%">软件开发计划书模板</el-radio>
+            <el-radio disabled v-model="radio2" label="2">需求规格说明书模板</el-radio>
+            <el-radio disabled v-model="radio2" label="3" style="margin-left: 4%;margin-top: 10px">会议纪要模板</el-radio>
+            <el-radio disabled v-model="radio2" label="4" style="margin-top: 10px">项目计划书模板</el-radio>
+          </template>
+        </div>
+
         <span slot="footer" class="dialog-footer">
           <el-button @click="create = false" class="cancel">取 消</el-button>
-          <el-button type="primary" @click="create_document" class="confirm">创 建</el-button>
+          <el-button type="primary" @click="getHTML" class="confirm">创 建</el-button>
         </span>
       </el-dialog>
     </div>
@@ -98,6 +122,8 @@ export default {
   },
   data(){
     return{
+      radio: '1',
+      radio2: '1',
       isActive: 1,
       isCreate: false,
       projects:[],
@@ -109,17 +135,53 @@ export default {
       doc_id: 0,
       doc_name: '',
       titleInput: '',
-
+      html: '',
+      model_name: '',
     }
   },
   methods: {
+    getHTML() {
+      let url
+      if (this.titleInput==='') {
+        this.$message.warning("请输入标题")
+        return
+      }
+      if (this.radio==='1') {
+        this.html = ''
+        this.model_name = 'default_document.html'
+        this.create_document()
+      }
+      if (this.radio==='2') {
+        if (this.radio2==='1') {
+          url = this.$store.state.base+"media/documents/document_model_1.html"
+          this.model_name = 'document_model_1.html'
+        } else if (this.radio2==='2') {
+          url = this.$store.state.base+"media/documents/document_model_2.html"
+          this.model_name = 'document_model_2.html'
+        } else if (this.radio2==='3') {
+          url = this.$store.state.base+"media/documents/document_model_3.html"
+          this.model_name = 'document_model_3.html'
+        } else if (this.radio2==='4') {
+          url = this.$store.state.base+"media/documents/document_model_4.html"
+          this.model_name = 'document_model_4.html'
+        }
+        this.$axios.get(url)
+            .then( res => {
+              this.html = res.data
+              //console.log("res.data:"+res.data)
+              this.create_document()
+            })
+      }
+    },
     create_document() {
       this.create = false
+      console.log("this.html:"+this.html)
       let params = {
         pid: this.$store.state.pid,
         name: this.titleInput,
-        data: ''
+        model_name: this.model_name,
       }
+      console.log("params.model_name:"+params.model_name)
       this.axios({
         method: "post",
         url: this.$store.state.base+'project_manage/create_document/',
@@ -127,8 +189,14 @@ export default {
       })
           .then(res => {
             console.log(res);
-            this.getAllDoc();
-            this.$message.success("新文档已保存。")
+            switch (res.data.errno) {
+              case 0:
+                this.getAllDoc();
+                this.$message.success("新文档已保存。")
+                break
+              default:
+                this.$message.warning(res.data.msg)
+            }
           })
     },
     Delete(id,name) {
@@ -246,10 +314,10 @@ export default {
       this.rename = true
     },
 
-    open(id,doc) {
+    open(id,doc,i) {
       this.$store.state.doc_id = id
       this.$store.state.doc = doc
-      this.$router.push('/editor')
+      this.$router.push({path: '/editor',query: {index: i}})
     },
     getFounder(uid){
       let self = this;

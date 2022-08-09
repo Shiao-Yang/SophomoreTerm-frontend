@@ -229,8 +229,10 @@ export default {
 
 <style scoped>
 .main {
+  overflow-x: hidden;
   /* 100%窗口高度 */
-  height: 675px;
+  height: 100vh;
+  min-height: 675px;
   width: 100%;
   /* 弹性布局 水平+垂直居中 */
   display: flex;
@@ -239,7 +241,7 @@ export default {
   /* 渐变背景 */
   background: linear-gradient(200deg,#f3e7e9,#e3eeff);
   top: 50px;
-  left: 0px;
+  left: 0;
 }
 
 .container{
@@ -298,6 +300,10 @@ export default {
   top: 10px;
   border-radius:100%;
   overflow:hidden;
+}
+
+.top #user-avatar{
+  cursor: pointer;
 }
 
 .top p{

@@ -13,7 +13,7 @@ import invite from "@/views/Invite";
 import project from "@/views/Project";
 import editor from "@/views/Editor";
 import DesignList from "@/views/DesignList"
-
+import Test from "@/views/test";
 
 import Home from "@/views/Home";
 import TeamList from "@/views/TeamList";
@@ -116,6 +116,11 @@ const routes = [
     path: '/docCenter',
     name: 'docCenter',
     component: docCenter
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: Test
   },
   {
     path: '/docList',

@@ -72,6 +72,7 @@ export default {
           this.$store.state.userInfo.uid = res.data.uid;
           this.$store.state.userInfo.username = res.data.username;
           this.$store.state.isLogin = true;
+          this.$store.state.userInfo.avatar = res.data.avatar;
           console.log(this.$store.state.userInfo.uid);
           this.$message({
             message: '登陆成功',

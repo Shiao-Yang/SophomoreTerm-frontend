@@ -137,7 +137,7 @@ export default {
     toTurnToProject(pid){
       this.$store.state.pid=pid;
       console.log(pid)
-      this.$router.push("/project")
+      this.$router.push("/designList")
       console.log(this.$store.state.pid)
     },
     getProjects(gid){
@@ -508,7 +508,7 @@ export default {
 .content-bar .nav-list .nav-item .sub-menu{
   position: absolute;
   left: 100%;
-  top: 0;
+  top: -100px;
   list-style: none;
   width: 150px;
   padding:0 10px 6px 10px;
@@ -518,14 +518,15 @@ export default {
   border-radius: 10px;
   box-shadow: #666666 1px 2px 3px;
   cursor: auto;
-  display: none;
   opacity: 0;
   transition: 0s;
+  pointer-events: none;
 }
 
 .content-bar .nav-list .nav-item:hover .sub-menu{
+  pointer-events: auto;
   opacity: 1;
-  top: 5px;
+  top: -80px;
   transition: 0.4s all ease;
 }
 

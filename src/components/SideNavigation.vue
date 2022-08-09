@@ -4,36 +4,71 @@
         <i class='bx bxs-book-reader'></i>
         <span class="logo-name">墨&nbsp书</span>
     </div>
-    <ul class="nav-links">
-      <li>
-        <router-link to="/adminTeam">
-          <i class='bx bxs-group'></i>
-          <span class="link-name">团队管理</span>
-        </router-link>
-      </li>
-      <li>
+    <ul class="nav-links" v-if="this.checkRoute() === 1">
+      <li :class="{'active': isSelectSide === 1}">
         <router-link to="/projectList">
-          <i class='bx bxs-pie-chart-alt-2'></i>
-          <span class="link-name">项目列表</span>
+          <i class='bx bxs-pie-chart-alt-2' :class="{'active': isSelectSide === 1}"></i>
+          <span class="link-name" :class="{'active': isSelectSide === 1}">项目列表</span>
         </router-link>
       </li>
-      <li>
+      <li :class="{'active': isSelectSide === 2}">
         <router-link to="/docCenter">
-          <i class='bx bx-book-open'></i>
-          <span class="link-name">文档中心</span>
+          <i class='bx bx-book-open' :class="{'active': isSelectSide === 2}"></i>
+          <span class="link-name" :class="{'active': isSelectSide === 2}">文档中心</span>
         </router-link>
       </li>
-      <li>
+      <li :class="{'active': isSelectSide === 3}">
+        <router-link to="/adminTeam">
+          <i class='bx bxs-group':class="{'active': isSelectSide === 3}" ></i>
+          <span class="link-name" :class="{'active': isSelectSide === 3}">团队管理</span>
+        </router-link>
+      </li>
+      <li class="active">
         <div class="profile-details">
           <div class="profile-content">
-<!--            <img src="../assets/images/register.png" alt="加载失败" v-if="theAvatarUrl==='111'">-->
-<!--            <img :src=" require('../../../moshu-backend/static/avatars/'+theAvatarUrl)" alt="加载失败" v-else>-->
-            <img src="@/assets/images/register.png">
+            <img :src="theAvatarUrl">
           </div>
           <div class="profile-name">
             {{this.$store.state.userInfo.username}}
           </div>
-          <i class='bx bx-log-out-circle' style="cursor: pointer" @click="toExit" title="退出登录"></i>
+          <i class='bx bx-log-out-circle exit-btn' @click="toExit" title="退出登录"></i>
+        </div>
+      </li>
+    </ul>
+    <ul class="nav-links" v-if="this.checkRoute() === 2">
+      <li :class="{'active': isSelectSide === 1}">
+        <router-link to="/designList">
+          <i class='bx bx-shape-triangle' :class="{'active': isSelectSide === 1}"></i>
+          <span class="link-name" :class="{'active': isSelectSide === 1}">原型设计</span>
+        </router-link>
+      </li>
+      <li :class="{'active': isSelectSide === 2}">
+        <router-link to="/docList">
+          <i class='bx bxs-edit' :class="{'active': isSelectSide === 2}"></i>
+          <span class="link-name" :class="{'active': isSelectSide === 2}">文档编辑</span>
+        </router-link>
+      </li>
+      <li :class="{'active': isSelectSide === 3}">
+        <router-link to="/adminTeam">
+          <i class='bx bxs-collection':class="{'active': isSelectSide === 3}" ></i>
+          <span class="link-name" :class="{'active': isSelectSide === 3}">UML绘制</span>
+        </router-link>
+      </li>
+      <li class="return">
+        <router-link to="/projectList">
+          <i class='bx bx-undo'></i>
+          <span class="link-name">返回上级</span>
+        </router-link>
+      </li>
+      <li class="active">
+        <div class="profile-details">
+          <div class="profile-content">
+            <img :src="theAvatarUrl">
+          </div>
+          <div class="profile-name">
+            {{this.$store.state.userInfo.username}}
+          </div>
+          <i class='bx bx-log-out-circle exit-btn' @click="toExit" title="退出登录"></i>
         </div>
       </li>
     </ul>
@@ -49,7 +84,8 @@ export default {
   data() {
     return {
       username:"DEFAULT",
-      theAvatarUrl:'111'
+      theAvatarUrl:"http://43.138.26.134/api/",
+      isSelectSide: 1,
     }
   },
   methods:{
@@ -76,11 +112,12 @@ export default {
         this.$store.state.userInfo.name = user.name;
         this.$store.state.userInfo.email = user.email;
         this.$store.state.userInfo.profile = user.profile;
+        this.theAvatarUrl = this.$store.state.base+user.avatar;
         if(user.avatar!=='111')
         {
-          tempthis.avatarArray=user.avatar.split('/')
-          this.$store.state.userInfo.avatar = tempthis.avatarArray[2];
-          tempthis.theAvatarUrl = this.$store.state.userInfo.avatar;
+          // tempthis.avatarArray=user.avatar.split('/')
+          // this.$store.state.userInfo.avatar = tempthis.avatarArray[2];
+          tempthis.theAvatarUrl = this.$store.state.base+user.avatar;
         }
         else{
           tempthis.theAvatarUrl = '111'
@@ -89,9 +126,40 @@ export default {
         console.log(err)
       })
     },
+
+    checkSelect(index){
+      if(index === 1){
+        if(this.$route.path === "/projectList") {
+          this.isSelectSide = 1;
+        }
+        else if(this.$route.path === "/docCenter") {
+          this.isSelectSide = 2;
+        }
+        else if(this.$route.path === "/adminTeam") {
+          this.isSelectSide = 3;
+        }
+      }
+      else if(index===2){
+        if(this.$route.path === '/designList'){
+          this.isSelectSide = 1;
+        }
+        else if(this.$route.path === '/docList'){
+          this.isSelectSide = 2;
+        }
+      }
+    },
+    checkRoute(){
+      if(this.$route.path === '/projectList' || this.$route.path === "/docCenter" || this.$route.path === "/adminTeam"){
+        return 1;
+      }
+      else if(this.$route.path === '/designList' || this.$route.path === '/docList'){
+        return 2;
+      }
+    }
   },
   created() {
     this.getAvatar(this.$store.state.userInfo.uid)
+    this.checkSelect(this.checkRoute());
   }
 }
 </script>
@@ -146,13 +214,20 @@ export default {
 }
 
 .sidebar .nav-links li{
+  opacity: 0.6;
   position: relative;
   list-style: none;
   transition: all 0.4s ease;
 }
 
+.sidebar .nav-links li.active{
+  opacity: 1;
+  background: #666666;
+}
+
+
 .sidebar .nav-links li:hover{
-  background: #333333;
+  background: #444444;
 }
 
 .sidebar .nav-links li i{
@@ -162,6 +237,11 @@ export default {
   line-height: 50px;
   font-size: 20px;
   color: #fff;
+}
+
+.sidebar .nav-links li i.active{
+  font-size: 24px;
+
 }
 
 .sidebar .nav-links li a{
@@ -174,6 +254,14 @@ export default {
   font-size: 18px;
   font-weight: 500;
   color: #fff;
+}
+
+.sidebar .nav-links li a span.active{
+  font-weight: 800;
+}
+
+.sidebar .nav-links li .profile-details{
+  opacity: 1;
 }
 
 .sidebar .profile-details{
@@ -205,5 +293,15 @@ export default {
   color: #fff;
   font-size: 18px;
   font-weight: 500;
+}
+
+.sidebar .profile-details .exit-btn {
+  cursor: pointer;
+}
+
+.sidebar .profile-details .exit-btn:hover{
+  color: #FF5733;
+  font-size: 24px;
+  transition: all 0.4s ease;
 }
 </style>

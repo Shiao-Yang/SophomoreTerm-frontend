@@ -14,6 +14,7 @@ import {
   EVENT_CONTENT_CHANGETOIMAGE,
   EVENT_APPLICATION_SAVE,
   EVENT_APPLICATION_ESC,
+  EVENT_APPLICATION_EXPORT,
 } from '@/examples/vseditor/event-enums'
 import FooterVue from '@/examples/vseditor/footer.vue'
 import HeaderVue from '@/examples/vseditor/header.vue'
@@ -30,6 +31,7 @@ import PluginSelectionVue from '@/examples/vseditor/plugins/plugin-selection.vue
 import PluginGridVue from '@/examples/vseditor/plugins/plugin-grid.vue'
 import { registerKeyboardAction } from '@/examples/vseditor/plugins/keyboard'
 import html2canvas from "html2canvas";
+import {saveAs} from 'file-saver'
 import $ from 'jquery'
 import qs from "qs";
 let historys = [[]]
@@ -44,6 +46,7 @@ export default {
       controlled: {},
       width: 800,
       height: 500,
+      /*url: 'http://43.138.26.134/api/media/documents/prototype_model_1.json'*/
     }
   },
   methods: {
@@ -386,21 +389,27 @@ export default {
     },
     handleSave() {
       this.setCurrentControl(this.getActiveComponent(this.controls))
-      let params = {
-        picid: this.$store.state.pic_id,
-        data: JSON.stringify(this.controls),
-
+      let str = JSON.stringify(this.controls);
+      console.log(str);
+      let blob = new Blob([str]);
+      let formData = new FormData();
+      formData.append("file", blob);
+      formData.append("picid", JSON.stringify(this.$store.state.pic_id));
+      for (var value of formData.values()) {
+        console.log(value);
+        console.log(typeof value);
       }
+
       this.$axios({
         method: 'post',
         url: this.$store.state.base + "design/store/",
-        data: qs.stringify(params)
+        data: formData
       }).then(res => {
         console.log(res.data);
         location.reload();
         if(res.data === 0) {
-          console.log(params.picid);
-          console.log(params.data);
+          //console.log(params.picid);
+          //console.log(params.data);
         }
         //location.reload();
       }).catch(err => {
@@ -417,15 +426,22 @@ export default {
         url: this.$store.state.base + "design/get_one_design/",
         data: qs.stringify(params)
       }).then(res => {
-        console.log(res.data[0]);
-        if(res.data[0].data === '') {
-          this.controls = [];
-        }
-        else
-          this.controls = JSON.parse(res.data[0].data);
-        //console.log(this.controls);
-        this.width = res.data[0].width;
-        this.height = res.data[0].height;
+        let ans = res.data[0];
+        console.log(ans);
+
+        console.log(this.$store.state.base + ans.url);
+        this.$axios.get(this.$store.state.base + ans.url)
+            .then( res => {
+              console.log(1)
+              console.log(res.data);
+              if(res.data === "")
+                this.controls = [];
+              else
+                this.controls = res.data;
+            })
+
+        this.width = ans.width;
+        this.height = ans.height;
         console.log(this.width, this.height);
         this.setSize(this.width, this.height);
       }).catch(err => {
@@ -435,7 +451,37 @@ export default {
     Escape() {
       this.$router.push('/designList')
       location.reload()
+    },
+    Export() {
+      var data = JSON.stringify(this.controls);
+      let str = new Blob([data], {type: ''})
+      saveAs(str, 'a.json');
+      alert('导出成功');
+    },
+
+    /*
+    getFile(picid) {
+      let params = {
+        picid : picid,
+      }
+
+      this.axios({
+        method: 'post',
+        url: this.$store.state.base + 'design/get_one_design/'
+      })
+
+      this.axios({
+
+      })
+      this.$axios.get(url)
+        .then( res => {
+          console.log(1)
+          console.log(res.data);
+          this.controls = res.data;
+        })
     }
+
+     */
   },
 
   mounted() {
@@ -459,6 +505,7 @@ export default {
 
     this.eventbus.$on(EVENT_APPLICATION_SAVE, this.handleSave)
     this.eventbus.$on(EVENT_APPLICATION_ESC, this.Escape)
+    this.eventbus.$on(EVENT_APPLICATION_EXPORT, this.Export)
     // 绑定键盘按钮事件
     registerKeyboardAction(this)
 
@@ -466,6 +513,16 @@ export default {
     this.get_Pic(this.$store.state.pic_id);
     console.log(this.controls);
     console.log("调用完毕");
+
+    /*
+    console.log("调用getFile");
+    this.getFile(this.url);
+    console.log(this.controls);
+    console.log("调用完毕");
+
+     */
+
+
   },
   render() {
     return (

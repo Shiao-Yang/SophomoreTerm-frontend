@@ -14,19 +14,21 @@
           </li>
           <li class="nav-item" :class="{'selected':isSelected}" v-if="this.$store.state.isLogin === true">
             <div class="user-box">
-              <img class="user-avatar" :title="this.$store.state.userInfo.username" :class="{'selected': isSelected}" :src="avatarUrl" @click="isSelected=!isSelected">
+              <img class="user-avatar" id="user-avatar" :title="this.$store.state.userInfo.username" :class="{'selected': isSelected}" :src="avatarUrl" @click="toVisitSelf">
             </div>
-            <ul class="sub-menu" v-show="isSelected">
+            <ul class="sub-menu">
               <span class="user-name">{{this.$store.state.userInfo.username}}</span>
               <li class="sub-item" @click="toVisitSelf">
                 <i class='bx bx-user'></i>
                 <span>个人信息</span>
                 <i class='bx bx-chevron-right right'></i>
               </li>
-              <li class="sub-item bottom-bor" @click="toVisitTeamList">
+              <li class="sub-item" @click="toVisitTeamList">
                 <i class='bx bx-group'></i>
                 <span>我的团队</span>
                 <i class='bx bx-chevron-right right'></i>
+              </li>
+              <li class="bottom-bor">
               </li>
               <li class="sub-item log-out" @click="toExit">
                 <i class='bx bx-log-out-circle'></i>
@@ -61,7 +63,6 @@ export default {
   methods:{
     toVisitHome:function (){
       this.$router.push('/');
-      location.reload();
     },
     toLogin:function (){
       this.$router.push('/login&register');
@@ -98,8 +99,6 @@ export default {
         this.$store.state.userInfo.profile = user.profile;
         this.$store.state.userInfo.avatar = user.avatar;
         this.avatarUrl=tempthis.$store.state.base+user.avatar
-        console.log(this.$store.state.userInfo.avatar);
-        console.log(this.avatarUrl)
       }).catch(err => {
         console.log(err)
       })
@@ -167,8 +166,7 @@ export default {
   color: #fff;
   text-decoration: none; /*字体增加装饰：去除下划线*/
   background: linear-gradient(
-      90deg,#03a9f4, #f441a5, #ffeb3b,
-      #03a9f4, #f441a5, #ffeb3b, #03a9f4); /*渐变背景*/
+      20deg,#03a9f4,  #f441a5,#03a9f4, #f441a5); /*渐变背景*/
   border-radius: 10px; /*边框圆角*/
   background-size: 400%; /*背景大小*/
   z-index: 1; /*层叠定位*/
@@ -194,8 +192,7 @@ export default {
   position: absolute; /*绝对定位*/
   z-index: -1;
   background: linear-gradient(
-      90deg,#03a9f4, #f441a5, #ffeb3b, #03a9f4,
-      #f441a5, #ffeb3b, #03a9f4);
+      20deg,#03a9f4, #f441a5,#03a9f4, #f441a5);
   border-radius: 40px;
   background-size: 400%;
   filter: blur(20px); /*过渡：模糊*/
@@ -235,22 +232,21 @@ export default {
   transition: all 0.5s ease;
 }
 
-.header .main .nav-links .nav-item .user-box .user-avatar.selected{
+.header .main .nav-links .nav-item:hover .user-box .user-avatar{
   position: relative;
   border-radius: 50%;
   margin-top: 10px;
   margin-left: -60px;
-  z-index: 2;
+  z-index: 100;
   border: #cdd1d3 1px solid;
   background-color: #cdd1d3;
   width: 80px;
   height: 80px;
-
 }
 
-.header .main .nav-links .nav-item.selected .sub-menu{
+.header .main .nav-links .nav-item:hover .sub-menu{
   opacity: 1;
-  display: block;
+  pointer-events: auto;
 }
 
 .header .main .nav-links .nav-item .sub-menu{
@@ -261,13 +257,14 @@ export default {
   color: black;
   background-color: #fff;
   border-radius: 10px;
-  z-index: 1;
+  z-index: 99;
   padding: 40px 10px 10px 10px;
   border: #eeeeee 2px solid;
   box-shadow: #eeeeee 3px 3px 3px;
   transition: all 0.8s ease;
-  transition-delay: 0.2s;
+  /*transition-delay: 0.2s;*/
   opacity: 0;
+  pointer-events: none;
 }
 
 .header .main .nav-links .nav-item .sub-menu .user-name{
@@ -304,7 +301,12 @@ export default {
 }
 
 .header .main .nav-links .nav-item .sub-menu .bottom-bor{
+  height: 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 0;
   border-bottom: #dddddd 1px solid;
+  pointer-events: none;
 }
 
 .header .main .nav-links .nav-item .sub-menu .log-out:hover{
