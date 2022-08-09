@@ -134,6 +134,48 @@ const NewProduct = {
   },
 }
 
+const Attention = {
+  render() {
+    return <div class="match-parent" class="rect"/>
+  },
+}
+
+const Live = {
+  render() {
+    return <div class="match-parent" class="rect"/>
+  },
+}
+
+const Friend = {
+  render() {
+    return <div class="match-parent" class="rect"/>
+  },
+}
+
+const Commend = {
+  render() {
+    return <div class="match-parent" class="rect"/>
+  },
+}
+
+const Safety = {
+  render() {
+    return <div class="match-parent" class="rect"/>
+  },
+}
+
+const Hot = {
+  render() {
+    return <div class="match-parent" class="rect"/>
+  },
+}
+
+const Game = {
+  render() {
+    return <div class="match-parent" class="rect"/>
+  },
+}
+
 export default {
   img: Img,
   input: Input,
@@ -147,5 +189,5 @@ export default {
   user: User,
   shopping: Shopping,
   home: Home,
-  newProduct: NewProduct,
+  attention: Attention,
 }
