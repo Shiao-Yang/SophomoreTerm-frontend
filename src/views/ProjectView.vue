@@ -518,6 +518,7 @@ export default {
   border-radius: 10px;
   box-shadow: #666666 1px 2px 3px;
   cursor: auto;
+  display: none;
   opacity: 0;
   transition: 0s;
 }
@@ -555,6 +556,7 @@ export default {
 }
 
 .content-bar .nav-list .nav-item .sub-menu .sub-op{
+  border-radius: 10%;
   cursor: pointer;
 }
 

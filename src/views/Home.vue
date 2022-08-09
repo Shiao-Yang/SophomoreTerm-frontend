@@ -1,24 +1,39 @@
 <template>
-  <div>
+  <div class="home">
     <Header/>
-  <h1>墨书，让小组合作更简单</h1>
-  <div class="container">
-    <div class="panel active" style="background-image: url('https://images.unsplash.com/photo-1558979158-65a1eaa08691?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80')">
-      <h3>功能介绍1</h3>
-    </div>
-    <div class="panel" style="background-image: url('https://images.unsplash.com/photo-1572276596237-5db2c3e16c5d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80')">
-      <h3>功能介绍2</h3>
-    </div>
-    <div class="panel" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1353&q=80')">
-      <h3>功能介绍3</h3>
-    </div>
-    <div class="panel" style="background-image: url('https://images.unsplash.com/photo-1551009175-8a68da93d5f9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80')">
-      <h3>功能介绍4</h3>
-    </div>
-    <div class="panel" style="background-image: url('https://images.unsplash.com/photo-1549880338-65ddcdfd017b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80')">
-      <h3>功能介绍5</h3>
-    </div>
-  </div>
+    <section>
+      <div class="box">
+        <h2 data-jarallax-element="0 -200">在线协作，高效编辑</h2>
+        <div class="container">
+          <div class="imgBx jarallax">
+            <img class="jarallax-img" src="../assets/adminBgd.jpg">
+          </div>
+          <div class="content" data-jarallax-element="-200 0">
+            <p>
+              - 支持在线文档编辑<br/>
+              - 支持文档团队多人编辑管理
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="box">
+        <h2 data-jarallax-element="0 200">团队管理，协作无间</h2>
+        <div class="container">
+          <div class="imgBx jarallax">
+            <img class="jarallax-img" src="../assets/adminBgd.jpg">
+          </div>
+          <div class="content" data-jarallax-element="-200 0">
+            <p>
+              - 支持团队管理，明确角色分工 <br/>
+              - 支持团队协作，共同开发
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -26,11 +41,16 @@
 import Header from "@/components/Header";
 export default {
   name: "Home",
-  components: {Header},
+  components: {
+    Header,
+  },
   data(){
     return{
       panels:null
     }
+  },
+  created() {
+
   },
   mounted(){
     this.initializePictures()
@@ -54,75 +74,115 @@ export default {
       })
     }
   },
+
 }
+
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
-
+  font-family: 'poppins', sans-serif;
 
 }
-h1 {
-  text-align: center;
-}
-body {
-  /*font-family: 'Muli', sans-serif;*/
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+
+.home {
+  background: #fff;
+  padding-bottom: 50px;
   overflow: hidden;
-  margin: 0;
 }
 
-.container {
-  display: flex;
-  width: 98vw;
-  margin-top: 3vh;
+.home:before {
+  content: 'MoBook';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16em;
+  font-weight: 700;
+  color: transparent;
+  -webkit-text-stroke: 1px #555;
 }
 
-.panel {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 80vh;
-  border-radius: 50px;
-  color: #fff;
-  cursor: pointer;
-  flex: 0.5;
-  margin: 10px;
+section {
   position: relative;
-  -webkit-transition: all 700ms ease-in;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-.panel h3 {
-  font-size: 24px;
+section h2 {
+  margin-left: 200px;
+  font-size: 4em;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+section .container {
+  position: relative;
+  width: 1000px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+section:nth-child(even) .container {
+  flex-direction: row-reverse;
+}
+
+section .container .imgBx {
+  position: relative;
+  width: 800px;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 25px 35px rgba(0, 0, 0, 0.1);
+}
+
+section .container .imgBx img {
   position: absolute;
-  bottom: 20px;
-  left: 20px;
-  margin: 0;
-  opacity: 0;
-  background: transparent;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.panel.active {
-  flex: 5;
+section .container .content {
+  position: absolute;
+  right: 0;
+  margin-top: 200px;
+  margin-bottom: 40px;
+  padding: 40px;
+  background: #333;
+  z-index: 1;
+  max-width: 400px;
+  color: #fff;
+  box-shadow: 0 25px 35px rgba(0, 0, 0, 0.1);
+  border-bottom: 6px solid #4ac7ff;
 }
 
-.panel.active h3 {
-  opacity: 1;
-  transition: opacity 0.3s ease-in 0.4s;
+section:nth-child(even) .container .content {
+  left: 0;
 }
 
-@media (max-width: 480px) {
-  .container {
-    width: 100vw;
-  }
-
-  .panel:nth-of-type(4),
-  .panel:nth-of-type(5) {
-    display: none;
-  }
+.jarallax {
+  position: relative;
+  z-index: 0;
+}
+.jarallax > .jarallax-img {
+  position: absolute;
+  object-fit: cover;
+  font-family: 'object-fit: cover;';
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 }
 </style>
