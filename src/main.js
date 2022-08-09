@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'; // 2.2引入样式
 import axios from 'axios'
 import $ from 'jquery'
 import VueAxios from 'vue-axios'
+import {saveAs} from 'file-saver'
 import {next} from "lodash/seq";
 
 Vue.prototype.$axios = axios

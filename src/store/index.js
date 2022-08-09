@@ -28,6 +28,7 @@ export default new Vuex.Store({
     pic_id: 1,
     pic_name: '',
     doc_id: 0,
+    design_url: "",
     doc: '',
     docs: '',
   },

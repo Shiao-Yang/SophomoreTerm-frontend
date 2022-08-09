@@ -44,7 +44,7 @@
       </div>
       <div class="main-container" v-if="isCreate">
         <template>
-          <CreateDesignWindow @ok="createProject" @cancel="close"></CreateDesignWindow>
+          <CreateDesignWindow @ok="createDesign" @cancel="close"></CreateDesignWindow>
         </template>
       </div>
       <div class="main-container" v-if="isSet !== -1">
@@ -202,12 +202,14 @@ export default {
       })
     },
 
-    createProject(name, width, height) {
+    createDesign(uid, name, width, height, model_name) {
       let params = {
-        picid: this.$store.state.pid /*this.$store.state.pid*/,
+        pid: this.$store.state.pid /*this.$store.state.pid*/,
+        uid: uid,
         name: name,
         width: width,
         height: height,
+        model_name: model_name,
       }
       console.log('createDesign')
       console.log(params);
@@ -223,7 +225,7 @@ export default {
             type: 'success',
             showClose: true,
           })
-          this.projects.push({picid: res.data.picid, name: params.name, data: []});
+          this.projects.push({picid: res.data.picid, name: params.name, data: res.data.data});
           this.isCreate = false;
           //location.reload();
         } else {

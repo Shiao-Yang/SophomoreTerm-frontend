@@ -8,6 +8,7 @@ import {
   EVENT_CONTENT_CHANGETOIMAGE,
   EVENT_APPLICATION_SAVE,
   EVENT_APPLICATION_ESC,
+  EVENT_APPLICATION_EXPORT,
 } from './event-enums'
 export default {
   methods: {},
@@ -74,6 +75,13 @@ export default {
               onClick={() => this.eventbus.$emit(EVENT_APPLICATION_ESC)}
           >
             退出
+          </button>
+          <button
+              title="Export Data"
+              data-action="export"
+              onClick={() => this.eventbus.$emit(EVENT_APPLICATION_EXPORT)}
+          >
+            导出为json文件
           </button>
         </div>
       </div>

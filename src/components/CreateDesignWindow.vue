@@ -13,8 +13,8 @@
               </li>
               <li style="position: relative; left: -15px">
                 <span>画布类型</span>
-                <el-radio style="margin-top: 5px" v-model="radio" label="1">从模板创建</el-radio>
-                <el-radio style="margin-top: 5px" v-model="radio" label="2">新建空白画布</el-radio>
+                <el-radio style="margin-top: 5px" @change="changeType1" v-model="radio" label="1">从模板创建</el-radio>
+                <el-radio style="margin-top: 5px" @change="changeType1" v-model="radio" label="2">新建空白画布</el-radio>
               </li>
               <!--
               <li>
@@ -56,9 +56,9 @@
                 <span>自定义</span>
               </div>
               <div class="text" style="margin-left: 15px">
-                <input placeholder="宽度" :disabled="this.radio === 2 && this.type ===3" id="w2"></input>
+                <input placeholder="宽度" :disabled="this.radio === 2 && this.type ===3" id="w2" @change="modify"></input>
                 <span>×</span>
-                <input placeholder="高度" :disabled="this.radio === 2 && this.type ===3" id="h2"></input>
+                <input placeholder="高度" :disabled="this.radio === 2 && this.type ===3" id="h2" @change="modify"></input>
               </div>
             </div>
           </div>
@@ -68,7 +68,7 @@
                 <i class='bx bx-desktop'></i>
               </div>
               <div class="text">
-                desktop
+                desktop1
               </div>
               <div class="text">
                 1000×800
@@ -79,7 +79,7 @@
                 <i class='bx bx-mobile-alt'></i>
               </div>
               <div class="text">
-                phone
+                phone2
               </div>
               <div class="text">
                 400×600
@@ -87,15 +87,24 @@
             </div>
             <div class="desktop" :class="{'active' : (this.type === 3)}" @click="changeType3">
               <div class="image">
-                <i class='bx bx-plus'></i>
+                <i class='bx bx-desktop'></i>
               </div>
               <div class="text">
-                <span>自定义</span>
+                desktop3
               </div>
-              <div class="text" style="margin-left: 15px">
-                <input placeholder="宽度" :disabled="this.radio === 2 && this.type ===3" id="w1"></input>
-                <span>×</span>
-                <input placeholder="高度" :disabled="this.radio === 2 && this.type ===3" id="h1"></input>
+              <div class="text">
+                1000×800
+              </div>
+            </div>
+            <div class="desktop" :class="{'active' : (this.type === 4)}" @click="changeType4">
+              <div class="image">
+                <i class='bx bx-desktop'></i>
+              </div>
+              <div class="text">
+                desktop4
+              </div>
+              <div class="text">
+                1000×800
               </div>
             </div>
           </div>
@@ -119,8 +128,9 @@ export default {
       input: '',
       width: 1000,
       height: 600,
-      radio: '2',
+      radio: '1',
       type: 1,
+      model: 1,
     }
   },
 
@@ -129,6 +139,16 @@ export default {
   },
 
   methods : {
+    modify() {
+      if(this.radio === '2') {
+        let w2 = document.getElementById('w2');
+        let h2 = document.getElementById('h2');
+        this.width = w2.value;
+        this.height = h2.value;
+        console.log('modify',this.width, this.height);
+      }
+    },
+
     reset() {
       console.log(this.width, this.height);
       let w2 = document.getElementById('w2');
@@ -143,36 +163,71 @@ export default {
       this.type = 1;
       this.width = 1000;
       this.height = 600;
-      this.reset();
+      if(this.radio === '2') {
+        this.width = 1000;
+        this.height = 600;
+        this.reset();
+      }
     },
     changeType2() {
       if(this.type === 2) return;
       this.type = 2;
-      this.width = 400;
-      this.height = 600;
-      this.reset();
+      if(this.radio === '1') {
+        this.width = 400;
+        this.height = 600;
+      }
+      else if(this.radio === "2") {
+        this.width = 400;
+        this.height = 600;
+        this.reset();
+      }
     },
     changeType3() {
       if(this.type === 3) return;
       this.type = 3;
-      this.width = "";
-      this.height = "";
-      this.reset();
+      if(this.radio === '1') {
+        this.width = 1000;
+        this.height = 600;
+      }
+      else if(this.radio === "2")
+        this.reset();
+    },
+    changeType4() {
+      if(this.type === 4 || this.radio === '2') return;
+      this.type = 4;
+      if(this.radio === '1') {
+        this.width = 400;
+        this.height = 600;
+      }
+      else if(this.radio === "2")
+        this.reset();
     },
     output() {
       console.log(this.radio,this.type,this.width,this.height);
-      let w2 = document.getElementById('w2').value;
-      let h2 = document.getElementById('h2').value;
-      console.log(w2,h2);
+      if(this.radio === '2') {
+        let w2 = document.getElementById('w2').value;
+        let h2 = document.getElementById('h2').value;
+        console.log(w2,h2);
+      }
     },
     sure() {
+      if(this.input === '') {
+        this.$message ({
+          message: '请填写设计图名称',
+          type: "warning",
+          showClose: true,
+        })
+        return;
+      }
       //console.log(this.radio, this.width, this.height);
       //console.log(typeof this.radio)
+      /*
       if(this.radio === '1') {
         //console.log(1)
         this.width = 1000;
         this.height = 600;
       }
+       */
       //console.log(4);
       if(this.radio === '2') {
         //console.log(2)
@@ -193,17 +248,17 @@ export default {
           }
         }
       }
-      if(this.input === '') {
-        this.$message ({
-          message: '请填写设计图名称',
-          type: "warning",
-          showClose: true,
-        })
-        return;
+
+      if(this.radio === '1') {
+        this.model = 'prototype_model_' + this.type + '.json';
       }
 
-      //console.log(this.radio, this.width, this.height);
-      this.$emit('ok', this.input, this.width, this.height);
+      if(this.radio === '2') {
+        this.model = 'default_prototype.json';
+      }
+
+      console.log(this.radio, this.width, this.height, this.model);
+      this.$emit('ok', this.$store.state.userInfo.uid, this.input, this.width, this.height, this.model);
     },
     cancel() {
       this.$emit('cancel');
