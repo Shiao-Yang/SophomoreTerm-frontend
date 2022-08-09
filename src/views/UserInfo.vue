@@ -6,17 +6,11 @@
         <div class="form-box-left">
           <div class="top">
 
-            <!--          <img src="../assets/images/register.png">-->
-
-            <!--部署前把下边两行注释改成正文,并注释掉上边一行代码-->
-
-        <img src="../assets/images/register.png" v-if="this.$store.state.userInfo.avatar==='src/assets/images/login'" alt="">
-          <img :src="avatarUrl" v-else alt="">
+          <img :src="avatarUrl" alt="" @click="changeAvatarVissible = true">
 
             <p> {{this.$store.state.userInfo.username}} </p>
           </div>
-          <input type="file" ref="pic">
-          <el-button @click="toChangeAvatar">上传头像</el-button>
+
           <div class="down1">
             <router-link to="/userInfo">个人资料</router-link>
           </div>
@@ -84,6 +78,20 @@
 
       </div>
     </div>
+    <el-dialog
+        title="上传头像"
+        :visible.sync="changeAvatarVissible"
+        width="30%"
+        class = "changeAvatar"
+    >
+      <span>
+        <input type="file" ref="pic">
+      </span>
+      <span slot="footer" class="dialog-footer">
+                  <el-button @click="changeAvatarVissible = false">取 消 上 传</el-button>
+                  <el-button type="primary" @click="toChangeAvatar">确 定 上 传</el-button>
+                </span>
+    </el-dialog>
   </div>
 
 </template>
@@ -98,9 +106,9 @@ export default {
   components: {Header},
   data() {
     return {
-      avatarUrl:"http://43.138.26.134/api"+this.$store.state.userInfo.avatar,
-      avatarArray:[],
-      theUid:0
+      avatarUrl:this.$store.state.base+this.$store.state.userInfo.avatar,
+      theUid:0,
+      changeAvatarVissible:false
     }
   },
 
@@ -110,8 +118,11 @@ export default {
     }
     this.getInfo(sessionStorage.getItem('uid'));
   },
+  mounted() {
+  },
   methods: {
     toChangeAvatar(){
+      this.changeAvatarVissible = false;
       const tempthis = this;
       let fileToUpload = this.$refs.pic.files[0];
       let param = new FormData();  //创建表单对象
@@ -122,8 +133,10 @@ export default {
           {headers:{'Content-Type':'multipart/form-data'}})
           .then(function (Response) {
             console.log(Response);
-            //const uuiidd = tempthis.$store.state.userInfo.uid;
-            //console.log(uuiidd)
+            if(Response.data.errno===0)
+            {
+              tempthis.$message.success("头像上传成功。")
+            }
             tempthis.getInfo(tempthis.$store.state.userInfo.uid);
           })
           .catch(function (error) {
@@ -147,15 +160,10 @@ export default {
         this.$store.state.userInfo.name = user.name;
         this.$store.state.userInfo.email = user.email;
         this.$store.state.userInfo.profile = user.profile;
-        if(user.avatar!=='111')
-        {
-          tempthis.avatarArray=user.avatar.split('/');
-          this.$store.state.userInfo.avatar = user.avatar;
-        }
-        else{
-          tempthis.avatarUrl = '111'
-        }
-        console.log(user);
+        this.$store.state.userInfo.avatar = user.avatar;
+        this.avatarUrl=tempthis.$store.state.base+user.avatar
+        console.log(this.$store.state.userInfo.avatar);
+        console.log(this.avatarUrl)
       }).catch(err => {
         console.log(err)
       })
@@ -496,5 +504,7 @@ input:focus::placeholder{
   color: #feffff;
   transition: background-color 0.5s ease;
 }
-
+.changeAvatar{
+  z-index:3;
+}
 </style>

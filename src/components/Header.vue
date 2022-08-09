@@ -14,7 +14,7 @@
           </li>
           <li class="nav-item" :class="{'selected':isSelected}" v-if="this.$store.state.isLogin === true">
             <div class="user-box">
-              <img class="user-avatar" :title="this.$store.state.userInfo.username" :class="{'selected': isSelected}" src="../assets/images/register.png" @click="isSelected=!isSelected">
+              <img class="user-avatar" :title="this.$store.state.userInfo.username" :class="{'selected': isSelected}" :src="avatarUrl" @click="isSelected=!isSelected">
             </div>
             <ul class="sub-menu" v-show="isSelected">
               <span class="user-name">{{this.$store.state.userInfo.username}}</span>
@@ -42,14 +42,22 @@
 </template>
 
 <script>
+import qs from "qs";
+
 export default {
   name: "Header",
   data(){
     return {
       isSelected: false,
+      avatarUrl:this.$store.state.base+this.$store.state.userInfo.avatar,
     }
   },
-
+  created() {
+    if(this.$store.state.isLogin === false){
+      this.$router.push('/');
+    }
+    this.getInfo(sessionStorage.getItem('uid'));
+  },
   methods:{
     toVisitHome:function (){
       this.$router.push('/');
@@ -70,6 +78,31 @@ export default {
     toExit:function (){
       this.$store.state.isLogin = false;
       this.$router.push('/');
+    },
+    getInfo(uid) {
+      const tempthis = this;
+      let user;
+      let params = {
+        uid: uid,
+      }
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base+"space/get_info/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log(res.data[0]);
+        user = res.data[0];
+        this.$store.state.userInfo.username = user.username;
+        this.$store.state.userInfo.name = user.name;
+        this.$store.state.userInfo.email = user.email;
+        this.$store.state.userInfo.profile = user.profile;
+        this.$store.state.userInfo.avatar = user.avatar;
+        this.avatarUrl=tempthis.$store.state.base+user.avatar
+        console.log(this.$store.state.userInfo.avatar);
+        console.log(this.avatarUrl)
+      }).catch(err => {
+        console.log(err)
+      })
     },
   }
 }

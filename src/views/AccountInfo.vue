@@ -6,13 +6,11 @@
       <div class="container">
         <div class="form-box-left">
           <div class="top">
-            <!--          <img src="../assets/images/register.png" alt="加载失败" v-if="this.$store.state.userInfo.avatar==='111'">-->
-            <!--          <img :src=" require('../../../moshu-backend/static/avatars/'+this.$store.state.userInfo.avatar)" alt="加载失败" v-else>-->
-            <img src="../assets/images/register.png">
+
+            <img :src="avatarUrl" alt="">
             <p> {{this.$store.state.userInfo.username}} </p>
           </div>
-          <!--        <input type="file" ref="pic" class="inputText">-->
-          <!--        <el-button @click="toChangeAvatar">上传头像</el-button>-->
+
           <div class="down">
             <router-link to="/userInfo">个人资料</router-link>
           </div>
@@ -83,7 +81,7 @@ export default {
   components: {Header},
   data() {
     return {
-      avatarUrl:'111',
+      avatarUrl:this.$store.state.base+this.$store.state.userInfo.avatar,
       tabPosition: 'left'
     }
   },
@@ -185,16 +183,10 @@ export default {
         this.$store.state.userInfo.name = user.name;
         this.$store.state.userInfo.email = user.email;
         this.$store.state.userInfo.profile = user.profile;
-        if(user.avatar!=='111')
-        {
-          tempthis.avatarArray=user.avatar.split('/')
-          this.$store.state.userInfo.avatar = tempthis.avatarArray[2];
-          tempthis.avatarUrl = this.$store.state.userInfo.avatar;
-        }
-        else{
-          tempthis.avatarUrl = '111'
-        }
-        console.log(user);
+        this.$store.state.userInfo.avatar = user.avatar;
+        this.avatarUrl=tempthis.$store.state.base+user.avatar
+        console.log(this.$store.state.userInfo.avatar);
+        console.log(this.avatarUrl)
       }).catch(err => {
         console.log(err)
       })
