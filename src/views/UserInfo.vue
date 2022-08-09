@@ -6,7 +6,7 @@
         <div class="form-box-left">
           <div class="top">
 
-          <img :src="avatarUrl" alt="" @click="changeAvatarVissible = true">
+          <img :src="avatarUrl" id="user-avatar"alt="" @click="changeAvatarVissible = true" title="更换头像">
 
             <p> {{this.$store.state.userInfo.username}} </p>
           </div>
@@ -302,6 +302,10 @@ export default {
   top: 10px;
   border-radius:100%;
   overflow:hidden;
+}
+
+.top #user-avatar{
+  cursor: pointer;
 }
 
 .top p{

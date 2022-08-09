@@ -58,15 +58,15 @@
 
       <section>
         <div class="box">
-          <h2 data-jarallax-element="0 -200">在线协作，高效编辑</h2>
+          <h2 data-jarallax-element="0 -200">多项功能，一站集成</h2>
           <div class="container">
             <div class="imgBx jarallax">
               <img class="jarallax-img" src="../assets/adminBgd.jpg">
             </div>
             <div class="content" data-jarallax-element="-200 0">
               <p>
-                - 支持在线文档编辑<br/>
-                - 支持文档团队多人编辑管理
+                - 支持在线文档、UML图编辑、原型设计等多项功能<br/>
+                - 在线一站式管理项目文件
               </p>
             </div>
           </div>
@@ -215,7 +215,7 @@ section .container .content {
   color: #fff;
   box-shadow: 0 25px 35px rgba(0, 0, 0, 0.1);
   border-bottom: 6px solid #4ac7ff;
-  border-radius: 20px;
+  border-radius: 10px;
 }
 
 section:nth-child(even) .container .content {

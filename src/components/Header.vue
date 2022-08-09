@@ -23,10 +23,12 @@
                 <span>个人信息</span>
                 <i class='bx bx-chevron-right right'></i>
               </li>
-              <li class="sub-item bottom-bor" @click="toVisitTeamList">
+              <li class="sub-item" @click="toVisitTeamList">
                 <i class='bx bx-group'></i>
                 <span>我的团队</span>
                 <i class='bx bx-chevron-right right'></i>
+              </li>
+              <li class="bottom-bor">
               </li>
               <li class="sub-item log-out" @click="toExit">
                 <i class='bx bx-log-out-circle'></i>
@@ -303,7 +305,12 @@ export default {
 }
 
 .header .main .nav-links .nav-item .sub-menu .bottom-bor{
+  height: 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 0;
   border-bottom: #dddddd 1px solid;
+  pointer-events: none;
 }
 
 .header .main .nav-links .nav-item .sub-menu .log-out:hover{
