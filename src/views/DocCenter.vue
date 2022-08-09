@@ -19,14 +19,15 @@
             <img src="../assets/plus.png" class="plus" @click.stop.prevent="toStartCreateDoc(item.id,index)">
           </template>
           <div v-for="(item2,index2) in projectDocs[index]" class="doc" :key="index2">
-            <p style="width: 80%;display: inline-block;" class="fileName" @click="toEditThisDoc(item2)">文件名:{{item2.name}}</p>
-            <span style="position: absolute;" class="delete" @click="dele(item2.id,item2.name,item.id,index,index2)">删除</span>
+            <p style="width: 65%;display: inline-block;" class="fileName" @click="toEditThisDoc(item2)">文件名:{{item2.name}}</p>
+            <span style="position: relative;margin-right: 5px" @click="Rename(item2.id,item2.name,item.id,index,index2)">改名</span>
+            <span style="position: relative;" @click="dele(item2.id,item2.name,item.id,index,index2)">删除</span>
           </div>
         </el-collapse-item>
       </el-collapse>
     </div>
-    <input type="text" placeholder="为文件命名" id="htmlTitle" v-if="this.$store.state.doc_id===0">
-    <div id="title" v-else>{{theTitle}}</div>
+    <input type="text" placeholder="为文件命名" id="htmlTitle" v-if="this.$store.state.doc_id===0" @keyup.enter="toSaveDoc" v-model="input">
+    <div id="title" v-else>文件名：{{theTitle}}</div>
     <el-button @click="toSaveDoc" id="save" size="small" v-if="this.$store.state.doc_id===0">保存</el-button>
     <el-button @click="toSaveDoc" id="modify" size="small" v-else>修改保存</el-button>
 
@@ -40,6 +41,18 @@
       <span slot="footer" class="dialog-footer">
           <el-button @click="Del = false" class="cancel">取 消</el-button>
           <el-button type="primary" @click="toDeleteTheDoc(id)" class="confirm">确 定</el-button>
+        </span>
+    </el-dialog>
+
+    <el-dialog
+        title="提示"
+        :visible.sync="rename"
+        :close-on-click-modal ="false"
+        width="30%">
+      <input placeholder="请输入修改标题" style="width: 70%;height: 15%;top: 38%;outline: none;position: absolute;left: 15%" v-model="titleInput"></input>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="rename = false" class="cancel">取 消</el-button>
+          <el-button type="primary" @click="rename_document" class="confirm">确 定</el-button>
         </span>
     </el-dialog>
 
@@ -89,6 +102,7 @@ export default Vue.extend({
       index2: 0,
       projectDocs: [],
       Del: false,
+      rename: false,
       name: '',
       html: '',
       toolbarConfig: { },
@@ -96,7 +110,8 @@ export default Vue.extend({
       mode: 'default', // or 'simple'
       docs: [],
       projects: [],
-      theTitle:"未命名"
+      theTitle:"未命名",
+      titleInput: ''
     }
   },
   methods: {
@@ -143,6 +158,15 @@ export default Vue.extend({
       this.index = index
       this.index2 = index2
     },
+    Rename(id,name,pid,index,index2) {
+      this.titleInput = ''
+      this.rename = true
+      this.id = id
+      this.name = name
+      this.pid = pid
+      this.index = index
+      this.index2 = index2
+    },
     onCreated(editor) {
       this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
     },
@@ -152,6 +176,44 @@ export default Vue.extend({
       this.html = ''
       this.pid = id
       this.index = index
+    },
+    rename_document() {
+      this.rename = false
+      let params = {
+        id: this.id,
+        name: this.titleInput
+      }
+      this.axios({
+        method: "post",
+        url: this.$store.state.base+'project_manage/rename_document/',
+        data: qs.stringify(params)
+      })
+          .then(res => {
+            console.log(res)
+            switch (res.data.errno) {
+              case 1001:
+                this.$message.warning(res.data.msg)
+                break
+              case 1002:
+                this.$message.warning(res.data.msg)
+                this.members=[]
+                break
+              case 1003:
+                this.$message.warning(res.data.msg)
+                break
+              case 1004:
+                this.$message.warning(res.data.msg)
+                break
+              case 1005:
+                this.$message.warning(res.data.msg)
+                break
+              case 0:
+                this.$message.success('修改成功！')
+                this.getProjects({gid: this.$store.state.gid})
+                this.$forceUpdate()
+                break
+            }
+          })
     },
     toDeleteTheDoc(id){
       this.Del = false
@@ -344,11 +406,11 @@ export default Vue.extend({
 #title {
   position: absolute;
   padding: 2px;
-  right: 42%;
-  top: 1%;
+  right: 1%;
+  top: 10%;
   font-size: 16px;
-  min-width: 7%;
-  max-width: 7%;
+  min-width: 8%;
+  max-width: 8%;
   border-radius: 5px;
   background-color: white;
   text-align: center;
