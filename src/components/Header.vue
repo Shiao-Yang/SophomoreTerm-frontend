@@ -14,9 +14,9 @@
           </li>
           <li class="nav-item" :class="{'selected':isSelected}" v-if="this.$store.state.isLogin === true">
             <div class="user-box">
-              <img class="user-avatar" :title="this.$store.state.userInfo.username" :class="{'selected': isSelected}" :src="avatarUrl" @click="isSelected=!isSelected">
+              <img class="user-avatar" id="user-avatar" :title="this.$store.state.userInfo.username" :class="{'selected': isSelected}" :src="avatarUrl" @click="toVisitSelf">
             </div>
-            <ul class="sub-menu" v-show="isSelected">
+            <ul class="sub-menu">
               <span class="user-name">{{this.$store.state.userInfo.username}}</span>
               <li class="sub-item" @click="toVisitSelf">
                 <i class='bx bx-user'></i>
@@ -61,7 +61,6 @@ export default {
   methods:{
     toVisitHome:function (){
       this.$router.push('/');
-      location.reload();
     },
     toLogin:function (){
       this.$router.push('/login&register');
@@ -235,22 +234,21 @@ export default {
   transition: all 0.5s ease;
 }
 
-.header .main .nav-links .nav-item .user-box .user-avatar.selected{
+.header .main .nav-links .nav-item:hover .user-box .user-avatar{
   position: relative;
   border-radius: 50%;
   margin-top: 10px;
   margin-left: -60px;
-  z-index: 2;
+  z-index: 100;
   border: #cdd1d3 1px solid;
   background-color: #cdd1d3;
   width: 80px;
   height: 80px;
-
 }
 
-.header .main .nav-links .nav-item.selected .sub-menu{
+.header .main .nav-links .nav-item:hover .sub-menu{
   opacity: 1;
-  display: block;
+  pointer-events: auto;
 }
 
 .header .main .nav-links .nav-item .sub-menu{
@@ -261,13 +259,14 @@ export default {
   color: black;
   background-color: #fff;
   border-radius: 10px;
-  z-index: 1;
+  z-index: 99;
   padding: 40px 10px 10px 10px;
   border: #eeeeee 2px solid;
   box-shadow: #eeeeee 3px 3px 3px;
   transition: all 0.8s ease;
-  transition-delay: 0.2s;
+  /*transition-delay: 0.2s;*/
   opacity: 0;
+  pointer-events: none;
 }
 
 .header .main .nav-links .nav-item .sub-menu .user-name{
