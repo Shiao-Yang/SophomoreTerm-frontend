@@ -16,7 +16,7 @@
               </li>
               <li>
                 <div class="add-design">
-                  <i class='bx bx-plus-circle' @click="create=true;titleInput=''" title="新建文档"></i>
+                  <i class='bx bx-plus-circle' @click="create=true;titleInput='';radio='1';radio2='1'" title="新建文档"></i>
                 </div>
               </li>
             </ul>
@@ -69,11 +69,35 @@
           title="提示"
           :visible.sync="create"
           :close-on-click-modal ="false"
-          width="30%">
-        <input placeholder="请输入标题" style="width: 70%;height: 15%;top: 38%;outline: none;position: absolute;left: 15%" v-model="titleInput"></input>
+          width="30%"
+          height="50%">
+        <div>
+          <input placeholder="请输入标题" style="width: 70%;height: 30px;outline: none;position:relative;left: 4%" v-model="titleInput"></input>
+        </div>
+        <div style="margin: 20px auto">
+          <template>
+            <el-radio v-model="radio" label="1" style="margin-left: 4%">自定义</el-radio>
+            <el-radio v-model="radio" label="2">选择模板</el-radio>
+          </template>
+        </div>
+        <div style="margin: 20px auto">
+          <template v-if="radio==='2'">
+            <el-radio v-model="radio2" label="1" style="margin-left: 4%">软件开发计划书模板</el-radio>
+            <el-radio v-model="radio2" label="2">需求规格说明书模板</el-radio>
+            <el-radio v-model="radio2" label="3" style="margin-left: 4%;margin-top: 10px">会议纪要模板</el-radio>
+            <el-radio v-model="radio2" label="4" style="margin-top: 10px">项目计划书模板</el-radio>
+          </template>
+          <template v-else>
+            <el-radio disabled v-model="radio2" label="1" style="margin-left: 4%">软件开发计划书模板</el-radio>
+            <el-radio disabled v-model="radio2" label="2">需求规格说明书模板</el-radio>
+            <el-radio disabled v-model="radio2" label="3" style="margin-left: 4%;margin-top: 10px">会议纪要模板</el-radio>
+            <el-radio disabled v-model="radio2" label="4" style="margin-top: 10px">项目计划书模板</el-radio>
+          </template>
+        </div>
+
         <span slot="footer" class="dialog-footer">
           <el-button @click="create = false" class="cancel">取 消</el-button>
-          <el-button type="primary" @click="create_document" class="confirm">创 建</el-button>
+          <el-button type="primary" @click="getHTML" class="confirm">创 建</el-button>
         </span>
       </el-dialog>
     </div>
@@ -98,6 +122,8 @@ export default {
   },
   data(){
     return{
+      radio: '1',
+      radio2: '1',
       isActive: 1,
       isCreate: false,
       projects:[],
@@ -109,17 +135,47 @@ export default {
       doc_id: 0,
       doc_name: '',
       titleInput: '',
-
+      html: '',
     }
   },
   methods: {
+    getHTML() {
+      let url
+      if (this.titleInput==='') {
+        this.$message.warning("请输入标题")
+        return
+      }
+      if (this.radio==='1') {
+        this.html = ''
+        this.create_document()
+      }
+      if (this.radio==='2') {
+        if (this.radio2==='1') {
+          url = this.$store.state.base+"media/documents/document_model_1.html"
+        } else if (this.radio2==='2') {
+          url = this.$store.state.base+"media/documents/document_model_2.html"
+        } else if (this.radio2==='3') {
+          url = this.$store.state.base+"media/documents/document_model_3.html"
+        } else if (this.radio2==='4') {
+          url = this.$store.state.base+"media/documents/document_model_4.html"
+        }
+        this.$axios.get(url)
+            .then( res => {
+              this.html = res.data
+              console.log("res.data:"+res.data)
+              this.create_document()
+            })
+      }
+    },
     create_document() {
       this.create = false
+      console.log("this.html:"+this.html)
       let params = {
         pid: this.$store.state.pid,
         name: this.titleInput,
-        data: ''
+        data: this.html
       }
+      console.log("params.date:"+params.data)
       this.axios({
         method: "post",
         url: this.$store.state.base+'project_manage/create_document/',
