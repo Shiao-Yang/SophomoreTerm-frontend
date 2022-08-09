@@ -50,7 +50,7 @@ export default {
   },
   methods:{
     turnToEditor(){
-      this.$router.push('/editor');
+      this.$router.push('/docList');
     },
     toDesign() {
       this.$router.push('/designList')
