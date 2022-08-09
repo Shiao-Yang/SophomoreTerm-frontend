@@ -16,7 +16,7 @@
               </li>
               <li>
                 <div class="add-design">
-                  <i class='bx bx-plus-circle' @click="" title="新建原型设计图"></i>
+                  <i class='bx bx-plus-circle' @click="create=true;titleInput=''" title="新建文档"></i>
                 </div>
               </li>
             </ul>
@@ -64,6 +64,18 @@
           <el-button type="primary" @click="rename_document" class="confirm">确 定</el-button>
         </span>
       </el-dialog>
+
+      <el-dialog
+          title="提示"
+          :visible.sync="create"
+          :close-on-click-modal ="false"
+          width="30%">
+        <input placeholder="请输入标题" style="width: 70%;height: 15%;top: 38%;outline: none;position: absolute;left: 15%" v-model="titleInput"></input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="create = false" class="cancel">取 消</el-button>
+          <el-button type="primary" @click="create_document" class="confirm">创 建</el-button>
+        </span>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -93,6 +105,7 @@ export default {
       isSet: -1,
       rename: false,
       Del: false,
+      create: false,
       doc_id: 0,
       doc_name: '',
       titleInput: '',
@@ -100,6 +113,24 @@ export default {
     }
   },
   methods: {
+    create_document() {
+      this.create = false
+      let params = {
+        pid: this.$store.state.pid,
+        name: this.titleInput,
+        data: ''
+      }
+      this.axios({
+        method: "post",
+        url: this.$store.state.base+'project_manage/create_document/',
+        data: qs.stringify(params)
+      })
+          .then(res => {
+            console.log(res);
+            this.getAllDoc();
+            this.$message.success("新文档已保存。")
+          })
+    },
     Delete(id,name) {
       this.Del = true
       this.doc_id = id
