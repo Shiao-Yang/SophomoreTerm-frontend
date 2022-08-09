@@ -6,7 +6,7 @@
         <div class="form-box-left">
           <div class="top">
 
-          <img :src="avatarUrl" alt="" @click="changeAvatarVissible = true">
+          <img :src="avatarUrl" alt="" @click="changeAvatarVissible = true" class="theAvatar">
 
             <p> {{this.$store.state.userInfo.username}} </p>
           </div>
@@ -17,10 +17,9 @@
           <div class="down">
             <router-link to="/accountInfo">修改密码</router-link>
           </div>
-          <!--        <div class="down">-->
-          <!--&lt;!&ndash;          <router-link to="/addedTeam">已加入团队</router-link>&ndash;&gt;-->
-          <!--          <router-link to="/teamList">团队列表</router-link>-->
-          <!--        </div>-->
+          <div class="down">
+            <router-link to="/messageList">团队邀请</router-link>
+          </div>
 
         </div>
 
@@ -506,5 +505,8 @@ input:focus::placeholder{
 }
 .changeAvatar{
   z-index:3;
+}
+.theAvatar{
+  cursor: pointer;
 }
 </style>
