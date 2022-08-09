@@ -298,7 +298,7 @@ export default {
       this.$axios({
         method: "POST",
         // url: this.$store.state.base + "project_manage/copy/",
-        url: "http://127.0.0.1:8000/api/project_manage/copy/",
+        url: this.$store.state.base+"project_manage/copy/",
         data: formData,
       })
           .then(res=>{
