@@ -21,6 +21,8 @@ import designList from "@/views/DesignList";
 import docCenter from "@/views/DocCenter";
 import docList from "@/views/docList";
 import userSet from "@/views/UserSet";
+import MessageList from "@/views/MessageList"
+
 Vue.use(VueRouter)
 
 
@@ -130,6 +132,11 @@ const routes = [
     path: '/userSet',
     name: 'userSet',
     component: userSet,
+  },
+  {
+    path: '/messageList',
+    name: 'messageList',
+    component: MessageList
   }
 
 ]
