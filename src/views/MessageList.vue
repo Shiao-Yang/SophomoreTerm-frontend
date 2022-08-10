@@ -386,11 +386,12 @@ export default {
 
 .form-box-right {
   position: relative;
-  background-color: #f0f5f5;
+  border: none;
+  background-color: transparent;
   width: 650px;
   height: 430px;
   border-radius: 5px;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  /*box-shadow: 2px 0 10px rgba(0,0,0,0.1);*/
   left: 370px;
   z-index: 2;
   /* 动画过渡 加速后减速 */

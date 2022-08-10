@@ -23,6 +23,7 @@ import docList from "@/views/docList";
 import userSet from "@/views/UserSet";
 import MessageList from "@/views/MessageList"
 import UmlView from "@/views/UmlView";
+import UserView from "@/views/UserView";
 
 import PreView from "@/views/PreView";
 import preView from "@/views/PreView";
@@ -145,15 +146,18 @@ const routes = [
     path: '/UmlView',
     name: 'UmlView',
     component: UmlView,
+  },
+  {
+    path: '/UserView',
+    name: 'UserView',
+    component: UserView,
   }
-
 ]
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-
 })
 
 const VueRouterPush = VueRouter.prototype.push

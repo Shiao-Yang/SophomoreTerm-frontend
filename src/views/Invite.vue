@@ -32,9 +32,12 @@ export default {
   name: "Invite",
   created() {
     window.myData = this;
+    if (!this.$store.state.isLogin) {
+      this.$router.push('/')
+    }
     //if (!this.$store.state.isLogin) {
     //  this.$store.state.warning = true
-    //  this.$router.push('/')
+    //
     //}
   },
   data() {

@@ -12,8 +12,8 @@ import {next} from "lodash/seq";
 import Viewer from 'v-viewer'
 import 'viewerjs/dist/viewer.css'
 
-import htmlToPdf from '../src/common/htmlToPdf';
-Vue.use(htmlToPdf)
+// import htmlToPdf from '../src/common/htmlToPdf';
+// Vue.use(htmlToPdf)
 
 Vue.prototype.$axios = axios
 Vue.use(VueAxios, axios) // 安装插件
