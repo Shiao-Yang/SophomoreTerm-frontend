@@ -34,7 +34,10 @@
               </li>
               <li>
                 <div class="add-design" v-if="this.preView===1" style="margin-left: 10px; font-size: 30px; position:relative; top: 0px">
-                  <i class='bx bx-clipboard' @click="changePreView" title="复制链接"></i>
+                  <button>
+                    <i class='bx bx-clipboard'></i>
+                  </button>
+                  <!--<i class='bx bx-clipboard' @click="changePreView" title="复制链接"></i>-->
                 </div>
               </li>
             </ul>
@@ -620,5 +623,14 @@ export default {
 
 .content-details .projectList .projects .project-item i:hover{
   color: #1b9aee;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+}
+
+button:hover {
+  cursor: pointer;
 }
 </style>
