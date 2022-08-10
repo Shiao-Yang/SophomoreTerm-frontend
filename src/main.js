@@ -11,11 +11,13 @@ import {saveAs} from 'file-saver'
 import {next} from "lodash/seq";
 import Viewer from 'v-viewer'
 import 'viewerjs/dist/viewer.css'
+import clipboard from 'clipboard'
 
 // import htmlToPdf from '../src/common/htmlToPdf';
 // Vue.use(htmlToPdf)
 
 Vue.prototype.$axios = axios
+Vue.prototype.clipboard = clipboard;
 Vue.use(VueAxios, axios) // 安装插件
 Vue.use(ElementUI);
 Vue.use(Viewer)

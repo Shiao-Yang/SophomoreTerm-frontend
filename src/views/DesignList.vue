@@ -34,7 +34,7 @@
               </li>
               <li>
                 <div class="add-design" v-if="this.preView===1" style="margin-left: 10px; font-size: 30px; position:relative; top: 0px">
-                  <button>
+                  <button @click="copyJsonToClipboard(url)">
                     <i class='bx bx-clipboard'></i>
                   </button>
                   <!--<i class='bx bx-clipboard' @click="changePreView" title="复制链接"></i>-->
@@ -81,6 +81,7 @@ import SetDesignWindow from "@/components/SetDesignWindow";
 import qs from "qs";
 import CreateDesignWindow from "@/components/CreateDesignWindow";
 import Header from "@/components/Header";
+//import Clipboard from 'clipboard'
 
 export default {
   name: "ProjectView",
@@ -101,14 +102,42 @@ export default {
       pname: '',
       pid: '',
       url: '',
+      sign: 0,
     }
   },
   methods: {
+    copyJsonToClipboard(json) {
+      console.log(json);
+      const input = document.createElement('input')
+      document.body.appendChild(input)
+      input.setAttribute('value', json)
+      input.setAttribute('readonly', 'readonly')
+      input.select()
+      input.setSelectionRange(0, 9999) // 如果select 没有选择到
+      if (document.execCommand('copy')) {
+        this.$message({
+          type: 'success',
+          message: '报文已复制到剪切板'
+        })
+      }
+      document.body.removeChild(input)
+    },
+
     initIsSet(){
       this.isSet = -1;
       console.log(this.isSet);
     },
 
+    generateURL(){
+      console.log("gen",this.sign, this.preView);
+      if(this.preView === 1) {
+        this.url = "http://localhost:8080/preView?" + "pid=" + this.pid + "&"+"pname=" + this.pname;
+      }
+      else {
+        this.url = "";
+      }
+
+    },
     getPreView(pid) {
       let params = {
         pid: pid,
@@ -139,6 +168,14 @@ export default {
           //   showClose: true,
           // })
         }
+
+        this.sign = 1;
+
+        console.log("sign",this.sign);
+
+        console.log("getPreview",this.preView)
+
+        this.generateURL();
       }).catch(err => {
         console.log(err)
       })
@@ -168,7 +205,7 @@ export default {
               showClose: true,
             })
 
-            this.url = "http://localhost:8080/preView?" + "pid=" + this.pid + "&"+"pname=" + this.pname;
+            this.generateURL();
           }
 
           else {
@@ -198,6 +235,8 @@ export default {
               showClose: true,
             })
           }
+
+          this.generateURL();
         }
       }).catch(err => {
         console.log(err)
@@ -392,17 +431,19 @@ export default {
     this.pid = this.$store.state.pid;
     this.pname = this.$store.state.pname;
     this.getPreView(this.$store.state.pid);
+    //for(let i = 1; this.sign !== 1; i++);
+    this.generateURL();
+
+    console.log("preView",this.preView);
     this.get_Picture(this.$store.state.pid);
+    //this.generateURL();
+    console.log(this.url);
   },
 
   mounted() {
-
-    /*
-    for(let i=0; i<this.projects.length; i++){
-      this.getFounder(i);
-    }
-
-     */
+    //while(this.sign === 0);
+    //this.generateURL();
+    console.log(this.url);
   }
 
 }
