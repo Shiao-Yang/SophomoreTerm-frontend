@@ -56,7 +56,7 @@
         </div>
       </section>
 
-      <section>
+      <section style="padding-bottom: 40px">
         <div class="box">
           <h2 data-jarallax-element="0 -200">多项功能，一站集成</h2>
           <div class="container">

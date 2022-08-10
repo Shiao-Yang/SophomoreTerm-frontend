@@ -13,6 +13,7 @@ export default {
      * @type {HTMLElement}
      */
     getWrapperElement() {
+      // return document.getElementById("myEditor").value;
       return this.$refs.editor
     },
   },
@@ -20,7 +21,7 @@ export default {
   render() {
     return (
       <div class={`vs-editor ${this.parentId ? 'nest-editor' : 'root-editor'}`}>
-        <div class="vs-editor-canvas" ref="editor">
+        <div class="vs-editor-canvas" id="myeditorW" ref="editor">
           {this.value.map((item) => {
             return <CellWrapperVue key={item.id} item={item} />
           })}
