@@ -6,10 +6,10 @@
     </router-link>
 
     <div id="list">
-      <div @click="toStartCreateDoc" id="create"><p style="position:absolute;left: 22%;top: 15%">创建新的文档</p></div>
+      <div @click="create=true;titleInput='';radio='1';radio2='1'" id="create"><p style="position:absolute;left: 22%;top: 15%">创建新的文档</p></div>
       <div id="files">
-        <div class="file" v-for="(item,index) in docs" :class="{'active':(Active === index),'notActive':(Active !== index)}">
-          <p style="font-size: 13px;width: 80%"@click="toEditThisDoc(item);Active=index">&nbsp;&nbsp;文件名:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
+        <div class="file" v-for="(item,index) in docs" :class="{'active':(Active === index),'notActive':(Active !== index)}" :key="index">
+          <p style="font-size: 13px;width: 80%"@click="toEditThisDoc(item,index);Active=index;">&nbsp;&nbsp;文件名:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
           <p style="font-size: 10px;position: absolute;right: 5px" @click="dele(item.id,item.name)">删除</p>
         </div>
       </div>
@@ -28,6 +28,41 @@
         </span>
     </el-dialog>
 
+    <el-dialog
+        title="提示"
+        :visible.sync="create"
+        :close-on-click-modal ="false"
+        width="30%"
+        height="50%">
+      <div>
+        <input placeholder="请输入标题" style="width: 70%;height: 30px;outline: none;position:relative;left: 4%" v-model="titleInput"></input>
+      </div>
+      <div style="margin: 20px auto">
+        <template>
+          <el-radio v-model="radio" label="1" style="margin-left: 4%">自定义</el-radio>
+          <el-radio v-model="radio" label="2">选择模板</el-radio>
+        </template>
+      </div>
+      <div style="margin: 20px auto">
+        <template v-if="radio==='2'">
+          <el-radio v-model="radio2" label="1" style="margin-left: 4%">软件开发计划书模板</el-radio>
+          <el-radio v-model="radio2" label="2">需求规格说明书模板</el-radio>
+          <el-radio v-model="radio2" label="3" style="margin-left: 4%;margin-top: 10px">会议纪要模板</el-radio>
+          <el-radio v-model="radio2" label="4" style="margin-top: 10px">项目计划书模板</el-radio>
+        </template>
+        <template v-else>
+          <el-radio disabled v-model="radio2" label="1" style="margin-left: 4%">软件开发计划书模板</el-radio>
+          <el-radio disabled v-model="radio2" label="2">需求规格说明书模板</el-radio>
+          <el-radio disabled v-model="radio2" label="3" style="margin-left: 4%;margin-top: 10px">会议纪要模板</el-radio>
+          <el-radio disabled v-model="radio2" label="4" style="margin-top: 10px">项目计划书模板</el-radio>
+        </template>
+      </div>
+
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="create = false" class="cancel">取 消</el-button>
+          <el-button type="primary" @click="getHTML" class="confirm">创 建</el-button>
+        </span>
+    </el-dialog>
     <div id="box">
       <Toolbar
           :editor="editor"
@@ -68,7 +103,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      Active: -1,
+      Active: this.$store.state.index,
       editor: null,
       id: 0,
       Del: false,
@@ -79,10 +114,72 @@ export default Vue.extend({
       editorConfig: { placeholder: '请输入内容...' },
       mode: 'default', // or 'simple'
       docs: [],
-      theTitle:"未命名"
+      theTitle:"未命名",
+      create: false,
+      titleInput: '',
+      radio: '1',
+      radio2: '1',
+      model_name: ''
     }
   },
   methods: {
+    getHTML() {
+      let url
+      if (this.titleInput==='') {
+        this.$message.warning("请输入标题")
+        return
+      }
+      this.create = false
+      if (this.radio==='1') {
+        this.html = ''
+        this.model_name = 'default_document.html'
+        this.create_document()
+      }
+      if (this.radio==='2') {
+        if (this.radio2==='1') {
+          url = this.$store.state.base+"media/documents/document_model_1.html"
+          this.model_name = 'document_model_1.html'
+        } else if (this.radio2==='2') {
+          url = this.$store.state.base+"media/documents/document_model_2.html"
+          this.model_name = 'document_model_2.html'
+        } else if (this.radio2==='3') {
+          url = this.$store.state.base+"media/documents/document_model_3.html"
+          this.model_name = 'document_model_3.html'
+        } else if (this.radio2==='4') {
+          url = this.$store.state.base+"media/documents/document_model_4.html"
+          this.model_name = 'document_model_4.html'
+        }
+        this.$axios.post(url)
+            .then( res => {
+              //console.log("res.data:"+res.data)
+              this.create_document()
+            })
+      }
+    },
+    create_document() {
+      let params = {
+        pid: this.$store.state.pid,
+        name: this.titleInput,
+        model_name: this.model_name,
+      }
+      console.log("params.model_name:"+params.model_name)
+      this.axios({
+        method: "post",
+        url: this.$store.state.base+'project_manage/create_document/',
+        data: qs.stringify(params)
+      })
+          .then(res => {
+            console.log(res);
+            switch (res.data.errno) {
+              case 0:
+                this.getAllDoc();
+                this.$message.success("新文档已保存。")
+                break
+              default:
+                this.$message.warning(res.data.msg)
+            }
+          })
+    },
     dele(id,name) {
       this.Del = true
       this.id = id
@@ -99,6 +196,10 @@ export default Vue.extend({
     toDeleteTheDoc(id){
       const tempthis = this;
       this.Del = false
+      if (tempthis.id===tempthis.$store.state.doc_id) {
+        tempthis.$message.warning("此文件已经打开！无法删除!")
+        return
+      }
       let params= {
         id: id,
       }
@@ -107,7 +208,11 @@ export default Vue.extend({
           .then(function (Response) {
             console.log(Response)
             tempthis.getAllDoc();
+            tempthis.$forceUpdate()
             tempthis.$message.success("删除成功！")
+            if (tempthis.id < tempthis.$store.state.doc_id) {
+              tempthis.Active -= 1
+            }
             if(Response.data.errno===0 && tempthis.id===tempthis.$store.state.doc_id){
               tempthis.toStartCreateDoc()
             }
@@ -118,7 +223,8 @@ export default Vue.extend({
             console.log(error);
           })
     },
-    toEditThisDoc(thisDoc){
+    toEditThisDoc(thisDoc,index){
+      this.$store.state.index=index
       this.$store.state.doc_id=thisDoc.id
       this.$store.state.doc = thisDoc
       let params= {
@@ -134,7 +240,8 @@ export default Vue.extend({
             console.log(Response.data)
             console.log("url:"+this.$store.state.base+'project_manage/open_document/')
             console.log("Response:"+Response.data[0].name+" "+Response.data[0].url)
-            this.$axios.get(this.$store.state.base+Response.data[0].url)
+            console.log(this.$store.state.base+Response.data[0].url)
+            this.$axios.post(this.$store.state.base+Response.data[0].url)
                 .then( res => {
                   this.html = res.data
                   console.log("res.data:"+res.data)
@@ -228,7 +335,7 @@ export default Vue.extend({
             console.log(tempthis.docs);
 
             if (tempthis.$store.state.doc_id !== 0) {
-              tempthis.toEditThisDoc(tempthis.$store.state.doc)
+              tempthis.toEditThisDoc(tempthis.$store.state.doc,tempthis.$store.state.index)
             }
           })
           .catch(function (error) {
@@ -240,7 +347,6 @@ export default Vue.extend({
     // this.docs = this.$store.state.docs
     this.toPrepare()
     this.getAllDoc();
-    this.Active = this.$route.query.index
     this.$forceUpdate()
     // 模拟 ajax 请求，异步渲染编辑器
     //setTimeout(() => {

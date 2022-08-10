@@ -31,6 +31,7 @@ export default new Vuex.Store({
     design_url: "",
     doc: '',
     docs: '',
+    index: -1,
   },
   getters: {
   },
