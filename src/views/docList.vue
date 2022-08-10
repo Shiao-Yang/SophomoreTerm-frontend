@@ -317,6 +317,7 @@ export default {
     open(id,doc,i) {
       this.$store.state.doc_id = id
       this.$store.state.doc = doc
+      this.$store.state.index = i
       this.$router.push({path: '/editor',query: {index: i}})
     },
     getFounder(uid){
