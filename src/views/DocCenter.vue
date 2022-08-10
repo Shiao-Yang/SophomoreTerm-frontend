@@ -515,7 +515,7 @@ export default Vue.extend({
     getProjects(gid){
       this.$axios({
         method: 'GET',
-        url: this.$store.state.base+"project_manage/get_project/",
+        url: this.$store.state.base+"project_manage/get_available_project/",
         params: gid,
       })
           .then(res =>{
