@@ -16,7 +16,7 @@
             <div class="user-box">
               <div class="user-avatar-box">
                 <img class="user-avatar" id="user-avatar" :title="this.$store.state.userInfo.username" :class="{'selected': isSelected}" :src="avatarUrl" @click="toVisitSelf">
-                <i class='bx bxs-circle' style="position:absolute;top:2px; right: 3px;font-size:12px;color: #FF5733" v-if="this.messageList.length === 0"></i>
+                <i class='bx bxs-circle' style="position:absolute;top:2px; right: 3px;font-size:12px;color: #FF5733" v-if="this.messageList.length !== 0"></i>
               </div>
             </div>
             <ul class="sub-menu">
