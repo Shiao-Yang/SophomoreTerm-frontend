@@ -82,7 +82,7 @@
     <el-button @click="toSaveDoc" id="save" size="small">保存</el-button>
     <el-button size="small" @click="handleExport1" id="exportAsPDF">导出为Pdf</el-button>
     <el-button size="small" @click="handleExport2" id="exportAsWord">导出为Word</el-button>
-
+    <el-button size="small" @click="handleExport3" id="exportAsMarkdown">导出为MD</el-button>
 
   </div>
 </template>
@@ -96,8 +96,11 @@ import { DomEditor } from '@wangeditor/editor'
 import { IToolbarConfig } from '@wangeditor/editor'
 import VueHtml2pdf from 'vue-html2pdf'
 import htmlToPdf from "../common/htmlToPdf"
-import $ from 'jquery'
-import '../common/htmlToWord'
+import htmlDocx from 'html-docx-js/dist/html-docx';
+import saveAs from 'file-saver';
+import turndown from "turndown";
+
+
 
 export default Vue.extend({
   components: { Editor, Toolbar,VueHtml2pdf },
@@ -133,8 +136,34 @@ export default Vue.extend({
       //第一个参数是需要导出的内容的id,第二个参数是输出的文档名称
     },
     handleExport2(){
-      $("#file").wordExport('this.fileName');//参数是下载的word文件名
+      const tempthis = this
+      let htmlStr = this.html
+      let page = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>${htmlStr}
+      </body></html>`
+      // console.log(page);return
+      saveAs(
+          htmlDocx.asBlob(page, {
+            orientation: "landscape"//跨域设置
+          }),
+          //文件名
+          tempthis.fileName+".doc"
+        )
     },
+    handleExport3() {
+      let down = new turndown()
+      const tempthis = this
+      let md = down.turndown(tempthis.html)
+      let blob = new Blob([md], {
+        type: 'text/markdown'
+      })
+      let url = URL.createObjectURL(blob)
+      let a = document.createElement("a")
+      a.href = url
+      a.download = tempthis.fileName+'.md'
+      a.click()
+      URL.revokeObjectURL(url)
+    },
+
     getHTML() {
       let url
       if (this.titleInput==='') {
@@ -500,6 +529,14 @@ export default Vue.extend({
   position: absolute;
   right: 1.5%;
   top: 30%;
+  width: 7%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+}
+#exportAsMarkdown{
+  position: absolute;
+  right: 1.5%;
+  top: 40%;
   width: 7%;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
