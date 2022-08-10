@@ -312,12 +312,13 @@ export default Vue.extend({
     },
     toPrepare(){
       const Tempthis = this
-      // const toolbar = DomEditor.getToolbar(tempthis.editor)
+      // const toolbar = DomEditor.getToolbar(Tempthis.editor)
       // console.log(toolbar.getConfig())
       // const curToolbarConfig = toolbar.getConfig()
       // console.log(curToolbarConfig.toolbarKeys)
       Tempthis.toolbarConfig.excludeKeys=[
         'emotion',
+        'group-image',
         'group-video'
       ]
     },
