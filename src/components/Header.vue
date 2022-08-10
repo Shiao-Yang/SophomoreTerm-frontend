@@ -16,6 +16,7 @@
             <div class="user-box">
               <div class="user-avatar-box">
                 <img class="user-avatar" id="user-avatar" :title="this.$store.state.userInfo.username" :class="{'selected': isSelected}" :src="avatarUrl" @click="toVisitSelf">
+                <i class='bx bxs-circle' style="position:absolute;top:2px; right: 3px;font-size:12px;color: #FF5733" v-if="this.messageList.length !== 0"></i>
               </div>
             </div>
             <ul class="sub-menu">
@@ -33,7 +34,7 @@
               <li class="sub-item" @click="toVisitInvitation">
                 <i class='bx bx-message-rounded'></i>
                 <span>消息中心</span>
-                <i class='bx bxs-circle' style="font-size:12px;color: #FF5733" v-if="this.messageList.length !== 0"></i>
+                <i class='bx bxs-circle' style="font-size:12px;color: #FF5733; transition: all 0.4s ease;" v-if="this.messageList.length !== 0"></i>
                 <i class='bx bx-chevron-right right'></i>
               </li>
               <li class="sub-item" @click="toVisitTeamList">
@@ -277,6 +278,14 @@ img {
   width: 40px;
   border-radius: 10%;
   background-color: #ffffff;
+}
+
+.user-avatar-box:hover i{
+  opacity: 0;
+  margin-top: 20px;
+  margin-right: 20px;
+
+  z-index: 1000000;
 }
 
 .header .main .nav-links .nav-item .user-box .user-avatar{

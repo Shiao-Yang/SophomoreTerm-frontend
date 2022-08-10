@@ -114,7 +114,7 @@
           <el-button @click="sure" type="success">确认创建</el-button>
           <el-button @click="cancel" type="danger">退出</el-button>
         </div>
-        <button @click="output">test</button>
+        <!--<button @click="output">test</button>-->
       </div>
     </div>
   </div>

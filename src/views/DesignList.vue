@@ -13,8 +13,28 @@
                 </div>
               </li>
               <li>
-                <div class="add-design">
+                <div class="add-design" style="position:relative; top: 3px">
                   <i class='bx bx-plus-circle' @click="isCreate=true" title="新建原型设计图"></i>
+                </div>
+              </li>
+              <li>
+                <div class="add-design" v-if="this.preView===0" style="margin-left: 10px; font-size: 50px; position:relative; top: -10px">
+                  <i class='bx bx-play' @click="changePreView" title="生成预览"></i>
+                </div>
+              </li>
+              <li>
+                <div class="add-design" v-if="this.preView===1" style="margin-left: 10px; font-size: 50px; position:relative; top: -10px">
+                  <i class='bx bx-stop' @click="changePreView" title="结束预览"></i>
+                </div>
+              </li>
+              <li>
+                <div class="add-design" v-if="this.preView===1" style="margin-left: 10px; font-size: 37px; position:relative; top: -3px">
+                  <i class='bx bx-link' @click="toPreview" title="前往演示"></i>
+                </div>
+              </li>
+              <li>
+                <div class="add-design" v-if="this.preView===1" style="margin-left: 10px; font-size: 30px; position:relative; top: 0px">
+                  <i class='bx bx-clipboard' @click="changePreView" title="复制链接"></i>
                 </div>
               </li>
             </ul>
@@ -29,7 +49,7 @@
                     <!--<span class="project-details">创建时间 : {{project.starttime}}</span>-->
                   </span>
                   <i class='bx bxl-sketch first' title="设计" @click="toDesign(project.picid,project.name)"></i>
-                  <i class='bx bx-play' title="设计" @click="toPreview(project.picid)"></i>
+                  <!--<i class='bx bx-play' v-if="preView===1" title="设计" @click="toPreview(pid, pname)"></i>-->
                   <i class='bx bxs-edit-alt' title="重命名" @click="changeIsSet(index)"></i>
                   <i class='bx bxs-trash delete' title="删除" @click="dlt(project.picid, index)"></i>
                 </li>
@@ -74,6 +94,10 @@ export default {
       projects:[],
       founders:[],
       isSet: -1,
+      preView: 0,
+      pname: '',
+      pid: '',
+      url: '',
     }
   },
   methods: {
@@ -82,13 +106,115 @@ export default {
       console.log(this.isSet);
     },
 
-    toPreview(picid) {
+    getPreView(pid) {
+      let params = {
+        pid: pid,
+      }
+
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base+"design/get_show_status/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log(res.data);
+        if(res.data.errno === 0) {
+
+          this.preView = res.data.showable;
+
+          // this.$message({
+          //   message: res.data.msg,
+          //   type: 'success',
+          //   showClose: true,
+          // })
+
+        } else {
+          this.preView = 0;
+
+          // this.$message({
+          //   message: res.data.msg,
+          //   type: 'error',
+          //   showClose: true,
+          // })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+
+    },
+    changePreView() {
+      let params = {
+        pid: this.$store.state.pid,
+      }
+
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base+"design/change_show_status/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log(res.data);
+        if(res.data.errno === 0) {
+
+          //this.preView = res.data.showable;
+
+          this.preView = 1 - this.preView;
+
+          if(this.preView === 1) {
+            this.$message({
+              message: '生成预览',
+              type: 'success',
+              showClose: true,
+            })
+
+            this.url = "http://localhost:8080/preView?" + "pid=" + this.pid + "&"+"pname=" + this.pname;
+          }
+
+          else {
+            this.$message({
+              message: '取消预览',
+              type: 'success',
+              showClose: true,
+            })
+          }
+
+        } else {
+          this.preView = 0;
+
+
+          if(this.preView === 1) {
+            this.$message({
+              message: '取消预览失败',
+              type: 'error',
+              showClose: true,
+            })
+          }
+
+          else {
+            this.$message({
+              message: '生成预览失败',
+              type: 'error',
+              showClose: true,
+            })
+          }
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+
+    toPreview() {
+      //http://localhost:8080/preView?pid=91&pname=aaa
+      //console.log(url);
+      window.open(this.url);
+      /*
       this.$router.push({
-        name: 'preView',
-        params: {
-          picid: picid,
+        path: '/preView',
+        query: {
+          pid: pid,
+          pname: pname,
         }
       })
+
+       */
     },
 
     changeIsSet(index){
@@ -260,6 +386,9 @@ export default {
   },
 
   created() {
+    this.pid = this.$store.state.pid;
+    this.pname = this.$store.state.pname;
+    this.getPreView(this.$store.state.pid);
     this.get_Picture(this.$store.state.pid);
   },
 
