@@ -55,7 +55,8 @@ export default {
     }
   },
   created() {
-    if(this.$store.state.isLogin === false){
+    if(this.$store.state.isLogin === false && this.$route.path !== '/login&register' && this.$route.path !== '/'){
+      this.$message.error("还没登录哦！")
       this.$router.push('/');
     }
     this.getInfo(sessionStorage.getItem('uid'));

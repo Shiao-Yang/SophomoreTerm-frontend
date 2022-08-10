@@ -1,43 +1,49 @@
 <template>
-  <div class="main">
-    <div class="container">
-      <div class="form-box">
-        <div class="register-box hidden">
-          <h1>register</h1>
-          <input type="text" placeholder="用户名" id="un1">
-          <input type="email" placeholder="邮箱" id="email">
-          <input type="password" placeholder="密码" id="pw1">
-          <input type="password" placeholder="确认密码" id="pw2" @keyup.enter="toRegister">
-          <button @click="toRegister()">确认注册</button>
+  <div>
+    <div class="header">
+      <Header></Header>
+    </div>
+    <div class="main">
+
+      <div class="container">
+        <div class="form-box">
+          <div class="register-box hidden">
+            <h1>register</h1>
+            <input type="text" placeholder="用户名" id="un1">
+            <input type="email" placeholder="邮箱" id="email">
+            <input type="password" placeholder="密码" id="pw1">
+            <input type="password" placeholder="确认密码" id="pw2" @keyup.enter="toRegister">
+            <button @click="toRegister()">确认注册</button>
+          </div>
+          <div class="login-box">
+            <h1>login</h1>
+            <input type="text" placeholder="用户名" id="un">
+            <input type="password" placeholder="密码" id="pw" @keyup.enter="toLogin">
+            <button @click="toLogin()">登录</button>
+          </div>
         </div>
-        <div class="login-box">
-          <h1>login</h1>
-          <input type="text" placeholder="用户名" id="un">
-          <input type="password" placeholder="密码" id="pw" @keyup.enter="toLogin">
-          <button @click="toLogin()">登录</button>
+        <div class="con-box left">
+          <h2>欢迎您<span>注册</span></h2>
+          <img src="../assets/images/register.png" alt="加载失败">
+          <p>已有账号</p>
+          <button id="login">去登录</button>
         </div>
-      </div>
-      <div class="con-box left">
-        <h2>欢迎您<span>注册</span></h2>
-        <img src="../assets/images/register.png" alt="加载失败">
-        <p>已有账号</p>
-        <button id="login">去登录</button>
-      </div>
-      <div class="con-box right">
-        <h2>欢迎您<span>登陆</span></h2>
-        <img src="../assets/images/login.png" alt="加载失败">
-        <p>没有账号？</p>
-        <button id="register">去注册</button>
+        <div class="con-box right">
+          <h2>欢迎您<span>登陆</span></h2>
+          <img src="../assets/images/login.png" alt="加载失败">
+          <p>没有账号？</p>
+          <button id="register">去注册</button>
+        </div>
       </div>
     </div>
   </div>
-
 </template>
 
 
 <script>
 import axios from "axios";
 import qs from "qs";
+import Header from "@/components/Header"
 axios.defaults.withCredentials = true;
 
 export default {
@@ -46,7 +52,7 @@ export default {
     return {}
   },
   components: {
-
+    Header
   },
   mounted() {
     this.initPage()
@@ -169,6 +175,13 @@ export default {
 }
 </script>
 <style scoped>
+.header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100000;
+}
 
 .main{
   /* 100%窗口高度 */
