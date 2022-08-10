@@ -12,7 +12,7 @@
     <div id="contentBgd">
       <div id="contentBox">
         <div class="result" v-for="(item,index) in members">
-          <img src="../assets/logo.png" class="avatar">
+          <img :src=$store.state.base+item.avatar class="avatar">
           <span class="info">ID：{{item.id}}</span>
           <span class="info">昵称：{{item.username}}</span>
           <span class="info">姓名：{{item.name}}</span>
