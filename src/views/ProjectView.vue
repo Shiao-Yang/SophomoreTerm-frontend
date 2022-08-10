@@ -499,6 +499,8 @@ export default {
   color: #262626;
   font-weight: 600;
   border-bottom: solid #006cfa 3px;
+  pointer-events: none;
+  cursor: pointer;
 }
 
 .content-bar .nav-list .nav-item:hover{
