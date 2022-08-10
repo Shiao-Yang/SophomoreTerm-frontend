@@ -9,7 +9,9 @@
           {{this.number}} 个页面
         </div>
         <div class="search">
-          <input type="text" placeholder="输入设计图名称查找" id="un1">
+          <span style="position:relative; left: 15px; top: 7px; font-size: 23px"><i class='bx bx-search' ></i></span>
+          <input type="text" placeholder="输入设计图名称查找" @keyup.enter="Sch" id="input">
+          <span class="clear" title="清除搜索结果"><i class='bx bx-minus-circle' @click="clear"></i></span>
         </div>
         <div class="list">
           <ul class="designs">
@@ -54,6 +56,7 @@ export default {
       success: 0,
       common:[],
       search:[],
+      keyword: "",
     }
   },
 
@@ -126,8 +129,28 @@ export default {
       }
     },
 
-    search() {
+    LoseBlur(){
 
+    },
+
+    Sch() {
+      let keyword = document.getElementById('input');
+      let params = {
+        pid: this.$route.query.pid,
+        keyword: keyword.value,
+      }
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base + 'design/search_design/',
+        data: qs.stringify(params),
+      }).then(res => {
+        console.log(res.data);
+        this.num = 0;
+        this.designs = res.data;
+        this.fetchPhoto(this.designs[this.num].picid);
+        keyword.value = "";
+        keyword.blur();
+      })
     },
 
     fetchPhoto(pic_id) {
@@ -172,6 +195,12 @@ export default {
 
     },
 
+    clear(){
+      this.designs = this.common;
+      this.num = 0;
+      this.fetchPhoto(this.designs[this.num].picid);
+    },
+
     get_Picture(pic_id) {
       let params = {
         pid: pic_id,
@@ -184,6 +213,7 @@ export default {
       }).then(res => {
         //console.log(res.data);
         this.designs = res.data;
+        this.common = res.data;
         this.number = res.data.length;
         console.log(this.designs);
         console.log(this.number);
@@ -271,8 +301,8 @@ input {
   border-bottom: 1px solid rgba(154, 151, 151, 0.4);
   font-size: 14px;
   letter-spacing: 2px;
-  text-indent: 30px;
-  margin: 20px 0 0 15px;
+  text-indent: 20px;
+  margin: 15px 0 0 0px;
   padding: 10px 0;
 
 }
@@ -330,7 +360,18 @@ input:focus::placeholder {
   border-radius: 15px;
 }
 
+.clear {
+  position:relative;
+  left: 0px;
+  top: 7px;
+  font-size: 23px;
+  transition: 0.5s;
+}
 
+.clear:hover {
+  cursor: pointer;
+  color: #1b9aee;
+}
 
 
 
