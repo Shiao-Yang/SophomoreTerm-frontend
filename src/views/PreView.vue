@@ -14,7 +14,7 @@
         <div class="list">
           <ul class="designs">
             <li class="design-item" v-for="(design, index) in this.designs" @click="changeNum(index,design.picid)">
-              <div class="item-details"  :class="{'active' : (num === index)}">
+              <div class="item-details" :class="{'active' : (num === index)}">
                 {{design.name}}
               </div>
             </li>
@@ -49,7 +49,7 @@ export default {
       p_name: "你好",
       number: 2,
       designs: [],
-      num: 1,
+      num: 0,
       src: "",
       success: 0,
     }
@@ -87,6 +87,8 @@ export default {
             alert("页面无效")
             return ;
           }
+
+
 
           // this.$message({
           //   message: res.data.msg,
@@ -183,6 +185,7 @@ export default {
         this.number = res.data.length;
         console.log(this.designs);
         console.log(this.number);
+        this.fetchPhoto(this.designs[0].picid);
       }).catch(err => {
         console.log(err)
       })
@@ -195,6 +198,7 @@ export default {
 <style scoped>
 li {
   list-style: none;
+  margin-bottom: 10px;
 }
 
 
@@ -219,7 +223,7 @@ li {
   height: 100%;
   width: 20%;
   /*border: 2px solid coral;*/
-  background-color: #f5f3f3;
+  background-color: #fff;
 }
 
 .main .right-box {
@@ -229,6 +233,12 @@ li {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgb(235,237,238);
+}
+
+.main .right-box .image {
+  height: 80%;
+  width: 80%;
 }
 
 .main .left-box .name {
