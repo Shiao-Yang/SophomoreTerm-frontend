@@ -62,7 +62,7 @@
                     <span class="project-name">{{project.name}}</span>
                     <span class="project-details">创建时间 : {{project.starttime}}</span>
                   </span>
-                  <i class='bx bxs-log-in first' title="进入项目" @click="toTurnToProject(project.id)"></i>
+                  <i class='bx bxs-log-in first' title="进入项目" @click="toTurnToProject(project.id,project.name)"></i>
                   <i class='bx bxs-cog' title="项目管理" @click="changeIsSet(index)"></i>
                   <i class='bx bxs-copy' title="复制项目" @click="copyProject(index)"></i>
                   <i class='bx bx-x delete' title="移动至回收站" @click="toBin(index)"></i>
@@ -80,7 +80,7 @@
                     <span class="project-name">{{project.name}}</span>
                     <span class="project-details">创建时间 : {{project.starttime}}</span>
                   </span>
-                  <i class='bx bxs-log-in first' title="进入项目" @click="toTurnToProject(project.id)"></i>
+                  <i class='bx bxs-log-in first' title="进入项目" @click="toTurnToProject(project.id,project.name)"></i>
                   <i class='bx bxs-cog' title="项目管理" @click="changeIsSet(index)"></i>
                   <i class='bx bxs-copy' title="复制项目" @click="copyProject(index)"></i>
                   <i class='bx bx-x delete' title="移动至回收站" @click="toBin(index)"></i>
@@ -131,9 +131,12 @@ export default {
     }
   },
   methods: {
-    toTurnToProject(pid){
+    toTurnToProject(pid, p_name){
       this.$store.state.pid=pid;
+      this.$store.state.pname = p_name;
       console.log(pid)
+      console.log(p_name)
+      console.log(this.$store.state.pname);
       this.$router.push("/designList")
       console.log(this.$store.state.pid)
     },

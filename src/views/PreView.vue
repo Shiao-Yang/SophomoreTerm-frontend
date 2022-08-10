@@ -1,57 +1,284 @@
 <template>
-  <!--
   <div>
-    <input name="butt" value="统计" type="button" id="change" @click="change()" />
-    <div class="box2">显示另外一个页面的内容
-      <iframe id="ifrID" src="http://www.baidu.com" frameBorder="0" width="100%" scrolling="no" height="100%">
-      </iframe>
-    </div>
-  </div>
-  -->
-  <div>
-    <input name="butt" value="统计" type="button" id="change" @click="change()" />
-    <div style="width:100%;height:750px;overflow:hidden;border: solid 5px">
-      <div style="width:1245px;height:750px;margin:0px 0px 0px 0px; border: solid 5px; overflow: hidden; position: relative; float: right">
-        <iFrame style="width: 1600px; height: 800px; margin-top: -55px; margin-right: -600px; margin-left: -100px" src="http://43.138.26.134/prototype?pic_id=193&pic_name=model1" scrolling="no">
-        </iFrame>
+    <Header></Header>
+    <div class="main">
+      <div class="left-box">
+        <div class="name">
+          {{this.p_name}}
+        </div>
+        <div class="number">
+          {{this.number}} 个页面
+        </div>
+        <div class="search">
+          <input type="text" placeholder="输入设计图名称查找" id="un1">
+        </div>
+        <div class="list">
+          <ul class="designs">
+            <li class="design-item" v-for="(design, index) in this.designs" @click="changeNum(index,design.picid)">
+              <div class="item-details"  :class="{'active' : (num === index)}">
+                {{design.name}}
+              </div>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      <div class="right-box">
+        <div class="image">
+          <img v-if="this.success===1 && this.src !== '' " :src=this.src alt="加载失败"/>
+          <p v-if="this.success === 1 && this.src === '' ">未生成预览</p>
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
+import Header from "@/components/Header";
+import qs from "qs";
+
+
 export default {
-name: "preView",
-data() {
-  return {
-    descImgs: [ 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
-      'https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg',
-      'https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg',
-      'https://fuss10.elemecdn.com/9/bb/e27858e973f5d7d3904835f46abbdjpeg.jpeg',
-      'https://fuss10.elemecdn.com/d/e6/c4d93a3805b3ce3f323f7974e6f78jpeg.jpeg',
-      'https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg',
-      'https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg'
-    ]
-  }
-},
+  name: "preView",
 
-methods: {
-  change() {
-      console.log(1)
-      document.getElementById("ifrID").src="http://43.138.26.134/prototype?pic_id=193&pic_name=model1";
-      console.log(2)
-      },
-  fetchPhoto() {
+  components: {
+    Header,
+  },
 
+  data() {
+    return {
+      p_name: "你好",
+      number: 2,
+      designs: [],
+      num: 1,
+      src: "",
+      success: 0,
+    }
+  },
+
+  created() {
+    this.p_name = this.$store.state.pname;
+    console.log(this.p_name);
+    this.get_Picture(this.$store.state.pid);
+  },
+
+  mounted() {
+
+  },
+
+  methods: {
+    changeNum(num,picid) {
+      console.log(num,":",picid);
+      if(this.num === num) {
+        return;
+      }
+
+      else {
+        this.success = 0;
+        this.num = num;
+        this.fetchPhoto(picid)
+      }
+    },
+
+    search() {
+
+    },
+
+    fetchPhoto(pic_id) {
+      const that = this;
+
+      let params = {
+        picid: pic_id,
+      }
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base + "design/get_prototype_img/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log("取图片成功")
+        console.log(res.data);
+        console.log(typeof res.data.errno);
+
+        if(res.data.errno === 0) {
+          if(res.data.url === null)
+            that.src = '';
+          else
+            that.src = this.$store.state.base+res.data.url;
+          console.log(that.src);
+          that.success = 1;
+          // this.$message({
+          //   message: res.data.msg,
+          //   type: "success",
+          //   showClose: true,
+          // })
+        }
+
+        else {
+          this.$message({
+            message: res.data.msg,
+            type: "error",
+            showClose: true,
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+
+    },
+
+    get_Picture(pic_id) {
+      let params = {
+        pid: pic_id,
+      }
+      console.log(params);
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base+"design/get_design/",
+        data: qs.stringify(params)
+      }).then(res => {
+        //console.log(res.data);
+        this.designs = res.data;
+        this.number = res.data.length;
+        console.log(this.designs);
+        console.log(this.number);
+      }).catch(err => {
+        console.log(err)
+      })
+
+    },
   }
-}
 }
 </script>
 
 <style scoped>
-.box2 {
-height: 500px;
-width: 500px;
+li {
+  list-style: none;
 }
+
+
+.main {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  /* 100%窗口高度 */
+  height: 670px;
+  min-height: 670px;
+  width: 100%;
+  /* 弹性布局 水平+垂直居中 */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  /* 渐变背景 */
+  /*background: linear-gradient(200deg,#f3e7e9,#e3eeff);*/
+  top: 50px;
+  left: 0;
+}
+
+.main .left-box {
+  height: 100%;
+  width: 20%;
+  /*border: 2px solid coral;*/
+  background-color: #f5f3f3;
+}
+
+.main .right-box {
+  height: 100%;
+  width: 80%;
+  /*border: 2px solid coral;*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main .left-box .name {
+  margin-left: 15px;
+  font-size: 40px;
+  color: #101111;
+  transition: 0.5s;
+}
+
+.main .left-box .name:hover {
+  cursor: pointer;
+  color: #ee4646;
+}
+
+.main .left-box .number {
+  margin-left: 15px;
+  font-size: 15px;
+  color: rgb(170, 176, 176);
+  transition: 0.5s;
+}
+
+input {
+  background-color: transparent;
+  width: 70%;
+  color: #ad2727;
+  border: none;
+  /*下边框样式*/
+  border-bottom: 1px solid rgba(154, 151, 151, 0.4);
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-indent: 30px;
+  margin: 20px 0 0 15px;
+  padding: 10px 0;
+
+}
+
+input::placeholder {
+  color: rgba(28, 27, 27, 0.4);
+}
+
+input:focus {
+  color: #8e9aaf;
+  outline: none;
+  border-bottom: 2px solid rgba(50, 102, 238, 0.5);
+  transition: 0.5s;
+}
+
+input:focus::placeholder {
+  opacity: 0;
+}
+
+.main .left-box .list {
+  font-size: 20px;
+  margin-top: 20px;
+  display: flex;
+}
+
+.main .left-box .list .designs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.main .left-box .list .designs .design-item .item-details {
+  line-style: none;
+  margin: 0 15px 0 15px ;
+  padding: 10px 0 10px 0;
+  transition: 0.5s;
+}
+
+.main .left-box .list .designs .design-item .item-details:hover {
+  line-style: none;
+  margin-left: 15px;
+  padding: 10px;
+  cursor: pointer;
+  background-color: #eae8e8;
+  border-radius: 15px;
+}
+
+
+.main .left-box .list .designs .design-item .active {
+  line-style: none;
+  margin-left: 15px;
+  padding: 10px;
+  cursor: pointer;
+  background-color: #eae8e8;
+  border-radius: 15px;
+}
+
+
+
+
+
 </style>

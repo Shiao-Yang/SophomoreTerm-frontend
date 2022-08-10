@@ -340,6 +340,59 @@ export default {
       this.dialogFormVisible = true;
       console.log(this.dialogFormVisible);
     },
+
+    saveImg(){
+      this.setCurrentControl(this.getActiveComponent(this.controls))
+      // 手动创建一个 canvas 标签
+      const canvas = document.createElement("canvas")
+      // 获取父标签，意思是这个标签内的 DOM 元素生成图片
+      // imageTofile是给截图范围内的父级元素自定义的ref名称
+      let canvasBox = this.$refs.imageTofile
+      // 获取父级的宽高
+      const width = parseInt(window.getComputedStyle(canvasBox).width)
+      const height = parseInt(window.getComputedStyle(canvasBox).height)
+      // 宽高 * 2 并放大 2 倍 是为了防止图片模糊
+      canvas.width = width * 3
+      canvas.height = height * 3
+      canvas.style.width = width + 'px'
+      canvas.style.height = height + 'px'
+      const context = canvas.getContext("2d");
+      context.scale(2.4, 2.4);
+      const options = {
+        backgroundColor: null,
+        canvas: canvas,
+        useCORS: true
+      }
+      html2canvas(canvasBox, options).then((canvas) => {
+        // toDataURL 图片格式转成 base64
+        //let fileName = prompt("请输入导出的图片名\n(默认.png，支持.jpg, .jpeg及.png)", "例:aaa(默认输出aaa.png)")
+        //let reg = [/.png$/, /.jpg$/, /.jpeg$/]
+        let dataURL = String
+        dataURL = canvas.toDataURL("image/png")
+        let params = {
+          img : JSON.stringify(dataURL),
+          picid: this.$route.query.pic_id
+        }
+        this.$axios({
+          method: 'post',
+          url: this.$store.state.base + "design/upload_prototype/",
+          data: qs.stringify(params)
+        }).then(res => {
+          console.log("新建图片成功")
+          console.log(res.data);
+          //location.reload();
+          // this.$message({
+          //   message: '保存成功',
+          //   type: "success",
+          //   showClose: true,
+          // })
+        }).catch(err => {
+          console.log(err)
+        })
+      })
+
+    },
+
     toImage() {
       this.setCurrentControl(this.getActiveComponent(this.controls))
       // 手动创建一个 canvas 标签
@@ -416,6 +469,8 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+
+      this.saveImg();
     },
     get_Pic(pic_id) {
       let params = {
