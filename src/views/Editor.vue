@@ -131,7 +131,6 @@ export default Vue.extend({
       }
       this.create = false
       if (this.radio==='1') {
-        this.html = ''
         this.model_name = 'default_document.html'
         this.create_document()
       }
