@@ -49,10 +49,10 @@
         </router-link>
       </li>
       <li :class="{'active': isSelectSide === 3}">
-        <a href="https://www.umletino.com/umletino.html">
+        <router-link to="/UmlView">
           <i class='bx bxs-collection':class="{'active': isSelectSide === 3}" ></i>
           <span class="link-name" :class="{'active': isSelectSide === 3}">UML绘制</span>
-        </a>
+        </router-link>
       </li>
       <li class="return">
         <router-link to="/projectList">
