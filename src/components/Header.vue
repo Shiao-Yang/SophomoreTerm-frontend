@@ -172,6 +172,7 @@ img {
   font-weight: bold;
   line-height: 40px; /*行高*/
   color: #fff;
+  margin-top: 10px;
   text-decoration: none; /*字体增加装饰：去除下划线*/
   background: linear-gradient(
       20deg,#03a9f4,  #f441a5,#03a9f4, #f441a5); /*渐变背景*/

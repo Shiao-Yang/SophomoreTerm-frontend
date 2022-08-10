@@ -24,6 +24,9 @@ import userSet from "@/views/UserSet";
 import MessageList from "@/views/MessageList"
 import UmlView from "@/views/UmlView";
 
+import PreView from "@/views/PreView";
+import preView from "@/views/PreView";
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -80,6 +83,9 @@ const routes = [
     component: TeamList
   },
 
+  // {
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  // },*/
   {
     path: '/adminTeam',
     name: 'adminTeam',
@@ -129,6 +135,11 @@ const routes = [
     path: '/messageList',
     name: 'messageList',
     component: MessageList
+  },
+  {
+    path: '/preView',
+    name: 'preView',
+    component: preView
   },
   {
     path: '/UmlView',

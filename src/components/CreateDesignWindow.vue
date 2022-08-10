@@ -68,10 +68,10 @@
                 <i class='bx bx-desktop'></i>
               </div>
               <div class="text">
-                desktop1
+                电商首页-pc
               </div>
               <div class="text">
-                1000×800
+                1000×600
               </div>
             </div>
             <div class="desktop" :class="{'active' : (this.type === 2)}" @click="changeType2">
@@ -79,7 +79,7 @@
                 <i class='bx bx-mobile-alt'></i>
               </div>
               <div class="text">
-                phone2
+                电商首页-mobile
               </div>
               <div class="text">
                 400×600
@@ -90,10 +90,10 @@
                 <i class='bx bx-desktop'></i>
               </div>
               <div class="text">
-                desktop3
+                短视频平台首页-pc
               </div>
               <div class="text">
-                1000×800
+                1000×600
               </div>
             </div>
             <div class="desktop" :class="{'active' : (this.type === 4)}" @click="changeType4">
@@ -101,10 +101,10 @@
                 <i class='bx bx-desktop'></i>
               </div>
               <div class="text">
-                desktop4
+                短视频平台首页-mobile
               </div>
               <div class="text">
-                1000×800
+                400×600
               </div>
             </div>
           </div>
@@ -308,9 +308,10 @@ export default {
 }
 
 .non-model .desktop .image {
-  margin-bottom: 10px;
   align-items: center;
   font-size: 100px;
+  line-height: 100px;
+  margin-bottom: 10px;
 }
 
 .non-model .desktop .image i {
@@ -333,7 +334,7 @@ export default {
 }
 
 .text {
-  margin-bottom: 10px;
+  margin-top: 5px;
 }
 input{
   background-color: transparent;
