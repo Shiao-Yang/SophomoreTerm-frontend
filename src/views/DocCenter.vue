@@ -138,7 +138,7 @@ export default Vue.extend({
       Del: false,
       rename: false,
       name: '',
-      html: '',
+      html: '<h1 style="text-align: center;">初始化页面</h1>',
       toolbarConfig: { },
       editorConfig: { placeholder: '请输入内容...' },
       mode: 'default', // or 'simple'
@@ -340,7 +340,7 @@ export default Vue.extend({
             }
             if(Response.data.errno===0 && this.$store.state.doc_id===id){
               this.init = true
-              this.html = ''
+              this.html = '<h1 style="text-align: center;">初始化页面</h1>'
               this.Active1 = -1
               this.Active2 = -1
             }
