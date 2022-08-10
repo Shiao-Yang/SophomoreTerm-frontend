@@ -58,7 +58,6 @@
             <div class="projectList">
               <ul class="projects">
                 <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== viewType && viewType === 1">
-<!--                  <img class="project-logo" src="../assets/logo.png" title="进入项目" @click="toTurnToProject(project.id)">-->
                   <span class="project-info" title="进入项目" @click="toTurnToProject(project.id)">
                     <span class="project-name">{{project.name}}</span>
                     <span class="project-details">创建时间 : {{project.starttime}}</span>
@@ -69,7 +68,6 @@
                   <i class='bx bx-x delete' title="移动至回收站" @click="toBin(index)"></i>
                 </li>
                 <li class="project-item" v-for="(project, index) in this.projects" v-if="project.available !== viewType && viewType === 0">
-<!--                  <img class="project-logo" src="../assets/logo.png">-->
                   <span class="project-info">
                     <span class="project-name">{{project.name}}</span>
                     <span class="project-details">创建时间 : {{project.starttime}}</span>
@@ -77,8 +75,7 @@
                   <i class='bx bxs-log-out-circle first' title="移出回收站" @click="outBin(index)"></i>
                   <i class='bx bx-x delete' title="删除项目" @click="deleteProject(index)"></i>
                 </li>
-                <li class="project-item" v-for="(project, index) in this.searchProjects" v-if="viewType === 2">
-                  <!--                  <img class="project-logo" src="../assets/logo.png">-->
+                <li class="project-item" v-for="(project, index) in this.searchProjects" v-if="viewType === 2 && project.available === 0">
                   <span class="project-info">
                     <span class="project-name">{{project.name}}</span>
                     <span class="project-details">创建时间 : {{project.starttime}}</span>
@@ -137,7 +134,7 @@ export default {
     toTurnToProject(pid){
       this.$store.state.pid=pid;
       console.log(pid)
-      this.$router.push("/project")
+      this.$router.push("/designList")
       console.log(this.$store.state.pid)
     },
     getProjects(gid){
@@ -171,6 +168,7 @@ export default {
       formData.append('name', name);
       formData.append('uid', this.$store.state.userInfo.uid);
       formData.append('gid', this.$store.state.gid);
+      console.log(formData);
       self.$axios({
         method: 'POST',
         url: self.$store.state.base+"project_manage/create/",
@@ -185,7 +183,6 @@ export default {
             }
             else{
               self.$message.error("新建项目失败,错误代码:"+res.data.errno);
-
             }
           })
           .catch(err=>{
@@ -301,7 +298,7 @@ export default {
       this.$axios({
         method: "POST",
         // url: this.$store.state.base + "project_manage/copy/",
-        url: "http://127.0.0.1:8000/api/project_manage/copy/",
+        url: this.$store.state.base+"project_manage/copy/",
         data: formData,
       })
           .then(res=>{

@@ -356,7 +356,7 @@ export default {
       canvas.style.width = width + 'px'
       canvas.style.height = height + 'px'
       const context = canvas.getContext("2d");
-      context.scale(2, 2);
+      context.scale(1.8175, 1.8175);
       const options = {
         backgroundColor: null,
         canvas: canvas,

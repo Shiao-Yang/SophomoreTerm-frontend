@@ -7,7 +7,7 @@
         <div class="form-box-left">
           <div class="top">
 
-            <img :src="avatarUrl" alt="">
+            <img :src="avatarUrl" alt="" @click="changeAvatarVissible = true" class="theAvatar">
             <p> {{this.$store.state.userInfo.username}} </p>
           </div>
 
@@ -17,9 +17,9 @@
           <div class="down1">
             <router-link to="/accountInfo">修改密码</router-link>
           </div>
-          <!--        <div class="down">-->
-          <!--          <router-link to="/teamList">团队列表</router-link>-->
-          <!--        </div>-->
+          <div class="down">
+            <router-link to="/messageList">团队邀请</router-link>
+          </div>
 
         </div>
 
@@ -67,6 +67,20 @@
 
       </div>
     </div>
+    <el-dialog
+        title="上传头像"
+        :visible.sync="changeAvatarVissible"
+        width="30%"
+        class = "changeAvatar"
+    >
+      <span>
+        <input type="file" ref="pic">
+      </span>
+      <span slot="footer" class="dialog-footer">
+                  <el-button @click="changeAvatarVissible = false">取 消 上 传</el-button>
+                  <el-button type="primary" @click="toChangeAvatar">确 定 上 传</el-button>
+                </span>
+    </el-dialog>
   </div>
 
 </template>
@@ -82,7 +96,8 @@ export default {
   data() {
     return {
       avatarUrl:this.$store.state.base+this.$store.state.userInfo.avatar,
-      tabPosition: 'left'
+      tabPosition: 'left',
+      changeAvatarVissible:false
     }
   },
 
@@ -148,6 +163,7 @@ export default {
       })
     },
     toChangeAvatar(){
+      this.changeAvatarVissible = false;
       const tempthis = this;
       let fileToUpload = this.$refs.pic.files[0];
       let param = new FormData();  //创建表单对象
@@ -158,8 +174,10 @@ export default {
           {headers:{'Content-Type':'multipart/form-data'}})
           .then(function (Response) {
             console.log(Response);
-            //const uuiidd = tempthis.$store.state.userInfo.uid;
-            //console.log(uuiidd)
+            if(Response.data.errno===0)
+            {
+              tempthis.$message.success("头像上传成功。")
+            }
             tempthis.getInfo(tempthis.$store.state.userInfo.uid);
           })
           .catch(function (error) {
@@ -473,5 +491,14 @@ input:focus::placeholder{
 }
 .inputText{
   color: black;
+}
+.changeAvatar{
+  z-index:3;
+}
+.changeAvatar input{
+  color: black;
+}
+.theAvatar{
+  cursor: pointer;
 }
 </style>

@@ -115,7 +115,7 @@ export default {
       // console.log(index);
       this.$store.state.gid=record.gid;
       this.$store.state.role=2;
-      this.$router.push('/adminTeam');
+      this.$router.push('/projectList');
       console.log(this.$store.state.gid);
     },
     rowClick2(record,index){
@@ -123,7 +123,7 @@ export default {
       // console.log(index);
       this.$store.state.gid=record.gid;
       this.$store.state.role=1;
-      this.$router.push('/adminTeam');
+      this.$router.push('/projectList');
       console.log(this.$store.state.gid);
     },
     rowClick3(record,index){
@@ -131,7 +131,7 @@ export default {
       // console.log(index);
       this.$store.state.gid=record.gid;
       this.$store.state.role=0;
-      this.$router.push('/adminTeam');
+      this.$router.push('/projectList');
       console.log(this.$store.state.gid);
     },
     backPage(){

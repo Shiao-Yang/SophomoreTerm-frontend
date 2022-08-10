@@ -6,7 +6,7 @@
         <div class="form-box-left">
           <div class="top">
 
-          <img :src="avatarUrl" id="user-avatar"alt="" @click="changeAvatarVissible = true" title="更换头像">
+          <img :src="avatarUrl" alt="" @click="changeAvatarVissible = true" class="theAvatar">
 
             <p> {{this.$store.state.userInfo.username}} </p>
           </div>
@@ -17,10 +17,9 @@
           <div class="down">
             <router-link to="/accountInfo">修改密码</router-link>
           </div>
-          <!--        <div class="down">-->
-          <!--&lt;!&ndash;          <router-link to="/addedTeam">已加入团队</router-link>&ndash;&gt;-->
-          <!--          <router-link to="/teamList">团队列表</router-link>-->
-          <!--        </div>-->
+          <div class="down">
+            <router-link to="/messageList">团队邀请</router-link>
+          </div>
 
         </div>
 
@@ -108,7 +107,7 @@ export default {
     return {
       avatarUrl:this.$store.state.base+this.$store.state.userInfo.avatar,
       theUid:0,
-      changeAvatarVissible:false
+      changeAvatarVissible:false,
     }
   },
 
@@ -225,7 +224,6 @@ export default {
       })
     },
   },
-
 }
 </script>
 
@@ -513,5 +511,8 @@ input:focus::placeholder{
 }
 .changeAvatar{
   z-index:3;
+}
+.theAvatar{
+  cursor: pointer;
 }
 </style>
