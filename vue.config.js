@@ -1,3 +1,6 @@
+const  webpack = require('webpack')
+const publicPath = './'
+//↑添加
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
@@ -11,6 +14,17 @@ module.exports = defineConfig({
       },
     },
   },
+  publicPath,
+  configureWebpack: {
+    plugins: [
+      new webpack.ProvidePlugin({
+        $: "jquery",
+        jQuery: "jquery",
+        jquery: "jquery",
+        "window.jQuery": "jquery"
+      })
+    ]
+  }
   //添加↑
 })
 

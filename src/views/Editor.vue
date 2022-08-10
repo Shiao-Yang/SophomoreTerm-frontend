@@ -80,34 +80,8 @@
     </div>
     <input type="text" placeholder="为文件命名" id="htmlTitle" v-if="this.$store.state.doc_id===0" :value="inputContent">
     <el-button @click="toSaveDoc" id="save" size="small">保存</el-button>
-
-<!--      <vue-html2pdf-->
-<!--          :show-layout="false"-->
-<!--          :float-layout="true"-->
-<!--          :enable-download="true"-->
-<!--          :preview-modal="false"-->
-<!--          :paginate-elements-by-height="1400"-->
-<!--          :filename="fileName"-->
-<!--          :pdf-quality="2"-->
-<!--          :manual-pagination="false"-->
-<!--          pdf-format="a4"-->
-<!--          pdf-orientation="landscape"-->
-<!--          pdf-content-width="800px"-->
-<!--          @progress="onProgress($event)"-->
-<!--          @hasStartedGeneration="hasStartedGeneration()"-->
-<!--          @hasGenerated="hasGenerated($event)"-->
-<!--          ref="html2Pdf"-->
-<!--      >-->
-<!--        <section slot="pdf-content">-->
-<!--          &lt;!&ndash; PDF Content Here &ndash;&gt;-->
-<!--          <span id="report" v-html="html"></span>-->
-<!--        </section>-->
-<!--      </vue-html2pdf>-->
-
-<!--      &lt;!&ndash;按钮&ndash;&gt;-->
-      <el-button size="small" @click="handleExport1" id="exportAsPDF">导出为Pdf</el-button>
-
-<!--      <el-button size="small" @click="handleSaveToWord" id="exportAsWord">导出为Word</el-button>-->
+    <el-button size="small" @click="handleExport1" id="exportAsPDF">导出为Pdf</el-button>
+    <el-button size="small" @click="handleExport2" id="exportAsWord">导出为Word</el-button>
 
 
   </div>
@@ -122,17 +96,14 @@ import { DomEditor } from '@wangeditor/editor'
 import { IToolbarConfig } from '@wangeditor/editor'
 import VueHtml2pdf from 'vue-html2pdf'
 import htmlToPdf from "../common/htmlToPdf"
+import $ from 'jquery'
+import '../common/htmlToWord'
 
 export default Vue.extend({
   components: { Editor, Toolbar,VueHtml2pdf },
   created() {
     window.myData = this;
     this.toPrepare()
-    // this.getAllDoc();
-    //if (!this.$store.state.isLogin) {
-    //   this.$store.state.warning = true
-    //  this.$router.push('/')
-    //}
   },
   data() {
     return {
@@ -161,17 +132,8 @@ export default Vue.extend({
       htmlToPdf.downloadPDF("editor",this.fileName)
       //第一个参数是需要导出的内容的id,第二个参数是输出的文档名称
     },
-    handleSaveToPdf() {
-      this.$refs.html2Pdf.generatePdf()
-    },
-    onProgress() {
-
-    },
-    hasStartedGeneration() {
-
-    },
-    hasGenerated() {
-
+    handleExport2(){
+      $("#file").wordExport('this.fileName');//参数是下载的word文件名
     },
     getHTML() {
       let url
