@@ -133,7 +133,7 @@ export default {
     generateURL(){
       console.log("gen",this.sign, this.preView);
       if(this.preView === 1) {
-        this.url = "http://localhost:8080/preView?" + "pid=" + this.pid + "&"+"pname=" + this.pname;
+        this.url = "http://43.138.26.134//preView?" + "pid=" + this.pid + "&"+"pname=" + this.pname;
       }
       else {
         this.url = "";
