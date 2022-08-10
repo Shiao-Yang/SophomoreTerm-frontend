@@ -23,16 +23,11 @@
           <span class="link-name" :class="{'active': isSelectSide === 3}">团队管理</span>
         </router-link>
       </li>
-      <li class="active">
-        <div class="profile-details">
-          <div class="profile-content">
-            <img :src="theAvatarUrl">
-          </div>
-          <div class="profile-name">
-            {{this.$store.state.userInfo.username}}
-          </div>
-          <i class='bx bx-log-out-circle exit-btn' @click="toExit" title="退出登录"></i>
-        </div>
+      <li class="return">
+        <router-link to="/teamList">
+          <i class='bx bx-undo'></i>
+          <span class="link-name">返回上级</span>
+        </router-link>
       </li>
     </ul>
     <ul class="nav-links" v-if="this.checkRoute() === 2">
@@ -59,17 +54,6 @@
           <i class='bx bx-undo'></i>
           <span class="link-name">返回上级</span>
         </router-link>
-      </li>
-      <li class="active">
-        <div class="profile-details">
-          <div class="profile-content">
-            <img :src="theAvatarUrl">
-          </div>
-          <div class="profile-name">
-            {{this.$store.state.userInfo.username}}
-          </div>
-          <i class='bx bx-log-out-circle exit-btn' @click="toExit" title="退出登录"></i>
-        </div>
       </li>
     </ul>
 
