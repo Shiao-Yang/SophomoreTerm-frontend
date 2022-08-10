@@ -18,6 +18,7 @@ export default new Vuex.Store({
     },
     gid: 1, // 当前团队id
     pid: '', // 当前项目id
+    pname: '', //当前项目名称
     role: 2, // 当前用户身份
     isLogin: false,
     warning: false, // 非法跳转

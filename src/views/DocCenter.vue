@@ -4,7 +4,7 @@
       <img src="../assets/return.png" id="return" @click="back()">
     <div id="list">
       <!--
-      <div @click="toStartCreateDoc" id="create"><p style="position:absolute;left: 22%;top: 15%">创建新的文档</p></div>
+
       <div id="files">
         <div class="file" v-for="item in docs">
           <p style="font-size: 13px;width: 80%"@click="toEditThisDoc(item)">&nbsp;&nbsp;文件名:&nbsp;&nbsp;&nbsp;{{item.name}}</p>
@@ -12,20 +12,82 @@
         </div>
       </div>
       -->
-      <el-collapse v-model="activeNames">
-        <el-collapse-item v-for="(item,index) in projects" :title="item.name" :name="index" :key="index">
-          <template slot="title" >
-            <p @click="pid=item.id" style="width: 75%;margin-left: 5%;">{{item.name}}</p>
-            <img src="../assets/plus.png" class="plus" @click.stop.prevent="openDialog(item.id,index)">
-          </template>
-          <div v-for="(item2,index2) in projectDocs[index]" class="doc" :key="index2"
-               :class="{'active':(Active2 === index2 && Active1 === index),'notActive':(Active2 !== index2 || Active1 !== index)}">
-            <p style="width: 65%;display: inline-block;" class="fileName" @click="toEditThisDoc(item2);Active1=index;Active2=index2">文件名:{{item2.name}}</p>
-            <span style="position: relative;margin-right: 5px" @click="Rename(item2.id,item2.name,item.id,index,index2)">改名</span>
-            <span style="position: relative;" @click="dele(item2.id,item2.name,item.id,index,index2)">删除</span>
-          </div>
+      <!--
+      <el-collapse v-model="activeNames1">
+        <el-collapse-item title="项目文档区" name="0">
+          <el-collapse v-model="activeNames">
+            <el-collapse-item v-for="(item,index) in projects" :title="item.name" :name="index" :key="index">
+              <template slot="title" >
+                <p @click="pid=item.id" style="width: 75%;margin-left: 5%;">{{item.name}}</p>
+                <img src="../assets/plus.png" class="plus" @click.stop.prevent="openDialog(item.id,index)">
+              </template>
+              <div v-for="(item2,index2) in projectDocs[index]" class="doc" :key="index2"
+                   :class="{'active':(Active2 === index2 && Active1 === index),'notActive':(Active2 !== index2 || Active1 !== index)}">
+                <p style="width: 65%;display: inline-block;" class="fileName" @click="toEditThisDoc(item2);Active1=index;Active2=index2">文件名:{{item2.name}}</p>
+                <span style="position: relative;margin-right: 5px" @click="Rename(item2.id,item2.name,item.id,index,index2)">改名</span>
+                <span style="position: relative;" @click="dele(item2.id,item2.name,item.id,index,index2)">删除</span>
+              </div>
+            </el-collapse-item>
+          </el-collapse>
         </el-collapse-item>
       </el-collapse>
+      -->
+
+      <div @click="create=true;titleInput='';type=1;tmpData.id=root_id" id="create">
+        <p style="position: relative; top: 15%">根目录创建</p>
+      </div>
+      <el-tree
+          :data="data"
+          node-key="id"
+          default-expand-all
+          :expand-on-click-node="false">
+      <span class="custom-tree-node" slot-scope="{ node, data }" @click="toEditThisDoc(data);open_file(data)">
+        <span>
+          <img src="../assets/folder.png" v-if="data.type!==1" style="width: 12px;height: 12px">
+          <img src="../assets/file.png" v-else style="width: 12px;height: 12px">
+          {{ node.label }}
+        </span>
+        <span>
+          <el-button
+              type="text"
+              size="mini"
+              @click="openDialog(data.id,data.index,data);type = 0"
+              v-if="data.type===2">
+            新建
+          </el-button>
+          <el-button
+              type="text"
+              size="mini"
+              @click.stop.prevent="openDialog(data.id,data.index,data);radio1='1';type=1"
+              v-if="data.type===0">
+            新建
+          </el-button>
+          <el-button
+              type="text"
+              size="mini"
+              @click.stop.prevent="rename=true;id=data.id;tmpData=data;titleInput=''"
+              v-if="data.type===1 && !data.isOther">
+            改名
+          </el-button>
+          <el-button
+            type="text"
+              size="mini"
+              @click.stop.prevent="rename=true;id=data.id;tmpData=data;titleInput=''"
+              v-else-if="data.isOther">
+            改名
+          </el-button>
+          <el-button
+              type="text"
+              size="mini"
+              @click.stop.prevent="tmpNode=node;tmpData=data;id=data.id;Del=true;"
+              v-if="data.type===1||data.type===0">
+            删除
+          </el-button>
+        </span>
+      </span>
+      </el-tree>
+
+
     </div>
     <el-button @click="toSaveDoc" id="save" size="small" v-if="!init">保存</el-button>
 
@@ -35,16 +97,19 @@
         :close-on-click-modal ="false"
         width="30%"
         height="50%">
+      <el-radio v-model="radio1" label="1" style="margin-left: 4%;margin-bottom: 20px" v-if="type===1">文件夹</el-radio>
+      <el-radio v-model="radio1" label="2" style="margin-bottom: 20px" v-if="type===1">文件</el-radio>
       <div>
-        <input placeholder="请输入标题" style="width: 70%;height: 30px;outline: none;position:relative;left: 4%" v-model="titleInput"></input>
+        <input placeholder="请输入标题" style="width: 70%;height: 30px;outline: none;position:relative;left: 4%"
+               v-model="titleInput" @keyup.enter="getHTML"></input>
       </div>
-      <div style="margin: 20px auto">
+      <div style="margin: 20px auto" v-if="radio1==='2' || type===0">
         <template>
           <el-radio v-model="radio" label="1" style="margin-left: 4%">自定义</el-radio>
           <el-radio v-model="radio" label="2">选择模板</el-radio>
         </template>
       </div>
-      <div style="margin: 20px auto">
+      <div style="margin: 20px auto" v-if="radio1==='2' || type===0">
         <template v-if="radio==='2'">
           <el-radio v-model="radio2" label="1" style="margin-left: 4%">软件开发计划书模板</el-radio>
           <el-radio v-model="radio2" label="2">需求规格说明书模板</el-radio>
@@ -83,7 +148,8 @@
         :visible.sync="rename"
         :close-on-click-modal ="false"
         width="30%">
-      <input placeholder="请输入修改标题" style="width: 70%;height: 15%;top: 38%;outline: none;position: absolute;left: 15%" v-model="titleInput"></input>
+      <input placeholder="请输入修改标题" @keyup.enter="rename_document" style="width: 70%;height: 15%;top: 38%;
+      outline: none;position: absolute;left: 15%" v-model="titleInput"></input>
       <span slot="footer" class="dialog-footer">
           <el-button @click="rename = false" class="cancel">取 消</el-button>
           <el-button type="primary" @click="rename_document" class="confirm">确 定</el-button>
@@ -120,7 +186,7 @@ export default Vue.extend({
     window.myData = this;
     this.$store.state.doc_id = 0
     this.getProjects({gid: this.$store.state.gid})
-    this.toPrepare()
+    // this.toPrepare()
     //if (!this.$store.state.isLogin) {
     //   this.$store.state.warning = true
     //  this.$router.push('/')
@@ -128,6 +194,14 @@ export default Vue.extend({
   },
   data() {
     return {
+      data: [{
+        id: 1,
+        type: -1, // -1代表项目文档区，0代表文件夹，1代表文件，2代表项目
+        label: '项目文档区',
+        children: []
+      }],
+      root_id: -1,
+      activeNames1: [],
       activeNames: [],
       editor: null,
       input: '',
@@ -135,7 +209,7 @@ export default Vue.extend({
       pid: 0,
       index: 0,
       index2: 0,
-      projectDocs: [],
+      //projectDocs: [],
       Del: false,
       rename: false,
       name: '',
@@ -148,29 +222,62 @@ export default Vue.extend({
       theTitle:"未命名",
       titleInput: '',
       create: false,
+
+      radio1: '1',
+
       radio: '1',
       radio2: '1',
       Active1: -1,
       Active2: -1,
-      init: true
+      init: true,
+      tmpData: {},
+      tmpNode: {},
+      type: -1 // 0代表项目区，1代表文件夹区
     }
   },
   methods: {
-    toPrepare(){
-      const Tempthis = this
-      Tempthis.toolbarConfig.excludeKeys=[
-        'emotion',
-        'group-video'
-      ]
+    append(data, child) {
+      console.log(data)
+      if (!data.children) {
+        this.$set(data, 'children', []);
+      }
+      data.children.push(child);
     },
-    openDialog(id,index) {
+
+    remove(node, data) {
+      console.log(node)
+      const parent = node.parent;
+      const children = parent.data.children || parent.data;
+      const index = children.findIndex(d => d.id === data.id);
+      children.splice(index, 1);
+    },
+
+    openDialog(id,index,data) {
+      console.log(id)
+      console.log(index)
       this.pid=id;
+      this.tmpData = data
       this.index=index;
       this.create=true;
       this.titleInput='';
       this.radio='1';
       this.radio2='1'
     },
+    toPrepare() {
+      const Tempthis = this
+      Tempthis.toolbarConfig.excludeKeys=[
+        'emotion',
+        'group-video'
+      ]
+    },
+    //openDialog(id,index) {
+    //  this.pid=id;
+    //  this.index=index;
+    //  this.create=true;
+    //  this.titleInput='';
+    //  this.radio='1';
+    //  this.radio2='1'
+    //},
     getHTML() {
       let url
       if (this.titleInput==='') {
@@ -180,7 +287,11 @@ export default Vue.extend({
       this.create = false
       if (this.radio==='1') {
         this.model_name = 'default_document.html'
-        this.create_document()
+        if (this.type === 0) {
+          this.create_document()
+        } else if (this.type === 1) {
+          this.create_file()
+        }
       }
       if (this.radio==='2') {
         if (this.radio2==='1') {
@@ -199,15 +310,102 @@ export default Vue.extend({
         this.$axios.get(url)
             .then( res => {
               //console.log("res.data:"+res.data)
-              this.create_document()
+              if (this.type===0) {
+                this.create_document()
+              } else if (this.type===1) {
+                this.create_file()
+              }
             })
       }
+    },
+    open_file(data) {
+      if (data.type !== 0 || data.children.length !== 0) {
+        return
+      }
+      this.tmpData = data
+      let params = {
+        id: data.id
+      }
+      this.axios({
+        method: "post",
+        url: this.$store.state.base+'documents_center/open_file/',
+        data: qs.stringify(params)
+      })
+          .then(res => {
+            switch (res.data.errno) {
+              case 1001:
+                this.$message.warning(res.data.msg)
+                    break
+              case 1002:
+                this.$message.warning(res.data.msg)
+                break
+              case 1003:
+                this.$message.warning(res.data.msg)
+                break
+              case 1004:
+                this.$message.warning(res.data.msg)
+                break
+              default:
+                console.log("   1res.data:")
+                console.log(res.data)
+                  let len = res.data.length,i = 0
+                  for (i; i < len; i++) {
+                    console.log(res.data[i])
+                    let Data = { id: res.data[i].id , label: res.data[i].name, children: [], type: res.data[i].type,isOther: true,}
+                    this.append(this.tmpData, Data)
+                  }
+                break
+            }
+          })
+    },
+    create_file() {
+      let params
+      if (this.radio1 === '1') {
+        params = {
+          id: this.tmpData.id,
+          name: this.titleInput,
+          type: 0
+        }
+      } else if (this.radio1 === '2') {
+        params = {
+          id: this.tmpData.id,
+          name: this.titleInput,
+          type: 1,
+          model_name: this.model_name,
+          uid: this.$store.state.userInfo.uid
+        }
+      }
+      this.axios({
+        method: "post",
+        url: this.$store.state.base+'documents_center/create_file/',
+        data: qs.stringify(params)
+      })
+          .then(res => {
+            switch (res.data.errno) {
+              case 0:
+                console.log(res.data.file_id)
+                  let data
+                  if (this.tmpData.id === this.root_id) {
+                    data = {id: res.data.file_id, label: this.titleInput, children: [],type: params.type,isOther: true}
+                    this.data.push(data)
+                  } else {
+                    data = {id: res.data.file_id , label: this.titleInput, children: [], type: params.type,isOther: true}
+                    this.append(this.tmpData,data)
+                  }
+                // this.getProjects({gid: this.$store.state.gid})
+                this.$message.success(res.data.msg)
+                break
+              default:
+                this.$message.warning(res.data.msg)
+            }
+          })
     },
     create_document() {
       console.log("this.html:"+this.html)
       let params = {
         pid: this.pid,
         name: this.titleInput,
+        uid: this.$store.state.userInfo.uid,
         model_name: this.model_name,
       }
       console.log("params.model_name:"+params.model_name)
@@ -217,11 +415,14 @@ export default Vue.extend({
         data: qs.stringify(params)
       })
           .then(res => {
+            console.log("res:")
             console.log(res);
             switch (res.data.errno) {
               case 0:
-                this.getProjects({gid: this.$store.state.gid})
-                this.$message.success("新文档已保存。")
+                let data = {id: res.data.docid , label: this.titleInput, children: [], type: 1, pid: this.pid }
+                  this.append(this.tmpData,data)
+                // this.getProjects({gid: this.$store.state.gid})
+                this.$message.success(res.data.msg)
                 break
               default:
                 this.$message.warning(res.data.msg)
@@ -238,14 +439,59 @@ export default Vue.extend({
         params: gid,
       })
           .then(res =>{
+            this.data = [{
+              id: 1,
+              type: -1, // -1代表项目文档区，0代表文件夹，1代表文件，2代表项目
+              label: '项目文档区',
+              children: []
+            }]
+            this.init_center()
             this.projects = res.data;
             console.log(this.projects)
             this.getFiles()
           });
     },
+    init_center() {
+      let params = {
+        gid: this.$store.state.gid
+      }
+      this.axios({
+        method: "post",
+        url: this.$store.state.base+"documents_center/",
+        data: qs.stringify(params)
+      })
+          .then(res => {
+            console.log('res:')
+            console.log(res)
+            switch (res.data.errno) {
+              case 1001:
+                this.$message.warning(res.data.msg)
+                break
+              case 1002:
+                this.$message.warning(res.data.msg)
+                break
+              case 1003:
+                this.$message.warning(res.data.msg)
+                break
+              case 1004:
+                this.$message.warning(res.data.msg)
+                break
+              default:
+                let len = res.data.length
+                for (let i = 0; i < len; i++) {
+                  if (res.data[i].name !== "项目文档区") {
+                    this.data.push({id: res.data[i].id, label: res.data[i].name, children: [], type: res.data[i].type,isOther:true})}
+                  this.root_id = res.data[i].root_id
+                }
+                break
+            }
+          })
+    },
     getFiles() {
-      let i, len = this.projects.length
-      for (i = 0; i < len; i++) {
+      let len = this.projects.length
+      for (let i = 0; i < len; i++) {
+        const newChild = { id: this.projects[i].id, label: this.projects[i].name, children: [],type: 2, index: i};
+        this.data[0].children.push(newChild);
         this.getProjectDoc(this.projects[i].id,i)
       }
     },
@@ -259,7 +505,15 @@ export default Vue.extend({
           data: qs.stringify(params)
         })
             .then(res => {
-              this.projectDocs[index]=res.data
+
+              //this.projectDocs[index]=res.data
+              let len = res.data.length
+              console.log(res.data)
+              for (let i = 0; i < len; i++) {
+                const newChild = { id: res.data[i].id, label: res.data[i].name, children: [],type: 1,pid: res.data[i].pid,index: i };
+                this.data[0].children[index].children.push(newChild)
+              }
+
               this.$forceUpdate()
             })
     },
@@ -291,14 +545,19 @@ export default Vue.extend({
       this.index = index
     },
     rename_document() {
-      this.rename = false
       let params = {
         id: this.id,
         name: this.titleInput
       }
+      let URL
+      if (!this.tmpData.isOther) {
+        URL = this.$store.state.base+'project_manage/rename_document/'
+      } else {
+        URL = this.$store.state.base+'documents_center/rename_file/'
+      }
       this.axios({
         method: "post",
-        url: this.$store.state.base+'project_manage/rename_document/',
+        url: URL,
         data: qs.stringify(params)
       })
           .then(res => {
@@ -322,7 +581,8 @@ export default Vue.extend({
                 break
               case 0:
                 this.$message.success('修改成功！')
-                this.getProjects({gid: this.$store.state.gid})
+                this.rename = false
+                  this.tmpData.label = this.titleInput
                 this.$forceUpdate()
                 break
             }
@@ -333,51 +593,79 @@ export default Vue.extend({
       let params= {
         id: id,
       }
+      let URL
+      if (this.tmpData.isOther) {
+        URL = this.$store.state.base+'documents_center/delete_file/'
+      } else {
+        URL = this.$store.state.base+'project_manage/delete_document/'
+      }
+      console.log(this.tmpData)
+      console.log("URL:")
+      console.log(URL)
       this.axios({
         method: 'post',
-        url: this.$store.state.base+'project_manage/delete_document/',
+        url: URL,
         data: qs.stringify(params)
       })
           .then(Response =>  {
             console.log(Response)
             //this.projectDocs[this.index].splice(this.index2, 1)
-            this.getProjects({gid: this.$store.state.gid})
-            this.$message.success('删除成功！')
-            if (this.index===this.Active1 && this.index2 < this.Active2) {
-              this.Active2 -= 1
+            //this.getProjects({gid: this.$store.state.gid})
+            switch (Response.data.errno) {
+              case 0:
+                this.$message.success('删除成功！')
+                this.remove(this.tmpNode,this.tmpData)
+                if (this.index===this.Active1 && this.index2 < this.Active2) {
+                  this.Active2 -= 1
+                }
+                if(Response.data.errno===0 && this.$store.state.doc_id===id|| this.$store.state.doc_id===this.tmpData.docid){
+                  this.init = true
+                  this.html = '<h1 style="text-align: center;">初始化页面</h1>'
+                  this.Active1 = -1
+                  this.Active2 = -1
+                }
+                break
+              default:
+                this.$message.warning(Response.data.msg)
+                    break
             }
-            if(Response.data.errno===0 && this.$store.state.doc_id===id){
-              this.init = true
-              this.html = '<h1 style="text-align: center;">初始化页面</h1>'
-              this.Active1 = -1
-              this.Active2 = -1
-            }
-            else if(Response.data.errno===2)
-              this.$message.warning("不存在此文档")
+
           })
           .catch(error => {
             console.log(error);
           })
     },
     toEditThisDoc(thisDoc) {
+      if (thisDoc.type !== 1) {
+        return
+      }
       this.$store.state.doc_id = thisDoc.id
       this.init = false
       let params = {
         id: thisDoc.id
       }
       console.log("id:" + thisDoc.id)
+      let URL
+      if (thisDoc.isOther) {
+        URL = this.$store.state.base + 'documents_center/open_file/'
+      } else {
+        URL = this.$store.state.base + 'project_manage/open_document/'
+      }
       this.axios({
         method: "post",
-        url: this.$store.state.base + 'project_manage/open_document/',
+        url: URL,
         data: qs.stringify(params)
       })
           .then(Response => {
             console.log(Response.data)
-            console.log("url:" + this.$store.state.base + 'project_manage/open_document/')
             console.log("Response:" + Response.data[0].name + " " + Response.data[0].url)
             console.log(this.$store.state.base + Response.data[0].url)
             this.$axios.post(this.$store.state.base + Response.data[0].url)
                 .then(res => {
+                  if (Response.data[0].docid) {
+                    this.$store.state.doc_id = Response.data[0].docid
+                    thisDoc.docid = Response.data[0].docid
+                  }
                   this.html = res.data
                   console.log("res.data:" + res.data)
                   console.log("此文档已打开，现在的html代码是" + this.html);
@@ -388,6 +676,7 @@ export default Vue.extend({
       if(this.$store.state.doc_id===0){
         let params= {
           pid: this.pid,
+          uid: this.$store.state.userInfo.uid,
           name: document.getElementById("htmlTitle").value,
           data: this.editor.getHtml()
         }
@@ -458,6 +747,14 @@ export default Vue.extend({
 
 <style src="@wangeditor/editor/dist/css/style.css"></style>
 <style scoped>
+.custom-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
+}
 #bgd {
   position: absolute;
   width: 100%;
@@ -614,6 +911,22 @@ export default Vue.extend({
   cursor: pointer;
 }
 #Delete:hover {
+  background: rgb(240,240,240);
+}
+#create {
+  position: relative;
+  text-align: center;
+  margin-bottom: 20px;
+  top: 2%;
+  left: 10%;
+  width: 80%;
+  height: 30px;
+  background: rgb(255,255,255);
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+#create:hover {
   background: rgb(240,240,240);
 }
 </style>

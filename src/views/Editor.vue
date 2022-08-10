@@ -80,10 +80,9 @@
     </div>
     <input type="text" placeholder="为文件命名" id="htmlTitle" v-if="this.$store.state.doc_id===0" :value="inputContent">
     <el-button @click="toSaveDoc" id="save" size="small">保存</el-button>
-    <el-button size="small" @click="handleExport1" id="exportAsPDF">导出为Pdf</el-button>
+    <el-button size="small" @click="handleExport1" id="exportAsPDF">导出为PDF</el-button>
     <el-button size="small" @click="handleExport2" id="exportAsWord">导出为Word</el-button>
     <el-button size="small" @click="handleExport3" id="exportAsMarkdown">导出为MD</el-button>
-
   </div>
 </template>
 
@@ -118,7 +117,15 @@ export default Vue.extend({
       name: '',
       html: '',
       toolbarConfig: { },
-      editorConfig: { placeholder: '请输入内容...' },
+      editorConfig: { placeholder: '请输入内容...',
+        // 所有的菜单配置，都要在 MENU_CONF 属性下
+        MENU_CONF: {
+          //配置上传图片
+          uploadImage: {
+            customUpload: this.uploadImg
+          },
+        },
+      },
       mode: 'default', // or 'simple'
       docs: [],
       theTitle:"未命名",
@@ -163,6 +170,30 @@ export default Vue.extend({
       a.click()
       URL.revokeObjectURL(url)
     },
+    uploadImg(file, insertFn){
+      const tempthis = this;
+      let param = new FormData();
+      param.append("img", file);
+      param.append("did", tempthis.$store.state.doc_id)
+      console.log(param)
+      //调接口，上传图片
+      axios.post(this.$store.state.base+'project_manage/upload_img/',
+          param,
+          {headers:{'Content-Type':'multipart/form-data'}})
+          .then(function (Response) {
+            // console.log(Response);
+            if(Response.data.errno===0)
+            {
+              insertFn(tempthis.$store.state.base+Response.data.data.url);
+            }
+            else{
+              alert("上传出错了")
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
 
     getHTML() {
       let url
@@ -198,6 +229,7 @@ export default Vue.extend({
     },
     create_document() {
       let params = {
+        uid:this.$store.state.userInfo.uid,
         pid: this.$store.state.pid,
         name: this.titleInput,
         model_name: this.model_name,
@@ -306,6 +338,7 @@ export default Vue.extend({
       const tempthis = this;
       if(this.$store.state.doc_id===0){
         let params= {
+          uid:this.$store.state.userInfo.uid,
           pid:this.$store.state.pid,
           name:document.getElementById("htmlTitle").value,
           data:tempthis.editor.getHtml()
@@ -356,15 +389,20 @@ export default Vue.extend({
     },
     toPrepare(){
       const Tempthis = this
-      // const toolbar = DomEditor.getToolbar(Tempthis.editor)
-      // console.log(toolbar.getConfig())
-      // const curToolbarConfig = toolbar.getConfig()
-      // console.log(curToolbarConfig.toolbarKeys)
       Tempthis.toolbarConfig.excludeKeys=[
         'emotion',
-        'group-image',
-        'group-video'
+        // 'group-image',
+        'group-video',
+        'insertImage'
       ]
+    },
+    temptemp(){
+      //这个是为了展示工具栏各个工具的信息。需要用的时候，在页面上加一个按钮，点击按钮调用此函数即可
+      const Tempthis = this
+      const toolbar = DomEditor.getToolbar(Tempthis.editor)
+      console.log(toolbar.getConfig())
+      const curToolbarConfig = toolbar.getConfig()
+      console.log(curToolbarConfig.toolbarKeys)
     },
     getAllDoc(){
       const tempthis = this;
