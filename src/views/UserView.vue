@@ -11,7 +11,7 @@
           <div class="blog-slider_item swiper-slide">
             <div class="blog-slider_img">
               <div class="side-avatar">
-                <img :src="this.$store.state.base+this.$store.state.userInfo.avatar" @click="changeAvatarVissible =true">
+                <img :src="this.$store.state.base+this.$store.state.userInfo.avatar" title="点击更换头像" @click="changeAvatarVissible =true">
               </div>
               <div class="side-namebox">
                 <span class="side-name">{{this.$store.state.userInfo.username}}</span>
@@ -79,9 +79,9 @@
           </div>
         </div>
         <div class="blog-slider_pagination">
-          <span class="swiper-pagination-bullet" :class="{'active':select===1}" @click="select=1"></span>
-          <span class="swiper-pagination-bullet" :class="{'active':select===2}" @click="select=2"></span>
-          <span class="swiper-pagination-bullet" :class="{'active':select===3}" @click="select=3"></span>
+          <span class="swiper-pagination-bullet" :class="{'active':select===1}" title="个人信息" @click="select=1"></span>
+          <span class="swiper-pagination-bullet" :class="{'active':select===2}" title="账号设置" @click="select=2"></span>
+          <span class="swiper-pagination-bullet" :class="{'active':select===3}" title="消息中心" @click="select=3"></span>
         </div>
       </div>
     </div>
@@ -844,8 +844,15 @@ p {
 }
 
 .blog-slider_content .inv-list .inv-item .inv-avatar{
-  width: 60px;
+  width: 50px;
   height: 60px;
+  border-radius: 30px;
+  line-height: 60px;
+}
+
+.blog-slider_content .inv-list .inv-item .inv-avatar img{
+  width: 50px;
+  height: 50px;
   border-radius: 30px;
 }
 
