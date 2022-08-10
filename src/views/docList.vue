@@ -28,7 +28,7 @@
                   <!--                  <img class="project-logo" src="../assets/logo.png">-->
                   <span class="project-info">
                     <span class="project-name">{{project.name}}</span>
-                    <!--<span class="project-details">创建时间 : {{project.starttime}}</span>-->
+                    <span class="project-details">创建时间 : {{project.create_time}} &nbsp;&nbsp;创建人 : {{project.creator_username}}</span>
                   </span>
                   <i class='bx bxl-sketch first' title="编辑" @click="open(project.id,project,index)"></i>
                   <i class='bx bxs-edit-alt' title="重命名" @click="Rename(project.id)"></i>
@@ -180,6 +180,7 @@ export default {
         pid: this.$store.state.pid,
         name: this.titleInput,
         model_name: this.model_name,
+        uid: this.$store.state.userInfo.uid
       }
       console.log("params.model_name:"+params.model_name)
       this.axios({
