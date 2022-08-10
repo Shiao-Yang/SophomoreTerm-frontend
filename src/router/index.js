@@ -22,6 +22,7 @@ import docCenter from "@/views/DocCenter";
 import docList from "@/views/docList";
 import userSet from "@/views/UserSet";
 import MessageList from "@/views/MessageList"
+import UmlView from "@/views/UmlView";
 
 Vue.use(VueRouter)
 
@@ -79,9 +80,6 @@ const routes = [
     component: TeamList
   },
 
-  // {
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  // },*/
   {
     path: '/adminTeam',
     name: 'adminTeam',
@@ -131,6 +129,11 @@ const routes = [
     path: '/messageList',
     name: 'messageList',
     component: MessageList
+  },
+  {
+    path: '/UmlView',
+    name: 'UmlView',
+    component: UmlView,
   }
 
 ]

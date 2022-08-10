@@ -249,8 +249,10 @@ export default {
 
 <style scoped>
 .main {
+  overflow-x: hidden;
   /* 100%窗口高度 */
-  height: 675px;
+  height: 100vh;
+  min-height: 675px;
   width: 100%;
   /* 弹性布局 水平+垂直居中 */
   display: flex;
