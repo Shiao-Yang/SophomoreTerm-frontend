@@ -16,20 +16,54 @@
         <el-collapse-item v-for="(item,index) in projects" :title="item.name" :name="index" :key="index">
           <template slot="title" >
             <p @click="pid=item.id" style="width: 75%;margin-left: 5%;">{{item.name}}</p>
-            <img src="../assets/plus.png" class="plus" @click.stop.prevent="toStartCreateDoc(item.id,index)">
+            <img src="../assets/plus.png" class="plus" @click.stop.prevent="openDialog(item.id,index)">
           </template>
-          <div v-for="(item2,index2) in projectDocs[index]" class="doc" :key="index2">
-            <p style="width: 65%;display: inline-block;" class="fileName" @click="toEditThisDoc(item2)">文件名:{{item2.name}}</p>
+          <div v-for="(item2,index2) in projectDocs[index]" class="doc" :key="index2"
+               :class="{'active':(Active2 === index2 && Active1 === index),'notActive':(Active2 !== index2 || Active1 !== index)}">
+            <p style="width: 65%;display: inline-block;" class="fileName" @click="toEditThisDoc(item2);Active1=index;Active2=index2">文件名:{{item2.name}}</p>
             <span style="position: relative;margin-right: 5px" @click="Rename(item2.id,item2.name,item.id,index,index2)">改名</span>
             <span style="position: relative;" @click="dele(item2.id,item2.name,item.id,index,index2)">删除</span>
           </div>
         </el-collapse-item>
       </el-collapse>
     </div>
-    <input type="text" placeholder="为文件命名" id="htmlTitle" v-if="this.$store.state.doc_id===0" @keyup.enter="toSaveDoc" v-model="input">
-    <div id="title" v-else>文件名：{{theTitle}}</div>
-    <el-button @click="toSaveDoc" id="save" size="small" v-if="this.$store.state.doc_id===0">保存</el-button>
-    <el-button @click="toSaveDoc" id="modify" size="small" v-else>修改保存</el-button>
+    <el-button @click="toSaveDoc" id="save" size="small" v-if="!init">保存</el-button>
+
+    <el-dialog
+        title="提示"
+        :visible.sync="create"
+        :close-on-click-modal ="false"
+        width="30%"
+        height="50%">
+      <div>
+        <input placeholder="请输入标题" style="width: 70%;height: 30px;outline: none;position:relative;left: 4%" v-model="titleInput"></input>
+      </div>
+      <div style="margin: 20px auto">
+        <template>
+          <el-radio v-model="radio" label="1" style="margin-left: 4%">自定义</el-radio>
+          <el-radio v-model="radio" label="2">选择模板</el-radio>
+        </template>
+      </div>
+      <div style="margin: 20px auto">
+        <template v-if="radio==='2'">
+          <el-radio v-model="radio2" label="1" style="margin-left: 4%">软件开发计划书模板</el-radio>
+          <el-radio v-model="radio2" label="2">需求规格说明书模板</el-radio>
+          <el-radio v-model="radio2" label="3" style="margin-left: 4%;margin-top: 10px">会议纪要模板</el-radio>
+          <el-radio v-model="radio2" label="4" style="margin-top: 10px">项目计划书模板</el-radio>
+        </template>
+        <template v-else>
+          <el-radio disabled v-model="radio2" label="1" style="margin-left: 4%">软件开发计划书模板</el-radio>
+          <el-radio disabled v-model="radio2" label="2">需求规格说明书模板</el-radio>
+          <el-radio disabled v-model="radio2" label="3" style="margin-left: 4%;margin-top: 10px">会议纪要模板</el-radio>
+          <el-radio disabled v-model="radio2" label="4" style="margin-top: 10px">项目计划书模板</el-radio>
+        </template>
+      </div>
+
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="create = false" class="cancel">取 消</el-button>
+          <el-button type="primary" @click="getHTML" class="confirm">创 建</el-button>
+        </span>
+    </el-dialog>
 
     <el-dialog
         title="提示"
@@ -111,10 +145,81 @@ export default Vue.extend({
       docs: [],
       projects: [],
       theTitle:"未命名",
-      titleInput: ''
+      titleInput: '',
+      create: false,
+      radio: '1',
+      radio2: '1',
+      Active1: -1,
+      Active2: -1,
+      init: true
     }
   },
   methods: {
+    openDialog(id,index) {
+      this.pid=id;
+      this.index=index;
+      this.create=true;
+      this.titleInput='';
+      this.radio='1';
+      this.radio2='1'
+    },
+    getHTML() {
+      let url
+      if (this.titleInput==='') {
+        this.$message.warning("请输入标题")
+        return
+      }
+      this.create = false
+      if (this.radio==='1') {
+        this.model_name = 'default_document.html'
+        this.create_document()
+      }
+      if (this.radio==='2') {
+        if (this.radio2==='1') {
+          url = this.$store.state.base+"media/documents/document_model_1.html"
+          this.model_name = 'document_model_1.html'
+        } else if (this.radio2==='2') {
+          url = this.$store.state.base+"media/documents/document_model_2.html"
+          this.model_name = 'document_model_2.html'
+        } else if (this.radio2==='3') {
+          url = this.$store.state.base+"media/documents/document_model_3.html"
+          this.model_name = 'document_model_3.html'
+        } else if (this.radio2==='4') {
+          url = this.$store.state.base+"media/documents/document_model_4.html"
+          this.model_name = 'document_model_4.html'
+        }
+        this.$axios.get(url)
+            .then( res => {
+              //console.log("res.data:"+res.data)
+              this.create_document()
+            })
+      }
+    },
+    create_document() {
+      console.log("this.html:"+this.html)
+      let params = {
+        pid: this.pid,
+        name: this.titleInput,
+        model_name: this.model_name,
+      }
+      console.log("params.model_name:"+params.model_name)
+      this.axios({
+        method: "post",
+        url: this.$store.state.base+'project_manage/create_document/',
+        data: qs.stringify(params)
+      })
+          .then(res => {
+            console.log(res);
+            switch (res.data.errno) {
+              case 0:
+                this.getProjects({gid: this.$store.state.gid})
+                this.$message.success("新文档已保存。")
+                break
+              default:
+                this.$message.warning(res.data.msg)
+            }
+          })
+    },
     back() {
       this.$router.go(-1);
     },
@@ -230,8 +335,14 @@ export default Vue.extend({
             //this.projectDocs[this.index].splice(this.index2, 1)
             this.getProjects({gid: this.$store.state.gid})
             this.$message.success('删除成功！')
+            if (this.index===this.Active1 && this.index2 < this.Active2) {
+              this.Active2 -= 1
+            }
             if(Response.data.errno===0 && this.$store.state.doc_id===id){
-              this.toStartCreateDoc(this.projects[0].id,0)
+              this.init = true
+              this.html = ''
+              this.Active1 = -1
+              this.Active2 = -1
             }
             else if(Response.data.errno===2)
               this.$message.warning("不存在此文档")
@@ -240,31 +351,32 @@ export default Vue.extend({
             console.log(error);
           })
     },
-    toEditThisDoc(thisDoc){
-
+    toEditThisDoc(thisDoc) {
       this.$store.state.doc_id = thisDoc.id
-      const tempthis = this;
-      let params= {
-        id:thisDoc.id
+      this.init = false
+      let params = {
+        id: thisDoc.id
       }
-      axios.post(this.$store.state.base+'project_manage/open_document/',
-          qs.stringify(params))
-          .then(function (Response) {
-            //alert("新文档已保存。")
-            tempthis.html=''
-            tempthis.html=Response.data.data
-            console.log("此文档已打开，现在的html代码是"+tempthis.html);
-            //console.log(Response)
-            let i;
-            //console.log(tempthis.docs.length)
-            tempthis.theTitle=thisDoc.name
-          })
-          .catch(function (error) {
-            console.log(error);
+      console.log("id:" + thisDoc.id)
+      this.axios({
+        method: "post",
+        url: this.$store.state.base + 'project_manage/open_document/',
+        data: qs.stringify(params)
+      })
+          .then(Response => {
+            console.log(Response.data)
+            console.log("url:" + this.$store.state.base + 'project_manage/open_document/')
+            console.log("Response:" + Response.data[0].name + " " + Response.data[0].url)
+            console.log(this.$store.state.base + Response.data[0].url)
+            this.$axios.post(this.$store.state.base + Response.data[0].url)
+                .then(res => {
+                  this.html = res.data
+                  console.log("res.data:" + res.data)
+                  console.log("此文档已打开，现在的html代码是" + this.html);
+                })
           })
     },
     toSaveDoc(){
-
       if(this.$store.state.doc_id===0){
         let params= {
           pid: this.pid,
@@ -289,23 +401,33 @@ export default Vue.extend({
             .catch(error => {
               console.log(error)
             })
-      }
-      else{
-        let params2= {
-          id:this.$store.state.doc_id,
-          data:this.editor.getHtml()
+      } else {
+        let str = this.editor.getHtml()
+        console.log("str:"+str)
+        let blob = new Blob([str])
+        let formData = new FormData()
+        formData.append("id", JSON.stringify(this.$store.state.doc_id))
+        formData.append("file", blob)
+
+        for (let value of formData.values()) {
+          console.log(value);
+          console.log(typeof value);
         }
-        this.axios({
+        this.axios ({
           method: "post",
           url: this.$store.state.base+'project_manage/store_document/',
-          data: qs.stringify(params2)
+          data: formData
         })
-            .then(Response => {
-              console.log(Response);
-              this.$message.success("对文档的修改已保存。")
-            })
-            .catch(error => {
-              console.log(error);
+            .then(res => {
+              console.log(res)
+              switch (res.data.errno) {
+                case 0:
+                  this.$message.success("对文档的修改已保存。")
+                  break
+                default:
+                  this.$message.warning(res.data.msg)
+                  break
+              }
             })
       }
     },
@@ -368,9 +490,13 @@ export default Vue.extend({
   cursor: pointer;
   transition: 0.3s;
 }
-.doc:hover {
-  transform: scale(1.1);
+.doc.notActive:hover {
+  transform: scale(1.05);
   background-color: rgb(240,240,240);
+}
+.active {
+  background-color: rgb(240,240,240);
+  scale: 1.05;
 }
 #box {
   position: absolute;
