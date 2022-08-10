@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header></Header>
     <div class="main">
       <div class="left-box">
         <div class="name">
@@ -57,16 +56,59 @@ export default {
   },
 
   created() {
-    this.p_name = this.$store.state.pname;
-    console.log(this.p_name);
-    this.get_Picture(this.$store.state.pid);
+    console.log(this.$route.query.pid,":",this.$route.query.pname)
+    this.getPreView(this.$route.query.pid, this.$route.query.pname);
   },
 
   mounted() {
-
+    console.log("num",this.num);
   },
 
   methods: {
+    getPreView(pid, pname) {
+      let params = {
+        pid: pid,
+      }
+
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base+"design/get_show_status/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log(res.data);
+        if(res.data.errno === 0) {
+
+          if(res.data.showable === 1) {
+            this.p_name = pname;
+            this.get_Picture(pid);
+          }
+
+          else {
+            alert("页面无效")
+            return ;
+          }
+
+          // this.$message({
+          //   message: res.data.msg,
+          //   type: 'success',
+          //   showClose: true,
+          // })
+
+        } else {
+          //this.preView = 0;
+
+          this.$message({
+            message: res.data.msg,
+            type: 'error',
+            showClose: true,
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+
+    },
+
     changeNum(num,picid) {
       console.log(num,":",picid);
       if(this.num === num) {
@@ -160,8 +202,7 @@ li {
   overflow-x: hidden;
   overflow-y: hidden;
   /* 100%窗口高度 */
-  height: 670px;
-  min-height: 670px;
+  height: 100vh;
   width: 100%;
   /* 弹性布局 水平+垂直居中 */
   display: flex;
