@@ -49,7 +49,9 @@
 <!--                  <img class="project-logo" src="../assets/logo.png">-->
                   <span class="project-info">
                     <span class="project-name">{{project.name}}</span>
-                    <!--<span class="project-details">创建时间 : {{project.starttime}}</span>-->
+                    <span class="project-creater-name">创建人 : {{project.creator_username}}</span>
+                    <span class="project-details">创建时间 : {{project.create_time}}</span>
+                    <span class="project-details">上次修改时间 : {{project.modify_time}}</span>
                   </span>
                   <i class='bx bxl-sketch first' title="设计" @click="toDesign(project.picid,project.name)"></i>
                   <!--<i class='bx bx-play' v-if="preView===1" title="设计" @click="toPreview(pid, pname)"></i>-->
@@ -633,6 +635,15 @@ export default {
   font-size: 20px;
   font-weight: 700;
   width: 100%;
+}
+
+.content-details .projectList .projects .project-item .project-info .project-creater-name{
+  font-size: 20px;
+  font-weight: 700;
+  width: 100%;
+  position: relative;
+  top: -30px;
+  left: -500px;
 }
 
 .content-details .projectList .projects .project-item .project-info .project-details{
