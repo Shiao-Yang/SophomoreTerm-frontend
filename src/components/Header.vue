@@ -25,6 +25,17 @@
                 <span>个人信息</span>
                 <i class='bx bx-chevron-right right'></i>
               </li>
+              <li class="sub-item" @click="toVisitAccountSettings">
+                <i class='bx bxs-user-account'></i>
+                <span>账号设置</span>
+                <i class='bx bx-chevron-right right'></i>
+              </li>
+              <li class="sub-item" @click="toVisitInvitation">
+                <i class='bx bx-message-rounded'></i>
+                <span>消息中心</span>
+                <i class='bx bxs-circle' style="font-size:12px;color: #FF5733" v-if="this.messageList.length !== 0"></i>
+                <i class='bx bx-chevron-right right'></i>
+              </li>
               <li class="sub-item" @click="toVisitTeamList">
                 <i class='bx bx-group'></i>
                 <span>我的团队</span>
@@ -54,14 +65,16 @@ export default {
     return {
       isSelected: false,
       avatarUrl:this.$store.state.base+this.$store.state.userInfo.avatar,
+      messageList: [],
     }
   },
   created() {
     if(this.$store.state.isLogin === false && this.$route.path !== '/login&register' && this.$route.path !== '/'){
-      this.$message.error("还没登录哦！")
       this.$router.push('/');
+      this.$message.error("还没登录哦！")
     }
     this.getInfo(sessionStorage.getItem('uid'));
+    this.toGetMessageList();
   },
   methods:{
     toVisitHome:function (){
@@ -74,7 +87,22 @@ export default {
       this.$router.push('/login&register');
     },
     toVisitSelf:function (){
-      this.$router.push('/userInfo');
+      this.$router.push({
+        name:'UserView',
+        params:{select: 1},
+      });
+    },
+    toVisitAccountSettings:function (){
+      this.$router.push({
+        name:'UserView',
+        params:{select: 2},
+      });
+    },
+    toVisitInvitation:function (){
+      this.$router.push({
+        name:'UserView',
+        params:{select: 3},
+      });
     },
     toVisitTeamList:function (){
       this.$router.push('/teamList');
@@ -102,6 +130,25 @@ export default {
         this.$store.state.userInfo.profile = user.profile;
         this.$store.state.userInfo.avatar = user.avatar;
         this.avatarUrl=tempthis.$store.state.base+user.avatar
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    toGetMessageList:function (){
+      const tempthis =this;
+      let params ={
+        uid:this.$store.state.userInfo.uid
+      }
+      this.$axios({
+        method: 'post',
+        url: this.$store.state.base+"team_manage/get_invitation/",
+        data: qs.stringify(params)
+      }).then(res => {
+        console.log(res)
+        tempthis.dataLoadingCompleted=false
+        tempthis.messageList=res.data
+        console.log(tempthis.messageList)
+        tempthis.dataLoadingCompleted=true
       }).catch(err => {
         console.log(err)
       })

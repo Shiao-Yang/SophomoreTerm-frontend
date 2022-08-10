@@ -24,7 +24,7 @@
                 <span class="details" v-if="project.status === 0">
                   <i class='bx bxs-circle' style="color: #42b983"></i>
                   正在开发
-                  <el-button type="info" style="margin-left: 10px" @click="changeState">结束</el-button>
+                  <el-button type="info" style="margin-left: 10px" @click="changeState" size="small">结束</el-button>
                 </span>
                 <span class="details" v-else>
                   <i class='bx bxs-circle' style="color: #666666"></i>

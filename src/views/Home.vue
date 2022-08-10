@@ -22,7 +22,7 @@
           <h2 data-jarallax-element="0 -200">在线协作，高效编辑</h2>
           <div class="container">
             <div class="imgBx jarallax">
-              <img class="jarallax-img" src="../assets/adminBgd.jpg">
+              <img class="jarallax-img" src="http://43.138.26.134/api/media/images/demo1.gif">
             </div>
             <div class="content" data-jarallax-element="-200 0">
               <p>
@@ -44,7 +44,7 @@
           <h2 data-jarallax-element="0 200">团队管理，协作无间</h2>
           <div class="container">
             <div class="imgBx jarallax">
-              <img class="jarallax-img" src="../assets/adminBgd.jpg">
+              <img class="jarallax-img" src="http://43.138.26.134/api/media/images/demo2.gif">
             </div>
             <div class="content" data-jarallax-element="-200 0">
               <p>
@@ -61,7 +61,7 @@
           <h2 data-jarallax-element="0 -200">多项功能，一站集成</h2>
           <div class="container">
             <div class="imgBx jarallax">
-              <img class="jarallax-img" src="../assets/adminBgd.jpg">
+              <img class="jarallax-img" src="http://43.138.26.134/api/media/images/demo3.gif">
             </div>
             <div class="content" data-jarallax-element="-200 0">
               <p>
@@ -141,7 +141,7 @@ export default {
 }
 
 .home {
-  background: linear-gradient(90deg,transparent,rgba(68,138,255,.05));;
+  background: linear-gradient(90deg,transparent,rgba(68,138,255,.05));
   padding-bottom: 50px;
   overflow: hidden;
 }

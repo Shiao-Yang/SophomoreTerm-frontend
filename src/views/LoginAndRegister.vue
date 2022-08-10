@@ -4,7 +4,6 @@
       <Header></Header>
     </div>
     <div class="main">
-
       <div class="container">
         <div class="form-box">
           <div class="register-box hidden">
@@ -237,6 +236,8 @@ export default {
 h1{
   text-align: center;
   margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 700;
   /* 大写 */
   text-transform: uppercase;
   color: #fff;

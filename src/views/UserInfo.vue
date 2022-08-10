@@ -240,7 +240,7 @@ export default {
   justify-content: center;
   align-items: center;
   /* 渐变背景 */
-  background: linear-gradient(200deg,#f3e7e9,#e3eeff);
+  background: linear-gradient(90deg,transparent,rgba(68,138,255,.05));
   top: 50px;
   left: 0;
 }
