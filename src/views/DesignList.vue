@@ -119,7 +119,7 @@ export default {
       if (document.execCommand('copy')) {
         this.$message({
           type: 'success',
-          message: '报文已复制到剪切板'
+          message: '链接已复制到剪切板'
         })
       }
       document.body.removeChild(input)
