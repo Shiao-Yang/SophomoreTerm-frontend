@@ -91,6 +91,11 @@
     </div>
     <el-button @click="toSaveDoc" id="save" size="small" v-if="!init">保存</el-button>
 
+    <el-button size="small" @click="handleExport1" id="exportAsPDF" v-if="!init">导出为PDF</el-button>
+    <el-button size="small" @click="handleExport2" id="exportAsWord" v-if="!init">导出为Word</el-button>
+    <el-button size="small" @click="handleExport3" id="exportAsMarkdown" v-if="!init">导出为MD</el-button>
+
+
     <el-dialog
         title="提示"
         :visible.sync="create"
@@ -179,6 +184,13 @@ import Vue from 'vue';
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import axios from "axios";
 import qs from "qs";
+import { DomEditor } from '@wangeditor/editor'
+import { IToolbarConfig } from '@wangeditor/editor'
+import VueHtml2pdf from 'vue-html2pdf'
+import htmlToPdf from "../common/htmlToPdf"
+import htmlDocx from 'html-docx-js/dist/html-docx';
+import saveAs from 'file-saver';
+import turndown from "turndown";
 
 export default Vue.extend({
   components: { Editor, Toolbar },
@@ -186,7 +198,7 @@ export default Vue.extend({
     window.myData = this;
     this.$store.state.doc_id = 0
     this.getProjects({gid: this.$store.state.gid})
-    // this.toPrepare()
+    this.toPrepare()
     //if (!this.$store.state.isLogin) {
     //   this.$store.state.warning = true
     //  this.$router.push('/')
@@ -215,7 +227,15 @@ export default Vue.extend({
       name: '',
       html: '<h1 style="text-align: center;">初始化页面</h1>',
       toolbarConfig: { },
-      editorConfig: { placeholder: '请输入内容...' },
+      editorConfig: { placeholder: '请输入内容...',
+        // 所有的菜单配置，都要在 MENU_CONF 属性下
+        MENU_CONF: {
+          //配置上传图片
+          uploadImage: {
+            customUpload: this.uploadImg
+          },
+        },
+      },
       mode: 'default', // or 'simple'
       docs: [],
       projects: [],
@@ -232,10 +252,44 @@ export default Vue.extend({
       init: true,
       tmpData: {},
       tmpNode: {},
-      type: -1 // 0代表项目区，1代表文件夹区
+      type: -1, // 0代表项目区，1代表文件夹区
+
+      fileName:'匿名'
     }
   },
   methods: {
+    handleExport1(){
+      htmlToPdf.downloadPDF("editor",this.fileName)
+      //第一个参数是需要导出的内容的id,第二个参数是输出的文档名称
+    },
+    handleExport2(){
+      const tempthis = this
+      let htmlStr = this.html
+      let page = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>${htmlStr}
+      </body></html>`
+      // console.log(page);return
+      saveAs(
+          htmlDocx.asBlob(page, {
+            orientation: "landscape"//跨域设置
+          }),
+          //文件名
+          tempthis.fileName+".doc"
+      )
+    },
+    handleExport3() {
+      let down = new turndown()
+      const tempthis = this
+      let md = down.turndown(tempthis.html)
+      let blob = new Blob([md], {
+        type: 'text/markdown'
+      })
+      let url = URL.createObjectURL(blob)
+      let a = document.createElement("a")
+      a.href = url
+      a.download = tempthis.fileName+'.md'
+      a.click()
+      URL.revokeObjectURL(url)
+    },
     append(data, child) {
       console.log(data)
       if (!data.children) {
@@ -263,11 +317,13 @@ export default Vue.extend({
       this.radio='1';
       this.radio2='1'
     },
-    toPrepare() {
+    toPrepare(){
       const Tempthis = this
       Tempthis.toolbarConfig.excludeKeys=[
         'emotion',
-        'group-video'
+        // 'group-image',
+        'group-video',
+        'insertImage'
       ]
     },
     //openDialog(id,index) {
@@ -278,6 +334,30 @@ export default Vue.extend({
     //  this.radio='1';
     //  this.radio2='1'
     //},
+    uploadImg(file, insertFn){
+      const tempthis = this;
+      let param = new FormData();
+      param.append("img", file);
+      param.append("did", tempthis.$store.state.doc_id)
+      console.log(param)
+      //调接口，上传图片
+      axios.post(this.$store.state.base+'project_manage/upload_img/',
+          param,
+          {headers:{'Content-Type':'multipart/form-data'}})
+          .then(function (Response) {
+            // console.log(Response);
+            if(Response.data.errno===0)
+            {
+              insertFn(tempthis.$store.state.base+Response.data.data.url);
+            }
+            else{
+              alert("上传出错了")
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
     getHTML() {
       let url
       if (this.titleInput==='') {
@@ -636,6 +716,7 @@ export default Vue.extend({
           })
     },
     toEditThisDoc(thisDoc) {
+      const tempthis = this;
       if (thisDoc.type !== 1) {
         return
       }
@@ -658,6 +739,7 @@ export default Vue.extend({
       })
           .then(Response => {
             console.log(Response.data)
+            tempthis.fileName = Response.data[0].name
             console.log("Response:" + Response.data[0].name + " " + Response.data[0].url)
             console.log(this.$store.state.base + Response.data[0].url)
             this.$axios.post(this.$store.state.base + Response.data[0].url)
@@ -928,5 +1010,29 @@ export default Vue.extend({
 }
 #create:hover {
   background: rgb(240,240,240);
+}
+#exportAsPDF{
+  position: absolute;
+  right: 1.5%;
+  top: 20%;
+  width: 7%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+}
+#exportAsWord{
+  position: absolute;
+  right: 1.5%;
+  top: 30%;
+  width: 7%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+}
+#exportAsMarkdown{
+  position: absolute;
+  right: 1.5%;
+  top: 40%;
+  width: 7%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
 }
 </style>
