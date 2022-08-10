@@ -280,11 +280,10 @@ img {
   background-color: #ffffff;
 }
 
-.user-avatar-box:hover i{
+.nav-item:hover:hover .user-avatar-box i{
   opacity: 0;
   margin-top: 20px;
   margin-right: 20px;
-
   z-index: 1000000;
 }
 
