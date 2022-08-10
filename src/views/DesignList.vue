@@ -29,6 +29,7 @@
                     <!--<span class="project-details">创建时间 : {{project.starttime}}</span>-->
                   </span>
                   <i class='bx bxl-sketch first' title="设计" @click="toDesign(project.picid,project.name)"></i>
+                  <i class='bx bx-play' title="设计" @click="toPreview(project.picid)"></i>
                   <i class='bx bxs-edit-alt' title="重命名" @click="changeIsSet(index)"></i>
                   <i class='bx bxs-trash delete' title="删除" @click="dlt(project.picid, index)"></i>
                 </li>
@@ -79,6 +80,15 @@ export default {
     initIsSet(){
       this.isSet = -1;
       console.log(this.isSet);
+    },
+
+    toPreview(picid) {
+      this.$router.push({
+        name: 'preView',
+        params: {
+          picid: picid,
+        }
+      })
     },
 
     changeIsSet(index){
