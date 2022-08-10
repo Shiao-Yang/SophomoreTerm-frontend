@@ -89,7 +89,7 @@ export default {
         loginUrl: "http://43.138.26.134/login&register",
         signupUrl: "http://43.138.26.134/login&register",
         userMenus: [
-          { name: "个人中心", router: "/userInfo" },
+          { name: "个人中心", router: "/userView" },
           {},
           {},
           { name: "退出", action: "logout" },
