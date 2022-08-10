@@ -66,7 +66,14 @@
               type="text"
               size="mini"
               @click.stop.prevent="rename=true;id=data.id;tmpData=data;titleInput=''"
-              v-if="data.type===1">
+              v-if="data.type===1 && !data.isOther">
+            改名
+          </el-button>
+          <el-button
+            type="text"
+              size="mini"
+              @click.stop.prevent="rename=true;id=data.id;tmpData=data;titleInput=''"
+              v-else-if="data.isOther">
             改名
           </el-button>
           <el-button
@@ -179,7 +186,7 @@ export default Vue.extend({
     window.myData = this;
     this.$store.state.doc_id = 0
     this.getProjects({gid: this.$store.state.gid})
-    this.toPrepare()
+    // this.toPrepare()
     //if (!this.$store.state.isLogin) {
     //   this.$store.state.warning = true
     //  this.$router.push('/')
@@ -248,22 +255,29 @@ export default Vue.extend({
     openDialog(id,index,data) {
       console.log(id)
       console.log(index)
-      this.tmpData = data
-    toPrepare(){
-      const Tempthis = this
-      Tempthis.toolbarConfig.excludeKeys=[
-        'emotion',
-        'group-video'
-      ]
-    },
-    openDialog(id,index) {
       this.pid=id;
+      this.tmpData = data
       this.index=index;
       this.create=true;
       this.titleInput='';
       this.radio='1';
       this.radio2='1'
     },
+    toPrepare() {
+      const Tempthis = this
+      Tempthis.toolbarConfig.excludeKeys=[
+        'emotion',
+        'group-video'
+      ]
+    },
+    //openDialog(id,index) {
+    //  this.pid=id;
+    //  this.index=index;
+    //  this.create=true;
+    //  this.titleInput='';
+    //  this.radio='1';
+    //  this.radio2='1'
+    //},
     getHTML() {
       let url
       if (this.titleInput==='') {
@@ -336,7 +350,8 @@ export default Vue.extend({
                 console.log(res.data)
                   let len = res.data.length,i = 0
                   for (i; i < len; i++) {
-                    let Data = { id: res.data[i].id , label: res.data[i].name, children: [], type: res.data[i].type,isOther: true }
+                    console.log(res.data[i])
+                    let Data = { id: res.data[i].id , label: res.data[i].name, children: [], type: res.data[i].type,isOther: true,}
                     this.append(this.tmpData, Data)
                   }
                 break
@@ -534,9 +549,15 @@ export default Vue.extend({
         id: this.id,
         name: this.titleInput
       }
+      let URL
+      if (!this.tmpData.isOther) {
+        URL = this.$store.state.base+'project_manage/rename_document/'
+      } else {
+        URL = this.$store.state.base+'documents_center/rename_file/'
+      }
       this.axios({
         method: "post",
-        url: this.$store.state.base+'project_manage/rename_document/',
+        url: URL,
         data: qs.stringify(params)
       })
           .then(res => {
@@ -597,7 +618,7 @@ export default Vue.extend({
                 if (this.index===this.Active1 && this.index2 < this.Active2) {
                   this.Active2 -= 1
                 }
-                if(Response.data.errno===0 && this.$store.state.doc_id===id){
+                if(Response.data.errno===0 && this.$store.state.doc_id===id|| this.$store.state.doc_id===this.tmpData.docid){
                   this.init = true
                   this.html = '<h1 style="text-align: center;">初始化页面</h1>'
                   this.Active1 = -1
@@ -641,6 +662,10 @@ export default Vue.extend({
             console.log(this.$store.state.base + Response.data[0].url)
             this.$axios.post(this.$store.state.base + Response.data[0].url)
                 .then(res => {
+                  if (Response.data[0].docid) {
+                    this.$store.state.doc_id = Response.data[0].docid
+                    thisDoc.docid = Response.data[0].docid
+                  }
                   this.html = res.data
                   console.log("res.data:" + res.data)
                   console.log("此文档已打开，现在的html代码是" + this.html);
