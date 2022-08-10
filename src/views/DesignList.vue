@@ -49,9 +49,9 @@
 <!--                  <img class="project-logo" src="../assets/logo.png">-->
                   <span class="project-info">
                     <span class="project-name">{{project.name}}</span>
-                    <span class="project-creater-name">创建人 : {{project.creator_username}}</span>
+                    <!--<span class="project-creater-name">创建人 : {{project.creator_username}}</span>-->
                     <span class="project-details">创建时间 : {{project.create_time}}</span>
-                    <span class="project-details">上次修改时间 : {{project.modify_time}}</span>
+                    <!--<span class="project-details">上次修改时间 : {{project.modify_time}}</span>-->
                   </span>
                   <i class='bx bxl-sketch first' title="设计" @click="toDesign(project.picid,project.name)"></i>
                   <!--<i class='bx bx-play' v-if="preView===1" title="设计" @click="toPreview(pid, pname)"></i>-->
@@ -133,7 +133,7 @@ export default {
     generateURL(){
       console.log("gen",this.sign, this.preView);
       if(this.preView === 1) {
-        this.url = "http://43.138.26.134//preView?" + "pid=" + this.pid + "&"+"pname=" + this.pname;
+        this.url = "http://43.138.26.134/preView?" + "pid=" + this.pid + "&"+"pname=" + this.pname;
       }
       else {
         this.url = "";
@@ -407,7 +407,8 @@ export default {
             type: 'success',
             showClose: true,
           })
-          this.projects.push({picid: res.data.picid, name: params.name, data: res.data.data});
+          //this.projects.push({picid: res.data.picid, name: res.data.name, data: res.data.data, create_time});
+          this.get_Picture(this.$store.state.pid)
           this.isCreate = false;
           //location.reload();
         } else {
