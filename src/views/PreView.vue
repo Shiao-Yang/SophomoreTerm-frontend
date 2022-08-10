@@ -52,6 +52,8 @@ export default {
       num: 0,
       src: "",
       success: 0,
+      common:[],
+      search:[],
     }
   },
 
