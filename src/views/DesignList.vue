@@ -163,7 +163,14 @@ export default {
       this.$store.state.pic_name = pic_name;
       console.log(this.$store.state.pic_id);
       console.log(this.$store.state.pic_name);
-      this.$router.push('/prototype');
+      //this.$router.push('/prototype');
+      this.$router.push({
+        path: '/prototype',
+        query: {
+          pic_id: pic_id,
+          pic_name: pic_name,
+        }
+      });
     },
     get_Picture(pic_id) {
       let params = {

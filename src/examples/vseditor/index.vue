@@ -356,7 +356,7 @@ export default {
       canvas.style.width = width + 'px'
       canvas.style.height = height + 'px'
       const context = canvas.getContext("2d");
-      context.scale(1.8175, 1.8175);
+      context.scale(2.4, 2.4);
       const options = {
         backgroundColor: null,
         canvas: canvas,
@@ -408,11 +408,11 @@ export default {
       }).then(res => {
         console.log(res.data);
         //location.reload();
-        if(res.data === 0) {
-          //console.log(params.picid);
-          //console.log(params.data);
-        }
-        //location.reload();
+        this.$message({
+          message: '保存成功',
+          type: "success",
+          showClose: true,
+        })
       }).catch(err => {
         console.log(err)
       })
@@ -431,7 +431,7 @@ export default {
         console.log(ans);
 
         console.log(this.$store.state.base + ans.url);
-        this.$axios.get(this.$store.state.base + ans.url)
+        this.$axios.post(this.$store.state.base + ans.url)
             .then( res => {
               console.log(1)
               console.log(res.data);
@@ -509,7 +509,7 @@ export default {
     registerKeyboardAction(this)
 
     console.log("调用created");
-    this.get_Pic(this.$store.state.pic_id);
+    this.get_Pic(this.$route.query.pic_id);
     console.log(this.controls);
     console.log("调用完毕");
 
@@ -529,7 +529,7 @@ export default {
         <HeaderVue />
         <div class="content">
           <ComponentsVue />
-          <div class="temp" >
+          <div class="temp">
             <div class="container" ref="imageTofile">
               <EditorViewVue ref="editor" value={this.controls}>
                 <PluginSelectionVue application={this}/>
