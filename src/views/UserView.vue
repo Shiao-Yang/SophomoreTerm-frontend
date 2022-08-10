@@ -846,7 +846,6 @@ p {
 .blog-slider_content .inv-list .inv-item .inv-avatar{
   width: 60px;
   height: 60px;
-  background-color: #42b983;
   border-radius: 30px;
 }
 
