@@ -308,9 +308,10 @@ export default {
 }
 
 .non-model .desktop .image {
-  margin-bottom: 10px;
   align-items: center;
   font-size: 100px;
+  line-height: 100px;
+  margin-bottom: 10px;
 }
 
 .non-model .desktop .image i {
@@ -333,7 +334,7 @@ export default {
 }
 
 .text {
-  margin-bottom: 10px;
+  margin-top: 5px;
 }
 input{
   background-color: transparent;
