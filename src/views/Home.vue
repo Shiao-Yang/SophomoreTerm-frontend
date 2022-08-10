@@ -164,11 +164,13 @@ section {
   justify-content: center;
   align-items: center;
   min-height: 80vh;
+  margin: 80px auto;
 }
 
 section h2 {
   margin-left: 200px;
   font-size: 4em;
+  font-weight: 700;
   color: #000;
   margin-bottom: 20px;
 }

@@ -179,6 +179,7 @@ export default Vue.extend({
     window.myData = this;
     this.$store.state.doc_id = 0
     this.getProjects({gid: this.$store.state.gid})
+    this.toPrepare()
     //if (!this.$store.state.isLogin) {
     //   this.$store.state.warning = true
     //  this.$router.push('/')
@@ -248,6 +249,14 @@ export default Vue.extend({
       console.log(id)
       console.log(index)
       this.tmpData = data
+    toPrepare(){
+      const Tempthis = this
+      Tempthis.toolbarConfig.excludeKeys=[
+        'emotion',
+        'group-video'
+      ]
+    },
+    openDialog(id,index) {
       this.pid=id;
       this.index=index;
       this.create=true;

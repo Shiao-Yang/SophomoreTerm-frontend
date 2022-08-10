@@ -9,10 +9,21 @@ import $ from 'jquery'
 import VueAxios from 'vue-axios'
 import {saveAs} from 'file-saver'
 import {next} from "lodash/seq";
+import Viewer from 'v-viewer'
+import 'viewerjs/dist/viewer.css'
+
+import htmlToPdf from '../src/common/htmlToPdf';
+Vue.use(htmlToPdf)
 
 Vue.prototype.$axios = axios
 Vue.use(VueAxios, axios) // 安装插件
 Vue.use(ElementUI);
+Vue.use(Viewer)
+
+Viewer.setDefaults({
+  title: false,
+  toolbar: false,
+})
 
 Vue.config.productionTip = false
 Vue.prototype.eventbus = new Vue()

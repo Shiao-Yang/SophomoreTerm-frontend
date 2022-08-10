@@ -80,6 +80,9 @@
     </div>
     <input type="text" placeholder="为文件命名" id="htmlTitle" v-if="this.$store.state.doc_id===0" :value="inputContent">
     <el-button @click="toSaveDoc" id="save" size="small">保存</el-button>
+    <el-button size="small" @click="handleExport1" id="exportAsPDF">导出为PDF</el-button>
+    <el-button size="small" @click="handleExport2" id="exportAsWord">导出为Word</el-button>
+    <el-button size="small" @click="handleExport3" id="exportAsMarkdown">导出为MD</el-button>
   </div>
 </template>
 
@@ -90,16 +93,19 @@ import axios from "axios";
 import qs from "qs";
 import { DomEditor } from '@wangeditor/editor'
 import { IToolbarConfig } from '@wangeditor/editor'
+import VueHtml2pdf from 'vue-html2pdf'
+import htmlToPdf from "../common/htmlToPdf"
+import htmlDocx from 'html-docx-js/dist/html-docx';
+import saveAs from 'file-saver';
+import turndown from "turndown";
+
+
+
 export default Vue.extend({
-  components: { Editor, Toolbar },
+  components: { Editor, Toolbar,VueHtml2pdf },
   created() {
     window.myData = this;
     this.toPrepare()
-    // this.getAllDoc();
-    //if (!this.$store.state.isLogin) {
-    //   this.$store.state.warning = true
-    //  this.$router.push('/')
-    //}
   },
   data() {
     return {
@@ -111,7 +117,15 @@ export default Vue.extend({
       name: '',
       html: '',
       toolbarConfig: { },
-      editorConfig: { placeholder: '请输入内容...' },
+      editorConfig: { placeholder: '请输入内容...',
+        // 所有的菜单配置，都要在 MENU_CONF 属性下
+        MENU_CONF: {
+          //配置上传图片
+          uploadImage: {
+            customUpload: this.uploadImg
+          },
+        },
+      },
       mode: 'default', // or 'simple'
       docs: [],
       theTitle:"未命名",
@@ -119,10 +133,68 @@ export default Vue.extend({
       titleInput: '',
       radio: '1',
       radio2: '1',
-      model_name: ''
+      model_name: '',
+      fileName:'匿名'
     }
   },
   methods: {
+    handleExport1(){
+      htmlToPdf.downloadPDF("editor",this.fileName)
+      //第一个参数是需要导出的内容的id,第二个参数是输出的文档名称
+    },
+    handleExport2(){
+      const tempthis = this
+      let htmlStr = this.html
+      let page = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>${htmlStr}
+      </body></html>`
+      // console.log(page);return
+      saveAs(
+          htmlDocx.asBlob(page, {
+            orientation: "landscape"//跨域设置
+          }),
+          //文件名
+          tempthis.fileName+".doc"
+        )
+    },
+    handleExport3() {
+      let down = new turndown()
+      const tempthis = this
+      let md = down.turndown(tempthis.html)
+      let blob = new Blob([md], {
+        type: 'text/markdown'
+      })
+      let url = URL.createObjectURL(blob)
+      let a = document.createElement("a")
+      a.href = url
+      a.download = tempthis.fileName+'.md'
+      a.click()
+      URL.revokeObjectURL(url)
+    },
+    uploadImg(file, insertFn){
+      const tempthis = this;
+      let param = new FormData();
+      param.append("img", file);
+      param.append("did", tempthis.$store.state.doc_id)
+      console.log(param)
+      //调接口，上传图片
+      axios.post(this.$store.state.base+'project_manage/upload_img/',
+          param,
+          {headers:{'Content-Type':'multipart/form-data'}})
+          .then(function (Response) {
+            // console.log(Response);
+            if(Response.data.errno===0)
+            {
+              insertFn(tempthis.$store.state.base+Response.data.data.url);
+            }
+            else{
+              alert("上传出错了")
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+    },
+
     getHTML() {
       let url
       if (this.titleInput==='') {
@@ -157,6 +229,7 @@ export default Vue.extend({
     },
     create_document() {
       let params = {
+        uid:this.$store.state.userInfo.uid,
         pid: this.$store.state.pid,
         name: this.titleInput,
         model_name: this.model_name,
@@ -223,6 +296,7 @@ export default Vue.extend({
           })
     },
     toEditThisDoc(thisDoc,index){
+      const tempthis = this;
       this.$store.state.index=index
       this.$store.state.doc_id=thisDoc.id
       this.$store.state.doc = thisDoc
@@ -237,13 +311,15 @@ export default Vue.extend({
       })
           .then(Response => {
             console.log(Response.data)
-            console.log("url:"+this.$store.state.base+'project_manage/open_document/')
-            console.log("Response:"+Response.data[0].name+" "+Response.data[0].url)
-            console.log(this.$store.state.base+Response.data[0].url)
+            tempthis.fileName = Response.data[0].name
+            console.log(tempthis.fileName)
+            // console.log("url:"+this.$store.state.base+'project_manage/open_document/')
+            // console.log("Response:"+Response.data[0].name+" "+Response.data[0].url)
+            // console.log(this.$store.state.base+Response.data[0].url)
             this.$axios.post(this.$store.state.base+Response.data[0].url)
                 .then( res => {
                   this.html = res.data
-                  console.log("res.data:"+res.data)
+                  console.log(res)
                   console.log("此文档已打开，现在的html代码是"+this.html);
                 })
             //console.log(Response)
@@ -262,6 +338,7 @@ export default Vue.extend({
       const tempthis = this;
       if(this.$store.state.doc_id===0){
         let params= {
+          uid:this.$store.state.userInfo.uid,
           pid:this.$store.state.pid,
           name:document.getElementById("htmlTitle").value,
           data:tempthis.editor.getHtml()
@@ -312,14 +389,20 @@ export default Vue.extend({
     },
     toPrepare(){
       const Tempthis = this
-      // const toolbar = DomEditor.getToolbar(tempthis.editor)
-      // console.log(toolbar.getConfig())
-      // const curToolbarConfig = toolbar.getConfig()
-      // console.log(curToolbarConfig.toolbarKeys)
       Tempthis.toolbarConfig.excludeKeys=[
         'emotion',
-        'group-video'
+        // 'group-image',
+        'group-video',
+        'insertImage'
       ]
+    },
+    temptemp(){
+      //这个是为了展示工具栏各个工具的信息。需要用的时候，在页面上加一个按钮，点击按钮调用此函数即可
+      const Tempthis = this
+      const toolbar = DomEditor.getToolbar(Tempthis.editor)
+      console.log(toolbar.getConfig())
+      const curToolbarConfig = toolbar.getConfig()
+      console.log(curToolbarConfig.toolbarKeys)
     },
     getAllDoc(){
       const tempthis = this;
@@ -468,6 +551,30 @@ export default Vue.extend({
   position: absolute;
   right: 1.5%;
   top: 10%;
+  width: 7%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+}
+#exportAsPDF{
+  position: absolute;
+  right: 1.5%;
+  top: 20%;
+  width: 7%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+}
+#exportAsWord{
+  position: absolute;
+  right: 1.5%;
+  top: 30%;
+  width: 7%;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+}
+#exportAsMarkdown{
+  position: absolute;
+  right: 1.5%;
+  top: 40%;
   width: 7%;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.3);

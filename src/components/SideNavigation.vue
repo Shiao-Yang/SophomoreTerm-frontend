@@ -23,16 +23,11 @@
           <span class="link-name" :class="{'active': isSelectSide === 3}">团队管理</span>
         </router-link>
       </li>
-      <li class="active">
-        <div class="profile-details">
-          <div class="profile-content">
-            <img :src="theAvatarUrl">
-          </div>
-          <div class="profile-name">
-            {{this.$store.state.userInfo.username}}
-          </div>
-          <i class='bx bx-log-out-circle exit-btn' @click="toExit" title="退出登录"></i>
-        </div>
+      <li class="return">
+        <router-link to="/teamList">
+          <i class='bx bx-undo'></i>
+          <span class="link-name">返回上级</span>
+        </router-link>
       </li>
     </ul>
     <ul class="nav-links" v-if="this.checkRoute() === 2">
@@ -49,27 +44,16 @@
         </router-link>
       </li>
       <li :class="{'active': isSelectSide === 3}">
-        <a href="https://www.umletino.com/umletino.html">
+        <router-link to="/UmlView">
           <i class='bx bxs-collection':class="{'active': isSelectSide === 3}" ></i>
           <span class="link-name" :class="{'active': isSelectSide === 3}">UML绘制</span>
-        </a>
+        </router-link>
       </li>
       <li class="return">
         <router-link to="/projectList">
           <i class='bx bx-undo'></i>
           <span class="link-name">返回上级</span>
         </router-link>
-      </li>
-      <li class="active">
-        <div class="profile-details">
-          <div class="profile-content">
-            <img :src="theAvatarUrl">
-          </div>
-          <div class="profile-name">
-            {{this.$store.state.userInfo.username}}
-          </div>
-          <i class='bx bx-log-out-circle exit-btn' @click="toExit" title="退出登录"></i>
-        </div>
       </li>
     </ul>
 

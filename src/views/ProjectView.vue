@@ -420,14 +420,14 @@ export default {
   font-weight: 500;
 }
 
-.header .search{
+.search{
   margin-left: auto;
   height: 45px;
   align-items: center;
   position: relative;
 }
 
-.header .search .search-input{
+.search .search-input{
   margin-top: 5px;
   font-size: 18px;
   padding: 8px 35px 8px 8px;
@@ -436,12 +436,12 @@ export default {
   width: 250px;
 }
 
-.header .search .search-input:focus{
+.search .search-input:focus{
   outline: none;
   border-color: #1b9aee;
 }
 
-.header .search .search-btn{
+.search .search-btn{
   font-size: 25px;
   min-width: 30px;
   position: absolute;
@@ -451,14 +451,14 @@ export default {
   transition: all 0.4s ease;
 }
 
-.header .search .search-btn:hover{
+.search .search-btn:hover{
   font-size: 30px;
   top: 10px;
   color: #1b9aee;
 }
 
 .content{
-  margin-top: 40px;
+  margin-top: 20px;
   margin-left: 5px;
 }
 
@@ -508,7 +508,7 @@ export default {
   top: -100px;
   list-style: none;
   width: 150px;
-  padding:0 10px 6px 10px;
+  padding:10px 10px 10px 10px;
   background-color: #fff;
   float: left;
   color: #000;
@@ -523,7 +523,7 @@ export default {
 .content-bar .nav-list .nav-item:hover .sub-menu{
   pointer-events: auto;
   opacity: 1;
-  top: -80px;
+  top: -60px;
   transition: 0.4s all ease;
 }
 

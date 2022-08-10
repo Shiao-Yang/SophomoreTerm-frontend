@@ -14,7 +14,9 @@
           </li>
           <li class="nav-item" :class="{'selected':isSelected}" v-if="this.$store.state.isLogin === true">
             <div class="user-box">
-              <img class="user-avatar" id="user-avatar" :title="this.$store.state.userInfo.username" :class="{'selected': isSelected}" :src="avatarUrl" @click="toVisitSelf">
+              <div class="user-avatar-box">
+                <img class="user-avatar" id="user-avatar" :title="this.$store.state.userInfo.username" :class="{'selected': isSelected}" :src="avatarUrl" @click="toVisitSelf">
+              </div>
             </div>
             <ul class="sub-menu">
               <span class="user-name">{{this.$store.state.userInfo.username}}</span>
@@ -118,6 +120,11 @@ export default {
   color: #c4cbcf;
 }
 
+img {
+  max-width: 700%;
+  max-height: 700%;
+}
+
 .header .logo-box{
   margin-left: 100px;
   display: flex;
@@ -165,6 +172,7 @@ export default {
   font-weight: bold;
   line-height: 40px; /*行高*/
   color: #fff;
+  margin-top: 10px;
   text-decoration: none; /*字体增加装饰：去除下划线*/
   background: linear-gradient(
       20deg,#03a9f4,  #f441a5,#03a9f4, #f441a5); /*渐变背景*/
@@ -218,8 +226,8 @@ export default {
 }
 
 .header .main .nav-links .nav-item .user-box{
-  height: 45px;
-  width: 45px;
+  height: 40px;
+  width: 40px;
   border-radius: 10%;
   background-color: #ffffff;
 }
@@ -237,12 +245,12 @@ export default {
   position: relative;
   border-radius: 50%;
   margin-top: 10px;
-  margin-left: -60px;
+  margin-left: -80px;
   z-index: 100;
   border: #cdd1d3 1px solid;
   background-color: #cdd1d3;
-  width: 80px;
-  height: 80px;
+  width: 80px ;
+  height: 80px ;
 }
 
 .header .main .nav-links .nav-item:hover .sub-menu{
@@ -279,7 +287,7 @@ export default {
   display: flex;
   height: 30px;
   line-height: 30px;
-  padding: 5px 8px;
+  padding: 0 8px;
   cursor: pointer;
   margin-top: 5px;
 }
