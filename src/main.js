@@ -10,6 +10,9 @@ import VueAxios from 'vue-axios'
 import {saveAs} from 'file-saver'
 import {next} from "lodash/seq";
 
+import htmlToPdf from '../src/common/htmlToPdf';
+Vue.use(htmlToPdf)
+
 Vue.prototype.$axios = axios
 Vue.use(VueAxios, axios) // 安装插件
 Vue.use(ElementUI);
