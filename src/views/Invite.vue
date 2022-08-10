@@ -217,7 +217,7 @@ export default {
   }
   .info {
     display: inline-block;
-    width: 10%;
+    width: 15%;
     margin: auto 10px;
   }
   #add {
