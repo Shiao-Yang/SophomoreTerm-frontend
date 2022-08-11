@@ -3,7 +3,7 @@
     <div>
       <div id="top">
         <div id="search">
-          <input type="text" autocomplete="off" name="username" id="input" v-model="input" placeholder="请输入昵称、姓名或邮箱" @keyup.enter="search"></input>
+          <input type="text" autocomplete="off" name="username" id="input" v-model="input" placeholder="请输入昵称" @keyup.enter="search"></input>
           <img src="../assets/search.png" id="searchBtn" @click="search">
         </div>
         <router-link to="/adminTeam">
@@ -14,10 +14,10 @@
         <div id="contentBox">
           <div class="result" v-for="(item,index) in members">
             <img :src=$store.state.base+item.avatar class="avatar">
-            <span class="info">ID：{{item.id}}</span>
+            <!--<span class="info">ID：{{item.id}}</span>-->
             <span class="info">昵称：{{item.username}}</span>
-            <span class="info">姓名：{{item.name}}</span>
-            <span class="info">邮箱：{{item.email}}</span>
+            <!--<span class="info">姓名：{{item.name}}</span>-->
+            <!--<span class="info">邮箱：{{item.email}}</span>-->
             <i class='bx bx-paper-plane' id="add" title="发送邀请" @click="invite(item.id)"></i>
 <!--            <img src="../assets/add.png" id="add" title="发送邀请" @click="invite(item.id)">-->
           </div>
@@ -237,8 +237,8 @@ export default {
   }
   .info {
     display: inline-block;
-    width: 15%;
-    margin: auto 10px;
+    width: 30%;
+    margin: auto 30px;
   }
   #add {
     position: absolute;
